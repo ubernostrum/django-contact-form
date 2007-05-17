@@ -78,7 +78,7 @@ class BaseContactForm(forms.Form):
         """
         if not self.is_valid():
             raise ValueError("Message cannot be rendered from invalid contact form")
-        t = loader.get_template('base_contact_form.html')
+        t = loader.get_template('base_contact_form.txt')
         c = Context({ 'name': self.cleaned_data['name'],
                       'email': self.cleaned_data['email'],
                       'message': self.cleaned_data['message'] })
