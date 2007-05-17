@@ -15,7 +15,7 @@ from django.contrib.sites.models import Site
 attrs_dict = { 'class': 'required' }
 
 
-class BaseContactForm(forms.Form):
+class ContactForm(forms.Form):
     """
     Base contact form class from which all contact form classes should
     inherit.
@@ -59,7 +59,7 @@ class BaseContactForm(forms.Form):
     
     """
     def __init__(self, *args, **kwargs):
-        super(BaseContactForm, self).__init__(*args, **kwargs)
+        super(ContactForm, self).__init__(*args, **kwargs)
     
     name = forms.CharField(max_length=100,
                            widget=forms.TextInput(attrs=attrs_dict),
@@ -86,7 +86,7 @@ class BaseContactForm(forms.Form):
                  'recipient_list': [mail_tuple[1] for mail_tuple in settings.MANAGERS],
                  'message': t.render(c) }
 
-class CaptchaContactForm(BaseContactForm):
+class CaptchaContactForm(ContactForm):
     """
     Extends the base contact form to add a simple CAPTCHA
     functionality for defeating automated spam bots.
@@ -121,3 +121,37 @@ class CaptchaContactForm(BaseContactForm):
             if sha.new(self.cleaned_data['captcha'] + settings.SECRET_KEY).hexdigest() == self.cleaned_data['setec_astronomy']:
                 return self.cleaned_data['captcha']
             raise forms.ValidationError(u"You didn't type the word correctly")
+
+
+class AkismetContactForm(ContactForm):
+    """
+    Contact form which doesn't add any extra fields, but does add an
+    Akismet spam check to the validation routine.
+    
+    Requires the setting ``AKISMET_API_KEY``, which should be a valid
+    Akismet API key.
+    
+    When instantiating, pass the ``HttpRequest`` object as the keyword
+    argument ``request``; this is necessary for Akismet to collect
+    data for the spam check.
+    
+    """
+    def __init__(self, request=None, *args, **kwargs):
+        if request is None:
+            raise ValueError("AkismetContactForm requires a 'request' keyword argument")
+        super(AkismetContactForm, self).__init__(*args, **kwargs)
+        self.request = request
+    
+    def clean_message(self):
+        if hasattr(settings, 'AKISMET_API_KEY') and settings.AKISMET_API_KEY:
+            from akismet import Akismet
+            akismet_api = Akismet(key=settings.AKISMET_API_KEY,
+                                  blog_url='http://%s/' % Site.objects.get_current().domain)
+            if akismet_api.verify_key():
+                akismet_data = { 'comment_type': 'comment',
+                                 'referer': self.request.META.get('HTTP_REFERER', ''),
+                                 'user_ip': self.request.META.get('REMOTE_ADDR', ''),,
+                                 'user_agent': self.request.META.get('HTTP_USER_AGENT', '') }
+                if akismet_api.comment_check(self.cleaned_data['message'], data=akismet_data, build_data=True):
+                    raise forms.ValidationError(u"Akismet thinks this message is spam")
+        return self.cleaned_data['message']
