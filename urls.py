@@ -18,7 +18,6 @@ urlpatterns = patterns('',
                        url(r'^contact/$',
                            contact_form,,
                            name='contact_form'),
-                       
                        url(r'^contact/sent/$',
                            direct_to_template,
                            { 'template': 'contact/contact_form_sent.html' },
