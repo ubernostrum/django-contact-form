@@ -32,8 +32,8 @@ class ContactForm(forms.Form):
     the following:
 
         * ``from_email`` -- used to get the address to use in the
-          ``From:`` header of the message. The default is the value of
-          the ``DEFAULT_FROM_EMAIL`` setting.
+          ``From:`` header of the message. The base implementation
+          returns the value of the ``DEFAULT_FROM_EMAIL`` setting.
     
         * ``message`` -- used to get the message body as a string. The
           base implementation renders a template using the form's
