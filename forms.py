@@ -129,43 +129,6 @@ class ContactForm(forms.Form):
         return True
 
 
-class CaptchaContactForm(ContactForm):
-    """
-    Extends the base contact form to add a simple CAPTCHA
-    functionality for defeating automated spam bots.
-    
-    The CAPTCHA works by requiring a word to be typed into an extra
-    field; a hidden field contains the SHA1 hash of this word and this
-    site's ``SECRET_KEY`` setting, and will check that the word typed
-    by the user hashes correctly.
-    
-    To set the word to use in the CAPTCHA, pass it to this form's
-    constructor as the ``captcha`` keyword argument; the default if
-    not supplied is "swordfish", but you really should pass in
-    something else. Choosing a random word from a dictionary file is a
-    good method.
-    
-    """
-    def __init__(self, captcha_value="swordfish", *args, **kwargs):
-        super(CaptchaContactForm, self).__init__(*args, **kwargs)
-        self.fields['hash'] = sha.new(captcha_value + settings.SECRET_KEY).hexdigest()
-        self.fields['captcha'].label = 'Type the word "%s" (to deter automated spam bots)' % captcha_value
-        
-    captcha = forms.CharField(widget=forms.TextInput(attrs=attrs_dict))
-    hash = forms.CharField(max_length=40, widget=forms.HiddenInput())
-    
-    def clean_captcha(self):
-        """
-        If the value of the captcha field doesn't properly hash to the
-        hidden pre-calculated value, raise a validation error.
-        
-        """
-        if 'captcha' in self.cleaned_data and 'hash' in self.cleaned_data:
-            if sha.new(self.cleaned_data['captcha'] + settings.SECRET_KEY).hexdigest() == self.cleaned_data['hash']:
-                return self.cleaned_data['captcha']
-            raise forms.ValidationError(u"You didn't type the word correctly")
-
-
 class AkismetContactForm(ContactForm):
     """
     Contact form which doesn't add any extra fields, but does add an
@@ -188,3 +151,43 @@ class AkismetContactForm(ContactForm):
                 if akismet_api.comment_check(self.cleaned_data['message'], data=akismet_data, build_data=True):
                     raise forms.ValidationError(u"Akismet thinks this message is spam")
         return self.cleaned_data['message']
+
+
+class CaptchaContactForm(ContactForm):
+    """
+    Extends the base contact form to add a simple CAPTCHA
+    functionality for defeating automated spam bots.
+    
+    The CAPTCHA works by requiring a word to be typed into an extra
+    field; a hidden field contains the SHA1 hash of this word and this
+    site's ``SECRET_KEY`` setting, and will check that the word typed
+    by the user hashes correctly.
+    
+    To set the word to use in the CAPTCHA, pass it to this form's
+    constructor as the ``captcha`` keyword argument; the default if
+    not supplied is "swordfish", but you really should pass in
+    something else. Choosing a random word from a dictionary file is a
+    good method.
+
+    Note that because this form requires extra parameters passed to
+    ``__init__``, you will need to write a custom view to use it.
+    
+    """
+    def __init__(self, captcha_value="swordfish", *args, **kwargs):
+        super(CaptchaContactForm, self).__init__(*args, **kwargs)
+        self.fields['hash'] = sha.new(captcha_value + settings.SECRET_KEY).hexdigest()
+        self.fields['captcha'].label = 'Type the word "%s" (to deter automated spam bots)' % captcha_value
+    
+    captcha = forms.CharField(widget=forms.TextInput(attrs=attrs_dict))
+    hash = forms.CharField(max_length=40, widget=forms.HiddenInput())
+    
+    def clean_captcha(self):
+        """
+        If the value of the captcha field doesn't properly hash to the
+        hidden pre-calculated value, raise a validation error.
+        
+        """
+        if 'captcha' in self.cleaned_data and 'hash' in self.cleaned_data:
+            if sha.new(self.cleaned_data['captcha'] + settings.SECRET_KEY).hexdigest() == self.cleaned_data['hash']:
+                return self.cleaned_data['captcha']
+            raise forms.ValidationError(u"You didn't type the word correctly")
