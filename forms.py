@@ -1,12 +1,14 @@
 """
-Base contact form and useful example functionality.
+A base contact form for allowing users to send email messages through
+a web interface, and some subclasses demonstrating useful
+functionality.
 
 """
 
 import sha
 from django import newforms as forms
 from django.conf import settings
-from django.template import Context, loader
+from django.template import loader, RequestContext
 from django.contrib.sites.models import Site
 
 # I put this on all required fields, because it's easier to pick up
@@ -24,42 +26,50 @@ class ContactForm(forms.Form):
     this form to provide basic contact functionality; it will collect
     name, email address and message.
     
-    To add functionality, subclass this form; most of the heavy
-    lifting happens in the ``get_message`` method, which must exist on
-    all subclasses and which must return a dictionary with the
-    following keys:
-
-        * ``subject``: A string to use as the subject of the message.
-        
-        * ``recipient_list``: A list of email addresses to which
-          the message should be sent.
-          
-        * ``message``: A string to use as the message body.
-
-    If all you want to add in your subclass is extra validation,
-    leaving the base ``get_message`` alone will work, and will return
+    To add functionality, subclasses can override any or all of
     the following:
-
-        * ``subject``: The name of the current ``Site`` in square
-          brackets, followed by "Message sent through the web site".
-
-        * ``recipient_list``: The email addresses specified in the
-          ``MANAGERS`` setting.
-
-        * ``message``: The output of rendering the template
-          ``contact/base_contact_form.txt`` with the values of the
-          ``name``, ``email`` and ``message`` fields.
-
-    If a subclass defines ``__init__``, it must call this form's
-    ``__init__`` via ``super``, and it must accept ``*args`` and
-    ``**kwargs`` and pass them in the ``super`` call.
+    
+        * ``get_message`` -- The method used to get the message body
+          as a string. The base implementation renders a template
+          using the form's ``cleaned_data`` dictionary as context.
+          
+        * ``get_recipients`` -- The method used to generate the list
+          of recipients for the message. The base implementation
+          returns the email addresses specified in the ``MANAGERS``
+          setting.
+          
+        * ``get_subject`` -- The method used to generate the subject
+          line for the message. The base implementation returns the
+          string 'Message sent through the web site', with the name of
+          the current ``Site`` prepended.
+          
+        * ``template_name`` -- Attribute used by the base
+          ``get_message`` method to determine which template to use
+          for rendering the message.
+          
+    Subclasses which override ``__init__`` **must** accept ``*args``
+    and ``**kwargs`` and pass them to the superclass ``__init__`` via
+    ``super``.
+    
+    Subclasses which want to inspect the current ``HttpRequest`` to
+    add functionality can access it via the attribute ``request``; the
+    base ``get_message`` takes advantage of this to use
+    ``RequestContext`` when rendering its template.
     
     Beyond that, the sky's the limit; anything which is supported by
-    Django's newforms can be added in a subclass.
+    Django's newforms can be added in a subclass. In most cases,
+    however, subclasses will not need to override much, if anything,
+    from the base form; for example, any additional fields defined in
+    a subclass will be picked up and automatically passed to the
+    template when the message is rendered, for example, so in many
+    cases all that's needed is to change the value of
+    ``template_name``, or override ``get_subject`` or
+    ``get_recipients``.
     
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
         super(ContactForm, self).__init__(*args, **kwargs)
+        self.request = request
     
     name = forms.CharField(max_length=100,
                            widget=forms.TextInput(attrs=attrs_dict),
@@ -70,21 +80,31 @@ class ContactForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea(attrs=attrs_dict),
                               label=u'Your message')
     
+    template_name = 'contact/contact_form.txt'
+    
     def get_message(self):
         """
-        Renders the message, using template
-        ``contact/base_contact_form.txt``.
+        Renders the body of the message to a string.
         
         """
         if not self.is_valid():
             raise ValueError("Message cannot be rendered from invalid contact form")
-        t = loader.get_template('base_contact_form.txt')
-        c = Context({ 'name': self.cleaned_data['name'],
-                      'email': self.cleaned_data['email'],
-                      'message': self.cleaned_data['message'] })
-        return { 'subject': "[%s] Message sent through the web site" % Site.objects.get_current().name,
-                 'recipient_list': [mail_tuple[1] for mail_tuple in settings.MANAGERS],
-                 'message': t.render(c) }
+        t = loader.get_template(self.template_name)
+        return t.render(RequestContext(self.request, self.cleaned_data))
+    
+    def get_recipients(self):
+        """
+        Returns a list of recipients to whom the message should be sent.
+        
+        """
+        return [mail_tuple[1] for mail_tuple in settings.MANAGERS]
+    
+    def get_subject(self):
+        """
+        Returns the subject line to use for the message.
+        
+        """
+        return "[%s] Message sent through the web site" % Site.objects.get_current().name
 
 class CaptchaContactForm(ContactForm):
     """
@@ -98,7 +118,7 @@ class CaptchaContactForm(ContactForm):
     
     To set the word to use in the CAPTCHA, pass it to this form's
     constructor as the ``captcha`` keyword argument; the default if
-    not supplied is 'swordfish', but you really should pass in
+    not supplied is "swordfish", but you really should pass in
     something else. Choosing a random word from a dictionary file is a
     good method.
     
@@ -131,17 +151,7 @@ class AkismetContactForm(ContactForm):
     Requires the setting ``AKISMET_API_KEY``, which should be a valid
     Akismet API key.
     
-    When instantiating, pass the ``HttpRequest`` object as the keyword
-    argument ``request``; this is necessary for Akismet to collect
-    data for the spam check.
-    
     """
-    def __init__(self, request=None, *args, **kwargs):
-        if request is None:
-            raise ValueError("AkismetContactForm requires a 'request' keyword argument")
-        super(AkismetContactForm, self).__init__(*args, **kwargs)
-        self.request = request
-    
     def clean_message(self):
         if hasattr(settings, 'AKISMET_API_KEY') and settings.AKISMET_API_KEY:
             from akismet import Akismet
