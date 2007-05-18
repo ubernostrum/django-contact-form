@@ -94,7 +94,11 @@ class ContactForm(forms.Form):
         """
         if not self.is_valid():
             raise ValueError("Message cannot be rendered from invalid contact form")
-        t = loader.get_template(self.template_name)
+        if callable(self.template_name):
+            template_name = self.template_name()
+        else:
+            template_name = self.template_name
+        t = loader.get_template(template_name)
         return t.render(RequestContext(self.request, self.cleaned_data))
 
 
