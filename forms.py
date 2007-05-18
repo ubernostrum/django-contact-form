@@ -29,24 +29,25 @@ class ContactForm(forms.Form):
     To add functionality, subclasses can override any or all of
     the following:
     
-        * ``get_message`` -- The method used to get the message body
-          as a string. The base implementation renders a template
-          using the form's ``cleaned_data`` dictionary as context.
+        * ``message`` -- used to get the message body as a string. The
+          base implementation renders a template using the form's
+          ``cleaned_data`` dictionary as context.
           
-        * ``get_recipients`` -- The method used to generate the list
-          of recipients for the message. The base implementation
-          returns the email addresses specified in the ``MANAGERS``
-          setting.
+        * ``recipients`` -- used to generate the list of recipients
+          for the message. The base implementation returns the email
+          addresses specified in the ``MANAGERS`` setting.
           
-        * ``get_subject`` -- The method used to generate the subject
-          line for the message. The base implementation returns the
-          string 'Message sent through the web site', with the name of
-          the current ``Site`` prepended.
+        * ``subject`` -- used to generate the subject line for the
+          message. The base implementation returns the string 'Message
+          sent through the web site', with the name of the current
+          ``Site`` prepended.
           
-        * ``template_name`` -- Attribute used by the base
-          ``get_message`` method to determine which template to use
-          for rendering the message. Default is
-          ``contact/contact_form.txt``
+        * ``template_name`` -- used by the base ``message`` method
+          to determine which template to use for rendering the
+          message. Default is ``contact/contact_form.txt``
+          
+    Each of these can be a normal attribute or a method; the contact
+    form view will handle either automatically.
           
     Subclasses which override ``__init__`` **must** accept ``*args``
     and ``**kwargs`` and pass them to the superclass ``__init__`` via
@@ -64,8 +65,7 @@ class ContactForm(forms.Form):
     a subclass will be picked up and automatically passed to the
     template when the message is rendered, for example, so in many
     cases all that's needed is to change the value of
-    ``template_name``, or override ``get_subject`` or
-    ``get_recipients``.
+    ``template_name``, or override ``subject`` or ``recipients``.
     
     """
     def __init__(self, request, *args, **kwargs):
@@ -81,9 +81,13 @@ class ContactForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea(attrs=attrs_dict),
                               label=u'Your message')
     
+    recipients = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
+    
+    subject = "[%s] Message sent through the web site" % Site.objects.get_current().name
+    
     template_name = 'contact/contact_form.txt'
     
-    def get_message(self):
+    def message(self):
         """
         Renders the body of the message to a string.
         
@@ -92,20 +96,7 @@ class ContactForm(forms.Form):
             raise ValueError("Message cannot be rendered from invalid contact form")
         t = loader.get_template(self.template_name)
         return t.render(RequestContext(self.request, self.cleaned_data))
-    
-    def get_recipients(self):
-        """
-        Returns a list of recipients to whom the message should be sent.
-        
-        """
-        return [mail_tuple[1] for mail_tuple in settings.MANAGERS]
-    
-    def get_subject(self):
-        """
-        Returns the subject line to use for the message.
-        
-        """
-        return "[%s] Message sent through the web site" % Site.objects.get_current().name
+
 
 class CaptchaContactForm(ContactForm):
     """
