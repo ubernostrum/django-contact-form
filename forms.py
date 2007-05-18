@@ -45,7 +45,8 @@ class ContactForm(forms.Form):
           
         * ``template_name`` -- Attribute used by the base
           ``get_message`` method to determine which template to use
-          for rendering the message.
+          for rendering the message. Default is
+          ``contact/contact_form.txt``
           
     Subclasses which override ``__init__`` **must** accept ``*args``
     and ``**kwargs`` and pass them to the superclass ``__init__`` via
