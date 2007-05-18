@@ -6,8 +6,10 @@ functionality.
 """
 
 import sha
+from smtplib import SMTPException
 from django import newforms as forms
 from django.conf import settings
+from django.core.mail import send_mail
 from django.template import loader, RequestContext
 from django.contrib.sites.models import Site
 
@@ -28,6 +30,10 @@ class ContactForm(forms.Form):
     
     To add functionality, subclasses can override any or all of
     the following:
+
+        * ``from_email`` -- used to get the address to use in the
+          ``From:`` header of the message. The default is the value of
+          the ``DEFAULT_FROM_EMAIL`` setting.
     
         * ``message`` -- used to get the message body as a string. The
           base implementation renders a template using the form's
@@ -57,6 +63,10 @@ class ContactForm(forms.Form):
     add functionality can access it via the attribute ``request``; the
     base ``get_message`` takes advantage of this to use
     ``RequestContext`` when rendering its template.
+
+    Subclasses should also be careful when overriding ``save``, as
+    this method is responsible for constructing and sending the actual
+    email message.
     
     Beyond that, the sky's the limit; anything which is supported by
     Django's newforms can be added in a subclass. In most cases,
@@ -81,6 +91,8 @@ class ContactForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea(attrs=attrs_dict),
                               label=u'Your message')
     
+    from_email = settings.DEFAULT_FROM_EMAIL
+    
     recipients = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
     
     subject = "[%s] Message sent through the web site" % Site.objects.get_current().name
@@ -92,14 +104,29 @@ class ContactForm(forms.Form):
         Renders the body of the message to a string.
         
         """
-        if not self.is_valid():
-            raise ValueError("Message cannot be rendered from invalid contact form")
         if callable(self.template_name):
             template_name = self.template_name()
         else:
             template_name = self.template_name
         t = loader.get_template(template_name)
         return t.render(RequestContext(self.request, self.cleaned_data))
+
+    def save(self):
+        """
+        Builds and sends the email message.
+        
+        """
+        if not self.is_valid():
+            raise ValueError("Message cannot be sent from invalid contact form")
+        message_dict = {}
+        for message_part in ('from_email', 'message', 'recipients', 'subject'):
+            attr = getattr(self, message_part)
+            message_dict[message_part] = callable(attr) and attr() or attr
+        try:
+            send_mail(**message_dict))
+        except SMTPException:
+            return False
+        return True
 
 
 class CaptchaContactForm(ContactForm):
