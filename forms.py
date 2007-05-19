@@ -1,7 +1,6 @@
 """
 A base contact form for allowing users to send email messages through
-a web interface, and some subclasses demonstrating useful
-functionality.
+a web interface, and a subclass demonstrating useful functionality.
 
 """
 
