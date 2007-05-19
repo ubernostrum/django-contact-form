@@ -174,8 +174,8 @@ class CaptchaContactForm(ContactForm):
     
     """
     def __init__(self, captcha_value="swordfish", *args, **kwargs):
-        super(CaptchaContactForm, self).__init__(*args, **kwargs)
-        self.fields['hash'] = sha.new(captcha_value + settings.SECRET_KEY).hexdigest()
+        initial_data = { 'hash': sha.new(captcha_value + settings.SECRET_KEY).hexdigest() }
+        super(CaptchaContactForm, self).__init__(initial=initial, *args, **kwargs)
         self.fields['captcha'].label = 'Type the word "%s" (to deter automated spam bots)' % captcha_value
     
     captcha = forms.CharField(widget=forms.TextInput(attrs=attrs_dict))
