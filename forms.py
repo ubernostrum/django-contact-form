@@ -174,12 +174,12 @@ class CaptchaContactForm(ContactForm):
     
     """
     def __init__(self, captcha_value="swordfish", *args, **kwargs):
-        initial_data = { 'hash': sha.new(captcha_value + settings.SECRET_KEY).hexdigest() }
+        initial_data = { 'verify': sha.new(captcha_value + settings.SECRET_KEY).hexdigest() }
         super(CaptchaContactForm, self).__init__(initial=initial, *args, **kwargs)
         self.fields['captcha'].label = 'Type the word "%s" (to deter automated spam bots)' % captcha_value
     
     captcha = forms.CharField(widget=forms.TextInput(attrs=attrs_dict))
-    hash = forms.CharField(max_length=40, widget=forms.HiddenInput())
+    verify = forms.CharField(max_length=40, widget=forms.HiddenInput())
     
     def clean_captcha(self):
         """
@@ -187,7 +187,7 @@ class CaptchaContactForm(ContactForm):
         hidden pre-calculated value, raise a validation error.
         
         """
-        if 'captcha' in self.cleaned_data and 'hash' in self.cleaned_data:
-            if sha.new(self.cleaned_data['captcha'] + settings.SECRET_KEY).hexdigest() == self.cleaned_data['hash']:
+        if 'captcha' in self.cleaned_data and 'verify' in self.cleaned_data:
+            if sha.new(self.cleaned_data['captcha'] + settings.SECRET_KEY).hexdigest() == self.cleaned_data['verify']:
                 return self.cleaned_data['captcha']
             raise forms.ValidationError(u"You didn't type the word correctly")
