@@ -17,13 +17,22 @@ def contact_form(request, form_class=ContactForm, template_name='contact/contact
     which is handled by the form class), pass the ``template_name``
     keyword argument; if not supplied, this will default to
     ``contact/contact_form.html``.
-
+    
     To specify a URL to redirect to after a successfully-sent message,
     pass the ``success_url`` keyword argument; if not supplied, this
     will default to ``/contact/sent/``.
     
     To allow only registered users to use the form, pass a ``True``
     value for the ``login_required`` keyword argument.
+    
+    Template::
+    
+        Passed in the ``template_name`` argument.
+        
+    Context::
+    
+        form
+            The form instance.
     
     """
     if login_required and not request.user.is_authenticated():
