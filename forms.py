@@ -129,8 +129,10 @@ class ContactForm(forms.Form):
     pass silently, unless explicitly silenced").
     
     """
-    def __init__(self, request, *args, **kwargs):
-        super(ContactForm, self).__init__(*args, **kwargs)
+    def __init__(self, data=None, request=None, *args, **kwargs):
+        if request is None:
+            raise TypeError("Keyword argument 'request' must be supplied")
+        super(ContactForm, self).__init__(data, *args, **kwargs)
         self.request = request
     
     name = forms.CharField(max_length=100,
