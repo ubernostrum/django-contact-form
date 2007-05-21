@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.contrib.auth.views import redirect_to_login
 from contact_form.forms import ContactForm
 
-def contact_form(request, form_class=ContactForm, template_name='contact/contact_form.html', success_url='/contact/sent/', login_required=False,):
+def contact_form(request, form_class=ContactForm, template_name='contact/contact_form.html', success_url='/contact/sent/', login_required=False, fail_silently=False):
     """
     Renders a contact form, validates its input and sends an email
     from it.
@@ -26,6 +26,10 @@ def contact_form(request, form_class=ContactForm, template_name='contact/contact
     To allow only registered users to use the form, pass a ``True``
     value for the ``login_required`` keyword argument.
     
+    To suppress exceptions raised during sending of the email, pass a
+    ``True`` value for the ``fail_silently`` keyword argument. This is
+    **not** recommended.
+    
     Template::
     
         Passed in the ``template_name`` argument.
@@ -38,11 +42,11 @@ def contact_form(request, form_class=ContactForm, template_name='contact/contact
     """
     if login_required and not request.user.is_authenticated():
         return redirect_to_login(request.path)
-
+    
     if request.method == 'POST':
         form = form_class(request.POST, request=request)
         if form.is_valid():
-            form.save()
+            form.save(fail_silently=fail_silently)
             return HttpResponseRedirect(success_url)
     else:
         form = form_class(request=request)
