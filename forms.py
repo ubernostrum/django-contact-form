@@ -5,7 +5,6 @@ a web interface, and a subclass demonstrating useful functionality.
 """
 
 import sha
-from smtplib import SMTPException
 from django import newforms as forms
 from django.conf import settings
 from django.core.mail import send_mail
@@ -65,7 +64,11 @@ class ContactForm(forms.Form):
 
     Subclasses should also be careful when overriding ``save``, as
     this method is responsible for constructing and sending the actual
-    email message.
+    email message. The base ``save`` method takes the keyword argument
+    ``fail_silently``, which defaults to ``False`` and is passed
+    through to ``send_mail``, so you can suppress errors if you like;
+    allowing it to fail noisily and raise exceptions, however, is
+    probably more desirable.
     
     Beyond that, the sky's the limit; anything which is supported by
     Django's newforms can be added in a subclass. In most cases,
@@ -110,7 +113,7 @@ class ContactForm(forms.Form):
         t = loader.get_template(template_name)
         return t.render(RequestContext(self.request, self.cleaned_data))
 
-    def save(self):
+    def save(self, fail_silently=False):
         """
         Builds and sends the email message.
         
@@ -121,11 +124,7 @@ class ContactForm(forms.Form):
         for message_part in ('from_email', 'message', 'recipients', 'subject'):
             attr = getattr(self, message_part)
             message_dict[message_part] = callable(attr) and attr() or attr
-        try:
-            send_mail(**message_dict)
-        except SMTPException:
-            return False
-        return True
+        send_mail(fail_silently=fail_silently, **message_dict)
 
 
 class AkismetContactForm(ContactForm):
