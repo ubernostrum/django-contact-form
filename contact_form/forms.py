@@ -80,7 +80,7 @@ class ContactForm(forms.Form):
           
         * ``template_name`` -- used by the base ``message`` method
           to determine which template to use for rendering the
-          message. Default is ``contact/contact_form.txt``
+          message. Default is ``contact_form/contact_form.txt``.
           
     Internally, the base implementation ``_get_message_dict`` method
     collects ``from_email``, ``message``, ``recipients`` and
@@ -150,7 +150,7 @@ class ContactForm(forms.Form):
     
     subject = "[%s] Message sent through the web site" % Site.objects.get_current().name
     
-    template_name = 'contact/contact_form.txt'
+    template_name = 'contact_form/contact_form.txt'
     
     def message(self):
         """

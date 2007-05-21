@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.contrib.auth.views import redirect_to_login
 from contact_form.forms import ContactForm
 
-def contact_form(request, form_class=ContactForm, template_name='contact/contact_form.html', success_url='/contact/sent/', login_required=False, fail_silently=False):
+def contact_form(request, form_class=ContactForm, template_name='contact_form/contact_form.html', success_url='/contact/sent/', login_required=False, fail_silently=False):
     """
     Renders a contact form, validates its input and sends an email
     from it.
@@ -17,7 +17,7 @@ def contact_form(request, form_class=ContactForm, template_name='contact/contact
     template used to render the email message sent from the form,
     which is handled by the form class), pass the ``template_name``
     keyword argument; if not supplied, this will default to
-    ``contact/contact_form.html``.
+    ``contact_form/contact_form.html``.
     
     To specify a URL to redirect to after a successfully-sent message,
     pass the ``success_url`` keyword argument; if not supplied, this

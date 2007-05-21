@@ -1,0 +1,46 @@
+==============
+Included views
+==============
+
+
+One view is included with this application:
+``contact_form.views.contact_form``, which knows how to work with
+``contact_form.forms.ContactForm`` and its subclasses, and takes
+several useful keyword arguments for specifying behavior.
+
+
+``contact_form.views.contact_form``
+====================================
+
+Renders a contact form, validates its input and sends an email
+from it.
+
+To specify the form class to use, pass the ``form_class`` keyword
+argument; if no ``form_class`` is specified, the base
+``ContactForm`` class will be used.
+
+To specify the template to use for rendering the form (*not* the
+template used to render the email message sent from the form,
+which is handled by the form class), pass the ``template_name``
+keyword argument; if not supplied, this will default to
+``contact/contact_form.html``.
+
+To specify a URL to redirect to after a successfully-sent message,
+pass the ``success_url`` keyword argument; if not supplied, this
+will default to ``/contact/sent/``.
+
+To allow only registered users to use the form, pass a ``True``
+value for the ``login_required`` keyword argument.
+
+To suppress exceptions raised during sending of the email, pass a
+``True`` value for the ``fail_silently`` keyword argument. This is
+**not** recommended.
+    
+Template::
+
+    Passed in the ``template_name`` argument.
+    
+Context::
+
+    form
+        The form instance.
