@@ -42,8 +42,8 @@ def contact_form(request, form_class=ContactForm, template_name='contact/contact
     if request.method == 'POST':
         form = form_class(request.POST, request=request)
         if form.is_valid():
-            if form.save():
-                return HttpResponseRedirect(success_url)
+            form.save()
+            return HttpResponseRedirect(success_url)
     else:
         form = form_class(request=request)
     return render_to_response(template_name,
