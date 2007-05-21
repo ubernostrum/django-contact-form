@@ -26,13 +26,45 @@ class ContactForm(forms.Form):
     this form to provide basic contact functionality; it will collect
     name, email address and message.
     
-    To add functionality, subclasses can override any or all of
-    the following:
-
+    The ``contact_form`` view included in this application knows how
+    to work with this form and can handle many types of subclasses as
+    well (see below for a discussion of the important points), so in
+    many cases it will be all that you need. If you'd like to use this
+    form or a subclass of it from one of your own views, just do the
+    following:
+    
+        1. When you instantiate the form, pass the current
+           ``HttpRequest`` object to the constructor as the keyword
+           argument ``request``; this is used internally by the base
+           implementation, and also made available so that subclasses
+           can add functionality which relies on inspecting the
+           request.
+           
+        2. To send the message, call the form's ``save`` method, which
+           accepts the keyword argument ``fail_silently`` and defaults
+           it to ``False``. This argument is passed directly to
+           ``send_mail``, and allows you to suppress or raise
+           exceptions as needed for debugging. The ``save`` method has
+           no return value.
+           
+    Other than that, treat it like any other form; validity checks and
+    validated data are handled normally, through the ``is_valid``
+    method and the ``cleaned_data`` dictionary.
+    
+    
+    Base implementation
+    -------------------
+    
+    Under the hood, this form uses a somewhat abstracted interface in
+    order to make it easier to subclass and add functionality. There
+    are several important attributes subclasses may want to look at
+    overriding, all of which will work (in the base implementation) as
+    either plain attributes or as callable methods:
+    
         * ``from_email`` -- used to get the address to use in the
           ``From:`` header of the message. The base implementation
           returns the value of the ``DEFAULT_FROM_EMAIL`` setting.
-    
+          
         * ``message`` -- used to get the message body as a string. The
           base implementation renders a template using the form's
           ``cleaned_data`` dictionary as context.
@@ -50,34 +82,47 @@ class ContactForm(forms.Form):
           to determine which template to use for rendering the
           message. Default is ``contact/contact_form.txt``
           
-    Each of these can be a normal attribute or a method; the contact
-    form view will handle either automatically.
-          
-    Subclasses which override ``__init__`` **must** accept ``*args``
-    and ``**kwargs`` and pass them to the superclass ``__init__`` via
-    ``super``.
+    Internally, the base implementation ``_get_message_dict`` method
+    collects ``from_email``, ``message``, ``recipients`` and
+    ``subject`` into a dictionary, which the ``save`` method then
+    passes directly to ``send_mail`` as keyword arguments.
+    
+    Particularly important is the ``message`` attribute, with its base
+    implementation as a method which renders a template; because it
+    passes ``cleaned_data`` as the template context, any additional
+    fields added by a subclass will automatically be available in the
+    template. This means that many useful subclasses can get by with
+    just adding a few fields and possibly overriding ``template_name``.
+    
+    Much useful functionality can be achieved in subclasses without
+    having to override much of the above; adding additional validation
+    methods works the same as any other form, and typically only a few
+    items -- ``recipient_list`` and ``subject_line``, for example,
+    need to be overridden to achieve customized behavior.
+    
+    
+    Other notes for subclassing
+    ---------------------------
     
     Subclasses which want to inspect the current ``HttpRequest`` to
     add functionality can access it via the attribute ``request``; the
-    base ``get_message`` takes advantage of this to use
-    ``RequestContext`` when rendering its template.
-
-    Subclasses should also be careful when overriding ``save``, as
-    this method is responsible for constructing and sending the actual
-    email message. The base ``save`` method takes the keyword argument
-    ``fail_silently``, which defaults to ``False`` and is passed
-    through to ``send_mail``, so you can suppress errors if you like;
-    allowing it to fail noisily and raise exceptions, however, is
-    probably more desirable.
+    base ``message`` takes advantage of this to use ``RequestContext``
+    when rendering its template. See the ``AkismetContactForm``
+    subclass in this file for an example of using the request to
+    perform additional validation.
     
-    Beyond that, the sky's the limit; anything which is supported by
-    Django's newforms can be added in a subclass. In most cases,
-    however, subclasses will not need to override much, if anything,
-    from the base form; for example, any additional fields defined in
-    a subclass will be picked up and automatically passed to the
-    template when the message is rendered, so in many cases all that's
-    needed is to change the value of ``template_name``, or override
-    ``subject`` or ``recipients``.
+    Subclasses should be careful if overriding ``_get_message_dict``,
+    since that method **must** return a dictionary suitable for
+    passing directly to ``send_mail`` (unless ``save`` is overridden
+    as well).
+    
+    Overriding ``save`` is relatively safe, though remember that code
+    which uses your form will expect ``save`` to accept the
+    ``fail_silently`` keyword argument. In the base implementation,
+    that argument defaults to ``False``, on the assumption that it's
+    far better to notice errors than to silently not send mail from
+    the contact form (see also the Zen of Python: "Errors should never
+    pass silently, unless explicitly silenced").
     
     """
     def __init__(self, request, *args, **kwargs):
@@ -90,7 +135,7 @@ class ContactForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=200)),
                              label=u'Your email address')
-    message = forms.CharField(widget=forms.Textarea(attrs=attrs_dict),
+    body = forms.CharField(widget=forms.Textarea(attrs=attrs_dict),
                               label=u'Your message')
     
     from_email = settings.DEFAULT_FROM_EMAIL
@@ -112,19 +157,22 @@ class ContactForm(forms.Form):
             template_name = self.template_name
         t = loader.get_template(template_name)
         return t.render(RequestContext(self.request, self.cleaned_data))
-
-    def save(self, fail_silently=False):
-        """
-        Builds and sends the email message.
-        
-        """
+    
+    def _get_message_dict(self):
         if not self.is_valid():
             raise ValueError("Message cannot be sent from invalid contact form")
         message_dict = {}
         for message_part in ('from_email', 'message', 'recipients', 'subject'):
             attr = getattr(self, message_part)
             message_dict[message_part] = callable(attr) and attr() or attr
-        send_mail(fail_silently=fail_silently, **message_dict)
+        return message_dict
+    
+    def save(self, fail_silently=False):
+        """
+        Builds and sends the email message.
+        
+        """
+        send_mail(fail_silently=fail_silently, **self._get_message_dict())
 
 
 class AkismetContactForm(ContactForm):
@@ -136,8 +184,8 @@ class AkismetContactForm(ContactForm):
     Akismet API key.
     
     """
-    def clean_message(self):
-        if hasattr(settings, 'AKISMET_API_KEY') and settings.AKISMET_API_KEY:
+    def clean_body(self):
+        if 'body' in self.cleaned_data and hasattr(settings, 'AKISMET_API_KEY') and settings.AKISMET_API_KEY:
             from akismet import Akismet
             akismet_api = Akismet(key=settings.AKISMET_API_KEY,
                                   blog_url='http://%s/' % Site.objects.get_current().domain)
@@ -146,6 +194,6 @@ class AkismetContactForm(ContactForm):
                                  'referer': self.request.META.get('HTTP_REFERER', ''),
                                  'user_ip': self.request.META.get('REMOTE_ADDR', ''),
                                  'user_agent': self.request.META.get('HTTP_USER_AGENT', '') }
-                if akismet_api.comment_check(self.cleaned_data['message'], data=akismet_data, build_data=True):
+                if akismet_api.comment_check(self.cleaned_data['body'], data=akismet_data, build_data=True):
                     raise forms.ValidationError(u"Akismet thinks this message is spam")
-        return self.cleaned_data['message']
+        return self.cleaned_data['body']
