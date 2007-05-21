@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.contrib.auth.views import redirect_to_login
 from contact_form.forms import ContactForm
 
 def contact_form(request, form_class=ContactForm, template_name='contact/contact_form.html', success_url='/contact/sent/', login_required=False,):
@@ -36,16 +37,15 @@ def contact_form(request, form_class=ContactForm, template_name='contact/contact
     
     """
     if login_required and not request.user.is_authenticated():
-        from django.contrib.auth.views import redirect_to_login
         return redirect_to_login(request.path)
 
     if request.method == 'POST':
-        form = form_class(request.POST)
+        form = form_class(request.POST, request=request)
         if form.is_valid():
             if form.save():
                 return HttpResponseRedirect(success_url)
     else:
-        form = form_class()
+        form = form_class(request=request)
     return render_to_response(template_name,
                               { 'form': form },
                               context_instance=RequestContext(request))
