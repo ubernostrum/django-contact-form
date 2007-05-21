@@ -111,6 +111,10 @@ class ContactForm(forms.Form):
     subclass in this file for an example of using the request to
     perform additional validation.
     
+    Subclasses which override ``__init__`` need to accept ``*args``
+    and ``**kwargs``, and pass them via ``super`` in order to ensure
+    proper behavior.
+    
     Subclasses should be careful if overriding ``_get_message_dict``,
     since that method **must** return a dictionary suitable for
     passing directly to ``send_mail`` (unless ``save`` is overridden
