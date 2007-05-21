@@ -40,7 +40,7 @@ def contact_form(request, form_class=ContactForm, template_name='contact/contact
         return redirect_to_login(request.path)
 
     if request.method == 'POST':
-        form = form_class(data=request.POST, request=request)
+        form = form_class(request.POST, request=request)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(success_url)
