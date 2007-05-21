@@ -75,9 +75,9 @@ class ContactForm(forms.Form):
     however, subclasses will not need to override much, if anything,
     from the base form; for example, any additional fields defined in
     a subclass will be picked up and automatically passed to the
-    template when the message is rendered, for example, so in many
-    cases all that's needed is to change the value of
-    ``template_name``, or override ``subject`` or ``recipients``.
+    template when the message is rendered, so in many cases all that's
+    needed is to change the value of ``template_name``, or override
+    ``subject`` or ``recipients``.
     
     """
     def __init__(self, request, *args, **kwargs):
