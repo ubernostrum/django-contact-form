@@ -27,9 +27,9 @@ the Django 0.96 release.
 
 If you will be using the included ``AkismetContactForm`` class, which
 performs an Akismet spam check as part of its validation, you will
-need the `Python Akismet module`_ and a valid Akismet API key; you
-can obtain an Akismet API by following the instructions at `the
-Akismet web site`_.
+need the `Python Akismet module`_ and a valid Akismet API key; you can
+obtain an Akismet API by following the instructions at `the Akismet
+web site`_.
 
 .. _Python Akismet module: http://www.voidspace.org.uk/python/modules.shtml#akismet
 .. _the Akismet web site: http://akismet.com/
@@ -81,8 +81,8 @@ following:
       ``contact_form/contact_form.html``, which will be used to
       display the form to users; and
       ``contact_form/contact_form_sent.html``, which will be used
-      after the form is successfully submitted.  See the forms and views
-      documentation, respectively, for details on the contexts
+      after the form is successfully submitted.  See the forms and
+      views documentation, respectively, for details on the contexts
       available to the first two templates; the third is rendered from
       the ``direct_to_template`` generic view, and has no context.
 

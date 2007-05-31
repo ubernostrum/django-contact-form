@@ -69,21 +69,21 @@ class ContactForm(forms.Form):
           base implementation renders a template using the form's
           ``cleaned_data`` dictionary as context.
           
-        * ``recipients`` -- used to generate the list of recipients
-          for the message. The base implementation returns the email
-          addresses specified in the ``MANAGERS`` setting.
+        * ``recipient_list`` -- used to generate the list of
+          recipients for the message. The base implementation returns
+          the email addresses specified in the ``MANAGERS`` setting.
           
         * ``subject`` -- used to generate the subject line for the
           message. The base implementation returns the string 'Message
           sent through the web site', with the name of the current
           ``Site`` prepended.
           
-        * ``template_name`` -- used by the base ``message`` method
-          to determine which template to use for rendering the
+        * ``template_name`` -- used by the base ``message`` method to
+          determine which template to use for rendering the
           message. Default is ``contact_form/contact_form.txt``.
           
     Internally, the base implementation ``_get_message_dict`` method
-    collects ``from_email``, ``message``, ``recipients`` and
+    collects ``from_email``, ``message``, ``recipient_list`` and
     ``subject`` into a dictionary, which the ``save`` method then
     passes directly to ``send_mail`` as keyword arguments.
     
@@ -92,7 +92,8 @@ class ContactForm(forms.Form):
     passes ``cleaned_data`` as the template context, any additional
     fields added by a subclass will automatically be available in the
     template. This means that many useful subclasses can get by with
-    just adding a few fields and possibly overriding ``template_name``.
+    just adding a few fields and possibly overriding
+    ``template_name``.
     
     Much useful functionality can be achieved in subclasses without
     having to override much of the above; adding additional validation
@@ -146,7 +147,7 @@ class ContactForm(forms.Form):
     
     from_email = settings.DEFAULT_FROM_EMAIL
     
-    recipients = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
+    recipient_list = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
     
     subject = "[%s] Message sent through the web site" % Site.objects.get_current().name
     
@@ -168,7 +169,7 @@ class ContactForm(forms.Form):
         if not self.is_valid():
             raise ValueError("Message cannot be sent from invalid contact form")
         message_dict = {}
-        for message_part in ('from_email', 'message', 'recipients', 'subject'):
+        for message_part in ('from_email', 'message', 'recipient_list', 'subject'):
             attr = getattr(self, message_part)
             message_dict[message_part] = callable(attr) and attr() or attr
         return message_dict
