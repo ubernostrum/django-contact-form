@@ -16,7 +16,7 @@ from contact_form.views import contact_form
 
 urlpatterns = patterns('',
                        url(r'^contact/$',
-                           contact_form,,
+                           contact_form,
                            name='contact_form'),
                        url(r'^contact/sent/$',
                            direct_to_template,
