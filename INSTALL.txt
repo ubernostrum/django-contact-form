@@ -11,9 +11,9 @@ into a directory that's on your Python path::
 The other method is to download a packaged version and use Python's
 ``distutils`` to install it onto your Python path::
 
-    wget http://django-contact-form.googlecode.com/files/contact_form-0.1.tar.gz
-    tar zxvf contact_form-0.1.tar.gz
-    cd contact-form-0.1
+    wget http://django-contact-form.googlecode.com/files/contact_form-0.2.tar.gz
+    tar zxvf contact_form-0.2.tar.gz
+    cd contact-form-0.2
     python setup.py install
 
 Depending on your system configuration, you may need to prefix the
