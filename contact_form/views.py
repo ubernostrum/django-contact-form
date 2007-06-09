@@ -1,8 +1,16 @@
+"""
+View which can render and send email from a contact form.
+
+"""
+
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.views import redirect_to_login
+
 from contact_form.forms import ContactForm
+
 
 def contact_form(request, form_class=ContactForm, template_name='contact_form/contact_form.html', success_url='/contact/sent/', login_required=False, fail_silently=False):
     """

@@ -4,12 +4,15 @@ a web interface, and a subclass demonstrating useful functionality.
 
 """
 
+
 import sha
+
 from django import newforms as forms
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template import loader, RequestContext
 from django.contrib.sites.models import Site
+
 
 # I put this on all required fields, because it's easier to pick up
 # on them with CSS or JavaScript if they have a class of "required"
