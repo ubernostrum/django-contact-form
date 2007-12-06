@@ -109,10 +109,10 @@ Other notes for subclassing
 
 Subclasses which want to inspect the current ``HttpRequest`` to add
 functionality can access it via the attribute ``request``; the base
-``message`` takes advantage of this to use ``RequestContext`` when
-rendering its template. See the ``AkismetContactForm`` subclass in
-this file for an example of using the request to perform additional
-validation.
+``message`` and ``subject`` take advantage of this to use
+``RequestContext`` when rendering their templates. See the
+``AkismetContactForm`` subclass in this file for an example of using
+the request to perform additional validation.
 
 Subclasses which override ``__init__`` need to accept ``*args`` and
 ``**kwargs``, and pass them via ``super`` in order to ensure proper
