@@ -76,7 +76,8 @@ following:
           
           (r'^contact/', include('contact_form.urls'),
     
-    * Create three templates: ``contact_form/contact_form.txt``, which
+    * Create four templates: ``contact_form/contact_form_subject.txt``
+      and ``contact_form/contact_form.txt``, which
       will be used to render the email messages sent by the form;
       ``contact_form/contact_form.html``, which will be used to
       display the form to users; and
