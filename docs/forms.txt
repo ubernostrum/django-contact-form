@@ -72,9 +72,16 @@ either plain attributes or as callable methods:
       sent through the web site', with the name of the current
       ``Site`` prepended.
       
-    * ``template_name`` -- used by the base ``message`` method to
+    * ``template_name`` -- used by the base ``ContactForm`` class to
       determine which template to use for rendering the
-      message. Default is ``contact/contact_form.txt``
+      message. Default is ``contact_form/contact_form.txt``.
+    
+    * ``subject_template_name`` -- used by the base ``ContactForm``
+      class to determine which template to use for rendering the
+      message's subject line. Regardless of the output of rendering
+      this template, it will be condensed to a single line of text;
+      multi-line subjects are not permitted. Default is
+      ``contact_form/contact_form_subject.txt``.
       
 Internally, the base implementation ``_get_message_dict`` method
 collects ``from_email``, ``message``, ``recipient_list`` and
@@ -82,11 +89,13 @@ collects ``from_email``, ``message``, ``recipient_list`` and
 directly to ``send_mail`` as keyword arguments.
 
 Particularly important is the ``message`` attribute, with its base
-implementation as a method which renders a template; because it passes
-``cleaned_data`` as the template context, any additional fields added
-by a subclass will automatically be available in the template. This
-means that many useful subclasses can get by with just adding a few
-fields and possibly overriding ``template_name``.
+implementation as a method which renders a template, and the
+``subject`` attribute which defaults to a similar method; because they
+pass ``cleaned_data`` as the template context, any additional fields
+added by a subclass will automatically be available in the
+template. This means that many useful subclasses can get by with just
+adding a few fields and possibly overriding ``template_name`` and/or
+``subject_template_name``.
 
 Much useful functionality can be achieved in subclasses without having
 to override much of the above; adding additional validation methods
