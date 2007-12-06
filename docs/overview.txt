@@ -77,15 +77,16 @@ following:
           (r'^contact/', include('contact_form.urls'),
     
     * Create four templates: ``contact_form/contact_form_subject.txt``
-      and ``contact_form/contact_form.txt``, which
-      will be used to render the email messages sent by the form;
+      and ``contact_form/contact_form.txt``, which will be used to
+      render the email messages sent by the form;
       ``contact_form/contact_form.html``, which will be used to
       display the form to users; and
       ``contact_form/contact_form_sent.html``, which will be used
       after the form is successfully submitted.  See the forms and
       views documentation, respectively, for details on the contexts
-      available to the first two templates; the third is rendered from
-      the ``direct_to_template`` generic view, and has no context.
+      available to the first three templates; the fourth is rendered
+      from the ``direct_to_template`` generic view, and has no
+      context.
 
 Once this is done, visiting the URL ``/contact/`` on your site will
 display the contact form, and submitting it will send an email to each
