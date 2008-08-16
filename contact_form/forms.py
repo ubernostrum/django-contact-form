@@ -5,7 +5,7 @@ a web interface, and a subclass demonstrating useful functionality.
 """
 
 
-from django import newforms as forms
+from django import forms
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template import loader, RequestContext
@@ -131,10 +131,10 @@ class ContactForm(forms.Form):
     pass silently, unless explicitly silenced").
     
     """
-    def __init__(self, data=None, request=None, *args, **kwargs):
+    def __init__(self, data=None, files=None, request=None, *args, **kwargs):
         if request is None:
             raise TypeError("Keyword argument 'request' must be supplied")
-        super(ContactForm, self).__init__(data, *args, **kwargs)
+        super(ContactForm, self).__init__(data=data, files=files, *args, **kwargs)
         self.request = request
     
     name = forms.CharField(max_length=100,
