@@ -55,7 +55,7 @@ def contact_form(request, form_class=ContactForm,
         return redirect_to_login(request.path)
     
     if request.method == 'POST':
-        form = form_class(data=request.POST, request=request)
+        form = form_class(data=request.POST, files=request.FILES, request=request)
         if form.is_valid():
             form.save(fail_silently=fail_silently)
             return HttpResponseRedirect(success_url)
