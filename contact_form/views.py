@@ -13,12 +13,18 @@ from contact_form.forms import ContactForm
 
 def contact_form(request, form_class=ContactForm,
                  template_name='contact_form/contact_form.html',
-                 success_url=None, fail_silently=False):
+                 success_url=None, extra_context=None,
+                 fail_silently=False):
     """
     Render a contact form, validate its input and send an email
     from it.
 
     **Optional arguments:**
+
+    ``extra_context``
+        A dictionary of variables to add to the template context. Any
+        callable object in this dictionary will be called to produce
+        the end result which appears in the context.
 
     ``fail_silently``
         If ``True``, errors when sending the email will be silently
@@ -74,6 +80,13 @@ def contact_form(request, form_class=ContactForm,
             return HttpResponseRedirect(success_url)
     else:
         form = form_class(request=request)
+
+    if extra_context is None:
+        extra_context = {}
+    context = RequestContext(request)
+    for key, value in extra_context.items():
+        context[key] = callable(value) and value() or value
+    
     return render_to_response(template_name,
                               { 'form': form },
-                              context_instance=RequestContext(request))
+                              context_instance=context)

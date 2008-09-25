@@ -16,6 +16,11 @@ Render a contact form, validate its input and send an email from it.
 
 **Optional arguments:**
 
+``extra_context``
+    A dictionary of variables to add to the template context. Any
+    callable object in this dictionary will be called to produce the
+    end result which appears in the context.
+
 ``fail_silently``
     If ``True``, errors when sending the email will be silently
     supressed (i.e., with no logging or reporting of any such
