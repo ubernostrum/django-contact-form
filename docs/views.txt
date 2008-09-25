@@ -32,7 +32,8 @@ Render a contact form, validate its input and send an email from it.
 
 ``success_url``
     The URL to redirect to after a successful submission. If not
-    supplied, this will be the URL ``/contact/sent/``.
+    supplied, this will be the URL pointed to by the named URL pattern
+    ``contact_form_sent``.
 
 ``template_name``
     The template to use for rendering the contact form. If not

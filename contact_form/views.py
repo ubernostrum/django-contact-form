@@ -3,7 +3,7 @@ View which can render and send email from a contact form.
 
 """
 
-
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -13,7 +13,7 @@ from contact_form.forms import ContactForm
 
 def contact_form(request, form_class=ContactForm,
                  template_name='contact_form/contact_form.html',
-                 success_url='/contact/sent/', fail_silently=False):
+                 success_url=None, fail_silently=False):
     """
     Render a contact form, validate its input and send an email
     from it.
@@ -37,7 +37,8 @@ def contact_form(request, form_class=ContactForm,
 
     ``success_url``
         The URL to redirect to after a successful submission. If not
-        supplied, this will be the URL ``/contact/sent/``.
+        supplied, this will default to the URL pointed to by the named
+        URL pattern ``contact_form_sent``.
 
     ``template_name``
         The template to use for rendering the contact form. If not
@@ -55,6 +56,17 @@ def contact_form(request, form_class=ContactForm,
     :template:`contact_form/contact_form.html`.
 
     """
+    #
+    # We set up success_url here, rather than as the default value for
+    # the argument. Trying to do it as the argument's default would
+    # mean evaluating the call to reverse() at the time this module is
+    # first imported, which introduces a circular dependency: to
+    # perform the reverse lookup we need access to contact_form/urls.py,
+    # but contact_form/urls.py in turn imports from this module.
+    #
+    
+    if success_url is None:
+        success_url = reverse('contact_form_sent')
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES, request=request)
         if form.is_valid():
