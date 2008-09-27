@@ -154,8 +154,6 @@ class ContactForm(forms.Form):
     
     template_name = 'contact_form/contact_form.txt'
 
-    _context = None
-    
     def message(self):
         """
         Renders the body of the message to a string.
@@ -180,11 +178,9 @@ class ContactForm(forms.Form):
     def get_context(self):
         if not self.is_valid():
             raise ValueError("Cannot generate Context from invalid contact form")
-        if self._context is None:
-            self._context = RequestContext(self.request,
-                                           dict(self.cleaned_data,
-                                                site=Site.objects.get_current()))
-        return self._context
+        return RequestContext(self.request,
+                              dict(self.cleaned_data,
+                                   site=Site.objects.get_current()))
     
     def get_message_dict(self):
         if not self.is_valid():
