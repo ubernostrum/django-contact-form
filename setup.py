@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-setup(name='contact_form',
+setup(name='django-contact-form',
       version='0.3',
       description='Generic contact-form application for Django',
       author='James Bennett',
