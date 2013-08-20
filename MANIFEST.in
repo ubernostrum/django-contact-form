@@ -1,5 +1,4 @@
-include INSTALL.txt
-include LICENSE.txt
-include README.txt
+include LICENSE
+include README
 include MANIFEST.in
 recursive-include docs *

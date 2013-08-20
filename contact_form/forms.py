@@ -10,26 +10,21 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template import loader
 from django.template import RequestContext
+from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
-
-
-# I put this on all required fields, because it's easier to pick up
-# on them with CSS or JavaScript if they have a class of "required"
-# in the HTML. Your mileage may vary.
-attrs_dict = { 'class': 'required' }
 
 
 class ContactForm(forms.Form):
     """
-    Base contact form class from which all contact form classes should
-    inherit.
+    The base contact form class from which all contact form classes
+    should inherit.
 
     If you don't need any custom functionality, you can simply use
     this form to provide basic contact functionality; it will collect
     name, email address and message.
 
-    The ``contact_form`` view included in this application knows how
-    to work with this form and can handle many types of subclasses as
+    The ``ContactForm`` view included in this application knows how to
+    work with this form and can handle many types of subclasses as
     well (see below for a discussion of the important points), so in
     many cases it will be all that you need. If you'd like to use this
     form or a subclass of it from one of your own views, just do the
@@ -127,8 +122,7 @@ class ContactForm(forms.Form):
     ``fail_silently`` keyword argument. In the base implementation,
     that argument defaults to ``False``, on the assumption that it's
     far better to notice errors than to silently not send mail from
-    the contact form (see also the Zen of Python: "Errors should never
-    pass silently, unless explicitly silenced").
+    the contact form.
     
     """
     def __init__(self, data=None, files=None, request=None, *args, **kwargs):
@@ -138,12 +132,10 @@ class ContactForm(forms.Form):
         self.request = request
     
     name = forms.CharField(max_length=100,
-                           widget=forms.TextInput(attrs=attrs_dict),
                            label=u'Your name')
-    email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
-                                                               maxlength=200)),
+    email = forms.EmailField(max_length=200,
                              label=u'Your email address')
-    body = forms.CharField(widget=forms.Textarea(attrs=attrs_dict),
+    body = forms.CharField(widget=forms.Textarea,
                               label=u'Your message')
     
     from_email = settings.DEFAULT_FROM_EMAIL
@@ -193,9 +185,13 @@ class ContactForm(forms.Form):
         """
         if not self.is_valid():
             raise ValueError("Cannot generate Context from invalid contact form")
+        if Site._meta.installed:
+            site = Site.objects.get_current()
+        else:
+            site = RequestSite(self.request)
         return RequestContext(self.request,
                               dict(self.cleaned_data,
-                                   site=Site.objects.get_current()))
+                                   site=site))
     
     def get_message_dict(self):
         """
@@ -219,7 +215,7 @@ class ContactForm(forms.Form):
         message_dict = {}
         for message_part in ('from_email', 'message', 'recipient_list', 'subject'):
             attr = getattr(self, message_part)
-            message_dict[message_part] = callable(attr) and attr() or attr
+            message_dict[message_part] = attr() if callable(attr) else attr
         return message_dict
     
     def save(self, fail_silently=False):
@@ -228,32 +224,3 @@ class ContactForm(forms.Form):
         
         """
         send_mail(fail_silently=fail_silently, **self.get_message_dict())
-
-
-class AkismetContactForm(ContactForm):
-    """
-    Contact form which doesn't add any extra fields, but does add an
-    Akismet spam check to the validation routine.
-
-    Requires the setting ``AKISMET_API_KEY``, which should be a valid
-    Akismet API key.
-    
-    """
-    def clean_body(self):
-        """
-        Perform Akismet validation of the message.
-        
-        """
-        if 'body' in self.cleaned_data and getattr(settings, 'AKISMET_API_KEY', ''):
-            from akismet import Akismet
-            from django.utils.encoding import smart_str
-            akismet_api = Akismet(key=settings.AKISMET_API_KEY,
-                                  blog_url='http://%s/' % Site.objects.get_current().domain)
-            if akismet_api.verify_key():
-                akismet_data = { 'comment_type': 'comment',
-                                 'referer': self.request.META.get('HTTP_REFERER', ''),
-                                 'user_ip': self.request.META.get('REMOTE_ADDR', ''),
-                                 'user_agent': self.request.META.get('HTTP_USER_AGENT', '') }
-                if akismet_api.comment_check(smart_str(self.cleaned_data['body']), data=akismet_data, build_data=True):
-                    raise forms.ValidationError(u"Akismet thinks this message is spam")
-        return self.cleaned_data['body']
