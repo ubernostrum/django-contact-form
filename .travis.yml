@@ -1,0 +1,13 @@
+language: python
+python:
+ - "3.4"
+ - "3.3"
+ - "2.7"
+env:
+ - DJANGO_VERSION=1.7.7
+ - DJANGO_VERSION=1.8
+install:
+ - pip install coverage
+ - pip install -q Django==$DJANGO_VERSION
+script: coverage run setup.py test
+after_success: coverage report
