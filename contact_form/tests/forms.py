@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from django.contrib.sites.models import Site
 
-from contact_form.forms import ContactForm
+from ..forms import ContactForm
 
 
 class ContactFormTests(TestCase):
@@ -43,11 +43,11 @@ class ContactFormTests(TestCase):
         self.assertEqual(1, len(mail.outbox))
 
         message = mail.outbox[0]
-        self.assertEqual([data['email']],
-                         message.recipients())
         self.assertTrue(data['body'] in message.body)
         self.assertEqual(settings.DEFAULT_FROM_EMAIL,
                          message.from_email)
+        self.assertEqual(form.recipient_list,
+                         message.recipients())
 
     def test_no_sites(self):
         """
@@ -55,17 +55,16 @@ class ContactFormTests(TestCase):
         contrib.sites.
         
         """
-        old_installed = Site._meta.installed
-        Site._meta.installed = False
+        with self.modify_settings(
+            INSTALLED_APPS={
+                'remove': ['django.contrib.sites'],
+            }):
+            request = RequestFactory().request()
+            data = {'name': 'Test',
+                    'email': 'test@example.com',
+                    'body': 'Test message'}
+            form = ContactForm(request=request, data=data)
+            self.assertTrue(form.is_valid())
 
-        request = RequestFactory().request()
-        data = {'name': 'Test',
-                'email': 'test@example.com',
-                'body': 'Test message'}
-        form = ContactForm(request=request, data=data)
-        self.assertTrue(form.is_valid())
-
-        form.save()
-        self.assertEqual(1, len(mail.outbox))
-
-        Site._meta.installed = old_installed
+            form.save()
+            self.assertEqual(1, len(mail.outbox))

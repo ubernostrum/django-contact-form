@@ -1,10 +1,13 @@
 from django.conf import settings
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.test import RequestFactory
 from django.test import TestCase
 
+from ..forms import ContactForm
 
-class ViewTests(TestCase):
+
+class ContactFormViewTests(TestCase):
     urls = 'contact_form.urls'
 
     def test_get(self):
@@ -39,11 +42,12 @@ class ViewTests(TestCase):
         self.assertEqual(1, len(mail.outbox))
 
         message = mail.outbox[0]
-        self.assertEqual([data['email']],
-                         message.recipients())
         self.assertTrue(data['body'] in message.body)
         self.assertEqual(settings.DEFAULT_FROM_EMAIL,
                          message.from_email)
+        form = ContactForm(request=RequestFactory().request)
+        self.assertEqual(form.recipient_list,
+                         message.recipients())
 
 
     def test_invalid(self):

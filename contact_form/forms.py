@@ -125,12 +125,6 @@ class ContactForm(forms.Form):
     the contact form.
     
     """
-    def __init__(self, data=None, files=None, request=None, *args, **kwargs):
-        if request is None:
-            raise TypeError("Keyword argument 'request' must be supplied")
-        super(ContactForm, self).__init__(data=data, files=files, *args, **kwargs)
-        self.request = request
-    
     name = forms.CharField(max_length=100,
                            label=u'Your name')
     email = forms.EmailField(max_length=200,
@@ -146,6 +140,12 @@ class ContactForm(forms.Form):
     
     template_name = 'contact_form/contact_form.txt'
 
+    def __init__(self, data=None, files=None, request=None, *args, **kwargs):
+        if request is None:
+            raise TypeError("Keyword argument 'request' must be supplied")
+        super(ContactForm, self).__init__(data=data, files=files, *args, **kwargs)
+        self.request = request
+    
     def message(self):
         """
         Render the body of the message to a string.
