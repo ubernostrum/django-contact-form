@@ -32,6 +32,7 @@ class ContactFormTests(TestCase):
                 'body': 'Test message'}
         form = ContactForm(request=self.request(), data=data)
         self.assertRaises(ValueError, form.get_message_dict)
+        self.assertRaises(ValueError, form.get_context)
 
     def test_send(self):
         """
