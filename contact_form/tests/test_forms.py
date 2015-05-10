@@ -104,3 +104,28 @@ class ContactFormTests(TestCase):
         message = mail.outbox[0]
         self.assertTrue('Callable template_name used.' in \
                         message.body)
+
+    def test_callable_message_parts(self):
+        overridden_data = {
+            'from_email': 'override@example.com',
+            'message': 'Overridden message.',
+            'recipient_list': ['override_recpt@example.com'],
+            'subject': 'Overridden subject',
+        }
+        
+        class CallableMessageParts(ContactForm):
+            def from_email(self):
+                return overridden_data['from_email']
+            def message(self):
+                return overridden_data['message']
+            def recipient_list(self):
+                return overridden_data['recipient_list']
+            def subject(self):
+                return overridden_data['subject']
+
+        form = CallableMessageParts(request=self.request(),
+                                    data=self.valid_data)
+        self.assertTrue(form.is_valid())
+
+        self.assertEqual(overridden_data,
+                         form.get_message_dict())
