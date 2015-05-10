@@ -9,6 +9,13 @@ from ..forms import ContactForm
 
 
 class ContactFormTests(TestCase):
+    valid_data = {'name': 'Test',
+                  'email': 'test@example.com',
+                  'body': 'Test message'}
+    
+    def request(self):
+        return RequestFactory().request()
+    
     def test_request_required(self):
         """
         Can't instantiate without an HttpRequest.
@@ -21,10 +28,9 @@ class ContactFormTests(TestCase):
         Can't try to build the message dict unless data is valid.
         
         """
-        request = RequestFactory().request()
         data = {'name': 'Test',
                 'body': 'Test message'}
-        form = ContactForm(request=request, data=data)
+        form = ContactForm(request=self.request(), data=data)
         self.assertRaises(ValueError, form.get_message_dict)
 
     def test_send(self):
@@ -32,18 +38,15 @@ class ContactFormTests(TestCase):
         Valid form can and does in fact send email.
         
         """
-        request = RequestFactory().request()
-        data = {'name': 'Test',
-                'email': 'test@example.com',
-                'body': 'Test message'}
-        form = ContactForm(request=request, data=data)
+        form = ContactForm(request=self.request(),
+                           data=self.valid_data)
         self.assertTrue(form.is_valid())
 
         form.save()
         self.assertEqual(1, len(mail.outbox))
 
         message = mail.outbox[0]
-        self.assertTrue(data['body'] in message.body)
+        self.assertTrue(self.valid_data['body'] in message.body)
         self.assertEqual(settings.DEFAULT_FROM_EMAIL,
                          message.from_email)
         self.assertEqual(form.recipient_list,
@@ -59,11 +62,8 @@ class ContactFormTests(TestCase):
             INSTALLED_APPS={
                 'remove': ['django.contrib.sites'],
             }):
-            request = RequestFactory().request()
-            data = {'name': 'Test',
-                    'email': 'test@example.com',
-                    'body': 'Test message'}
-            form = ContactForm(request=request, data=data)
+            form = ContactForm(request=self.request(),
+                               data=self.valid_data)
             self.assertTrue(form.is_valid())
 
             form.save()
@@ -76,11 +76,8 @@ class ContactFormTests(TestCase):
 
         """
         recipient_list = ['recipient_list@example.com']
-        request = RequestFactory().request()
-        data = {'name': 'Test',
-                'email': 'test@example.com',
-                'body': 'Test message'}
-        form = ContactForm(request=request, data=data,
+        form = ContactForm(request=self.request(),
+                           data=self.valid_data,
                            recipient_list=recipient_list)
         self.assertTrue(form.is_valid())
 
@@ -90,3 +87,19 @@ class ContactFormTests(TestCase):
         message = mail.outbox[0]
         self.assertEqual(recipient_list,
                          message.recipients())
+
+    def test_callable_template_name(self):
+        class CallableTemplateName(ContactForm):
+            def template_name(self):
+                return 'contact_form/test_callable_template_name.html'
+
+        form = CallableTemplateName(request=self.request(),
+                                    data=self.valid_data)
+        self.assertTrue(form.is_valid())
+
+        form.save()
+        self.assertEqual(1, len(mail.outbox))
+
+        message = mail.outbox[0]
+        self.assertTrue('Callable template_name used.' in \
+                        message.body)
