@@ -11,6 +11,7 @@ from .forms import ContactForm
 
 class ContactFormView(FormView):
     form_class = ContactForm
+    recipient_list = None
     template_name = 'contact_form/contact_form.html'
 
     def form_valid(self, form):
@@ -22,6 +23,11 @@ class ContactFormView(FormView):
         # HttpRequest.
         kwargs = super(ContactFormView, self).get_form_kwargs()
         kwargs.update({'request': self.request})
+        
+        # We may also have been given a recipient list when
+        # instantiated.
+        if self.recipient_list is not None:
+            kwargs.update({'recipient_list': self.recipient_list})
         return kwargs
 
     def get_success_url(self):

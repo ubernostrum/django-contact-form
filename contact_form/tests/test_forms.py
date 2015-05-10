@@ -68,3 +68,25 @@ class ContactFormTests(TestCase):
 
             form.save()
             self.assertEqual(1, len(mail.outbox))
+
+    def test_recipient_list(self):
+        """
+        Passing recipient_list when instantiating ContactForm properly
+        overrides the list of recipients.
+
+        """
+        recipient_list = ['recipient_list@example.com']
+        request = RequestFactory().request()
+        data = {'name': 'Test',
+                'email': 'test@example.com',
+                'body': 'Test message'}
+        form = ContactForm(request=request, data=data,
+                           recipient_list=recipient_list)
+        self.assertTrue(form.is_valid())
+
+        form.save()
+        self.assertEqual(1, len(mail.outbox))
+
+        message = mail.outbox[0]
+        self.assertEqual(recipient_list,
+                         message.recipients())

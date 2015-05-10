@@ -8,7 +8,7 @@ from ..forms import ContactForm
 
 
 class ContactFormViewTests(TestCase):
-    urls = 'contact_form.urls'
+    urls = 'contact_form.tests.test_urls'
 
     def test_get(self):
         """
@@ -68,3 +68,24 @@ class ContactFormViewTests(TestCase):
                              'email',
                              'This field is required.')
         self.assertEqual(0, len(mail.outbox))
+
+    def test_recipient_list(self):
+        """
+        Passing recipient_list when instantiating ContactFormView
+        properly overrides the list of recipients.
+
+        """
+        contact_url = reverse('test_recipient_list')
+        data = {'name': 'Test',
+                'email': 'test@example.com',
+                'body': 'Test message'}
+
+        response = self.client.post(contact_url,
+                                    data=data)
+        self.assertRedirects(response,
+                             reverse('contact_form_sent'))
+        self.assertEqual(1, len(mail.outbox))
+
+        message = mail.outbox[0]
+        self.assertEqual(['recipient_list@example.com'],
+                         message.recipients())
