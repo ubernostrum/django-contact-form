@@ -5,25 +5,22 @@ Frequently asked questions
 ==========================
 
 The following notes answer some common questions, and may be useful to
-you when installing, configuring or using django-contact-form.
+you when installing, configuring or using ``django-contact-form``.
 
 
 What versions of Django are supported?
 --------------------------------------
 
-As of django-contact-form |version|, Django 1.4 and 1.5 are
-supported. It is expected that django-contact-form |version| will also
-work unmodified with Django 1.6, once Django 1.6 is released.
-
-Django 1.3 may also work, but is unsupported. Django 1.2 and earlier
-will not work with django-contact-form |version|.
+As of ``django-contact-form`` |version|, Django 1.7 and 1.8 are
+supported.
 
 
 What versions of Python are supported?
 --------------------------------------
 
-On Django 1.4 and 1.5, django-contact-form |version| supports Python
-2.6 and 2.7. On Django 1.5, Python 3.3 is also supported.
+As of |version|, ``django-contact-form`` supports Python 2.7, 3.3, and
+3.4. It is anticipated that when Python 3.5 is released,
+``django-contact-form`` |version| will be compatible with it.
 
 
 Why aren't there any default templates I can use?
@@ -32,26 +29,31 @@ Why aren't there any default templates I can use?
 Usable default templates, for an application designed to be widely
 reused, are essentially impossible to produce; variations in site
 design, block structure, etc. cannot be reliably accounted for. As
-such, django-contact-form simply provides good documentation of all
-templates it requires and the context made available to them.
+such, ``django-contact-form`` provides bare-bones (i.e., containing no
+HTML structure whatsoever) templates in its source distribution to
+enable running tests, and otherwise simply provides good documentation
+of all required templates and the context made available to them.
 
 
 What happened to the spam-filtering form in previous versions?
 --------------------------------------------------------------
 
-Older versions of django-contact-form shipped a subclass of
+Older versions of ``django-contact-form`` shipped a subclass of
 :class:`~contact_form.forms.ContactForm` which used `the Akismet web
 service <http://akismet.com/>`_ to identify and reject spam
 submissions.
 
 Unfortunately, the Akismet Python library -- required in order to use
 such a class -- does not currently support all versions of Python on
-which django-contact-form is supported, meaning it cannot be included
-in django-contact-form by default.
+which ``django-contact-form`` is supported, meaning it cannot be
+included in ``django-contact-form`` by default. The author of
+``django-contact-form`` is working on producing a version of the
+Akismet library compatible with Python 3, but it was not yet ready as
+of the release of ``django-contact-form`` |version|.
 
 
-Why am I getting a bunch of BadHeaderError exceptions?
-------------------------------------------------------
+Why am I getting a bunch of ``BadHeaderError`` exceptions?
+----------------------------------------------------------
 
 Most likely, you have an error in your
 :class:`~contact_form.forms.ContactForm` subclass. Specifically, one

@@ -1,3 +1,4 @@
+.. _forms:
 .. module:: contact_form.forms
 
 
@@ -13,12 +14,12 @@ The ContactForm class
     this form to provide basic contact functionality; it will collect
     name, email address and message.
 
-    The ContactForm view included in this application knows how
-    to work with this form and can handle many types of subclasses as
-    well (see below for a discussion of the important points), so in
-    many cases it will be all that you need. If you'd like to use this
-    form or a subclass of it from one of your own views, just do the
-    following:
+    The :class:`~contact_form.views.ContactFormView` included in this
+    application knows how to work with this form and can handle many
+    types of subclasses as well (see below for a discussion of the
+    important points), so in many cases it will be all that you
+    need. If you'd like to use this form or a subclass of it from one
+    of your own views, just do the following:
 
     1. When you instantiate the form, pass the current ``HttpRequest``
        object to the constructor as the keyword argument ``request``;

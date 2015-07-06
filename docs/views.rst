@@ -1,3 +1,4 @@
+.. _views:
 .. module:: contact_form.views
 
 
@@ -18,7 +19,53 @@ Built-in views
     so refer to the Django documentation for a list of
     attributes/methods which can be overridden to customize behavior.
 
-    By default, ``success_url`` will be the named URL
-    ``contact_form_sent``; this URL needs to exist and should resolve
-    properly. In the default URLConf, that URL is a ``TemplateView``
-    rendering the template ``contact_form/contact_form_sent.html``.
+    One non-standard attribute is defined here:
+
+    .. attribute:: recipient_list
+
+       The list of email addresses to send mail to. If not specified,
+       defaults to the
+       :attr:`~contact_form.forms.ContactForm.recipient_list` of the
+       form.
+
+    Additionally, the following standard (from ``FormView``) methods
+    and attributes are commonly useful to override:
+
+    .. attribute:: form_class
+
+       The form class to use. By default, will be
+       :class:`~contact_form.forms.ContactForm`. This can also be
+       overridden as a method named ``form_class()``; this permits,
+       for example, per-request customization (by inspecting
+       attributes of ``self.request``).
+
+    .. attribute:: template_name
+
+       The template to use when rendering the form. By default, will
+       be ``contact_form/contact_form.html``.
+
+    .. method:: get_success_url()
+
+       The URL to redirect to after successful form submission. By
+       default, this is the named URL ``contact_form.sent``. In the
+       default URLconf provided with ``django-contact-form``, that URL
+       is mapped to ``TemplateView`` rendering the template
+       ``contact_form/contact_form_sent.html``.
+
+    .. method:: get_form_kwargs()
+
+       Returns additional keyword arguments (as a dictionary) to pass
+       to the form class on initialization.
+
+       By default, this will return a dictionary containing the
+       current ``HttpRequest`` (as the key ``request``) and, if
+       :attr:`~ContactFormView.recipient_list` was defined, its value
+       (as the key ``recipient_list``).
+
+       .. warning:: If you override ``get_form_kwargs()``, you
+          **must** ensure that, at the very least, the keyword
+          argument ``request`` is still provided, or ``ContactForm``
+          initialization will raise ``TypeError``. The simplest
+          approach is to use ``super()`` to call the base
+          implementation in ``ContactFormView``, and modify the
+          dictionary it returns.

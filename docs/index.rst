@@ -17,7 +17,7 @@ and a few templates, and one pattern in your URLConf:
 
 .. code-block:: python
 
-    (r'^contact/', include('contact_form.urls')),
+    url(r'^contact/', include('contact_form.urls')),
 
 
 Contents:
@@ -25,7 +25,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   quickstart
+   install
    forms
    views
    faq
