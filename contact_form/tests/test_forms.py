@@ -3,8 +3,6 @@ from django.core import mail
 from django.test import RequestFactory
 from django.test import TestCase
 
-from django.contrib.sites.models import Site
-
 from ..forms import ContactForm
 
 
@@ -12,21 +10,21 @@ class ContactFormTests(TestCase):
     valid_data = {'name': 'Test',
                   'email': 'test@example.com',
                   'body': 'Test message'}
-    
+
     def request(self):
         return RequestFactory().request()
-    
+
     def test_request_required(self):
         """
         Can't instantiate without an HttpRequest.
-        
+
         """
         self.assertRaises(TypeError, ContactForm)
 
     def test_valid_data_required(self):
         """
         Can't try to build the message dict unless data is valid.
-        
+
         """
         data = {'name': 'Test',
                 'body': 'Test message'}
@@ -37,7 +35,7 @@ class ContactFormTests(TestCase):
     def test_send(self):
         """
         Valid form can and does in fact send email.
-        
+
         """
         form = ContactForm(request=self.request(),
                            data=self.valid_data)
@@ -57,12 +55,12 @@ class ContactFormTests(TestCase):
         """
         Sites integration works with or without installed
         contrib.sites.
-        
+
         """
         with self.modify_settings(
             INSTALLED_APPS={
                 'remove': ['django.contrib.sites'],
-            }):
+                }):
             form = ContactForm(request=self.request(),
                                data=self.valid_data)
             self.assertTrue(form.is_valid())
@@ -102,7 +100,7 @@ class ContactFormTests(TestCase):
         self.assertEqual(1, len(mail.outbox))
 
         message = mail.outbox[0]
-        self.assertTrue('Callable template_name used.' in \
+        self.assertTrue('Callable template_name used.' in
                         message.body)
 
     def test_callable_message_parts(self):
@@ -112,14 +110,17 @@ class ContactFormTests(TestCase):
             'recipient_list': ['override_recpt@example.com'],
             'subject': 'Overridden subject',
         }
-        
+
         class CallableMessageParts(ContactForm):
             def from_email(self):
                 return overridden_data['from_email']
+
             def message(self):
                 return overridden_data['message']
+
             def recipient_list(self):
                 return overridden_data['recipient_list']
+
             def subject(self):
                 return overridden_data['subject']
 

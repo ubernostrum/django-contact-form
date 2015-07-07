@@ -23,7 +23,7 @@ class ContactFormView(FormView):
         # HttpRequest.
         kwargs = super(ContactFormView, self).get_form_kwargs()
         kwargs.update({'request': self.request})
-        
+
         # We may also have been given a recipient list when
         # instantiated.
         if self.recipient_list is not None:

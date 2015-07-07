@@ -13,28 +13,27 @@ class ContactFormViewTests(TestCase):
     def test_get(self):
         """
         HTTP GET on the form view just shows the form.
-        
+
         """
         contact_url = reverse('contact_form')
-        
+
         response = self.client.get(contact_url)
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response,
                                 'contact_form/contact_form.html')
-        
-    
+
     def test_send(self):
         """
         Valid data through the view results in a successful send.
-        
+
         """
         contact_url = reverse('contact_form')
         data = {'name': 'Test',
                 'email': 'test@example.com',
                 'body': 'Test message'}
-        
+
         response = self.client.post(contact_url,
-                                data=data)
+                                    data=data)
 
         self.assertRedirects(response,
                              reverse('contact_form_sent'))
@@ -49,16 +48,15 @@ class ContactFormViewTests(TestCase):
         self.assertEqual(form.recipient_list,
                          message.recipients())
 
-
     def test_invalid(self):
         """
         Invalid data doesn't work.
-        
+
         """
         contact_url = reverse('contact_form')
         data = {'name': 'Test',
                 'body': 'Test message'}
-        
+
         response = self.client.post(contact_url,
                                     data=data)
 
