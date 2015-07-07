@@ -88,6 +88,11 @@ class ContactFormTests(TestCase):
                          message.recipients())
 
     def test_callable_template_name(self):
+        """
+        When a template_name() method is defined, it is used and
+        preferred over a 'template_name' attribute.
+
+        """
         class CallableTemplateName(ContactForm):
             def template_name(self):
                 return 'contact_form/test_callable_template_name.html'
@@ -104,6 +109,11 @@ class ContactFormTests(TestCase):
                         message.body)
 
     def test_callable_message_parts(self):
+        """
+        Message parts implemented as methods are called and preferred
+        over attributes.
+
+        """
         overridden_data = {
             'from_email': 'override@example.com',
             'message': 'Overridden message.',
