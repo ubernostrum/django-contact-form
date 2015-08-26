@@ -21,7 +21,12 @@ sys.path.insert(0, CONTACT_FORM_DIR)
 # Minimum settings required for django-contact-form to work.
 SETTINGS_DICT = {
     'BASE_DIR': CONTACT_FORM_DIR,
-    'INSTALLED_APPS': ('contact_form', 'django.contrib.sites'),
+    'INSTALLED_APPS': (
+        'contact_form',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sites',
+    ),
     'ROOT_URLCONF': 'contact_form.tests.urls',
     'DATABASES': {
         'default': {

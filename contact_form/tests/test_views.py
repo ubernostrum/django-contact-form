@@ -3,12 +3,13 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import RequestFactory
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from ..forms import ContactForm
 
 
+@override_settings(ROOT_URLCONF='contact_form.tests.test_urls')
 class ContactFormViewTests(TestCase):
-    urls = 'contact_form.tests.test_urls'
 
     def test_get(self):
         """
