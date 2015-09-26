@@ -6,11 +6,10 @@ a web interface.
 
 from django import forms
 from django.conf import settings
-from django.core.mail import send_mail
-from django.template import loader
-from django.template import RequestContext
 from django.contrib.sites.models import Site
 from django.contrib.sites.requests import RequestSite
+from django.core.mail import send_mail
+from django.template import RequestContext, loader
 
 
 class ContactForm(forms.Form):

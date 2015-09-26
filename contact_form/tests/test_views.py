@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.core import mail
 from django.core.urlresolvers import reverse
-from django.test import RequestFactory
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 
 from ..forms import ContactForm

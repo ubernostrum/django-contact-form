@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core import mail
-from django.test import RequestFactory
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 
 from ..forms import ContactForm
 
