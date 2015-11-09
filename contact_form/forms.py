@@ -8,6 +8,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.contrib.sites.requests import RequestSite
+from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
 from django.template import RequestContext, loader
 
@@ -19,11 +20,11 @@ class ContactForm(forms.Form):
 
     """
     name = forms.CharField(max_length=100,
-                           label=u'Your name')
+                           label=_(u'Your name'))
     email = forms.EmailField(max_length=200,
-                             label=u'Your email address')
+                             label=_(u'Your email address'))
     body = forms.CharField(widget=forms.Textarea,
-                           label=u'Your message')
+                           label=_(u'Your message'))
 
     from_email = settings.DEFAULT_FROM_EMAIL
 
