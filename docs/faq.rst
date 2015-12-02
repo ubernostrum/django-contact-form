@@ -18,9 +18,8 @@ supported.
 What versions of Python are supported?
 --------------------------------------
 
-As of |version|, ``django-contact-form`` supports Python 2.7, 3.3, and
-3.4. It is anticipated that when Python 3.5 is released,
-``django-contact-form`` |version| will be compatible with it.
+As of |version|, ``django-contact-form`` supports Python 2.7, 3.3, 3.4, and
+3.5.
 
 
 Why aren't there any default templates I can use?
