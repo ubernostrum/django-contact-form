@@ -11,7 +11,7 @@ you when installing, configuring or using ``django-contact-form``.
 What versions of Django are supported?
 --------------------------------------
 
-As of ``django-contact-form`` |version|, Django 1.7 and 1.8 are
+As of ``django-contact-form`` |version|, Django 1.7, 1.8, and 1.9 are
 supported.
 
 
