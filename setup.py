@@ -4,7 +4,7 @@ from setuptools import setup
 
 
 setup(name='django-contact-form',
-      version='1.1',
+      version='1.2',
       zip_safe=False, # eggs are the devil.
       description='Generic contact-form application for Django',
       long_description=open(os.path.join(os.path.dirname(__file__),
