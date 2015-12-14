@@ -10,9 +10,9 @@ information on obtaining and installing Django, consult the `Django
 download page <https://www.djangoproject.com/download/>`_, which
 offers convenient packaged downloads and installation instructions.
 
-The |version| release of ``django-contact-form`` supports Django 1.7, 1.8
-and 1.9, on any of Python 2.7, 3.3, 3.4, or 3.5. Older versions of Django
-and/or Python may work, but are not tested or officially supported.
+The |version| release of ``django-contact-form`` supports Django 1.8 and 1.9,
+on any of Python 2.7, 3.3, 3.4, or 3.5. Older versions of Django and/or Python
+may work, but are not tested or officially supported.
 
 
 Normal installation
