@@ -17,8 +17,10 @@ As of ``django-contact-form`` |version|, Django 1.8 and 1.9 are supported.
 What versions of Python are supported?
 --------------------------------------
 
-As of |version|, ``django-contact-form`` supports Python 2.7, 3.3, 3.4, and
-3.5.
+As of |version|, ``django-contact-form`` supports Python 2.7, 3.2,
+3.3, 3.4, and 3.5. Note that Django 1.9 dropped support for Python 3.2
+and 3.3, and the next released version of ``django-contact-form`` will
+drop Python 3.2 support.
 
 
 Why aren't there any default templates I can use?

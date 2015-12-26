@@ -10,9 +10,24 @@ information on obtaining and installing Django, consult the `Django
 download page <https://www.djangoproject.com/download/>`_, which
 offers convenient packaged downloads and installation instructions.
 
-The |version| release of ``django-contact-form`` supports Django 1.8 and 1.9,
-on any of Python 2.7, 3.3, 3.4, or 3.5. Older versions of Django and/or Python
-may work, but are not tested or officially supported.
+The |version| release of ``django-registration`` supports Django 1.8
+and 1.9, on any Python version supported by those versions of Django:
+
+* Django 1.8 suports Python 2.7, 3.2, 3.3, 3.4 and 3.5.
+
+* Django 1.9 supports Python 2.7, 3.4 and 3.5.
+
+.. important:: **Python 3.2**
+
+   Although Django 1.8 supports Python 3.2, and
+   ``django-registration`` |version| supports it, many Python
+   libraries supporting Python 3 impose a minimum requirement of
+   Python 3.3 (due to conveniences added in Python 3.3 which make
+   supporting Python 2 and 3 in the same codebase much simpler).
+
+   As a result, use of Python 3.2 is discouraged; Django 1.9 has
+   already dropped support for it, and the next release of
+   ``django-registration`` will drop Python 3.2 support as well.
 
 
 Normal installation
