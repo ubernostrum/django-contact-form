@@ -69,3 +69,14 @@ Built-in views
           approach is to use ``super()`` to call the base
           implementation in ``ContactFormView``, and modify the
           dictionary it returns.
+
+    .. warning:: Implementing ``form_invalid()``
+
+       To work around `a potential performance issue in Django 1.9
+       <https://code.djangoproject.com/ticket/25548>`_,
+       ``ContactFormView`` implements the ``form_invalid()``
+       method. If you choose to override ``form_invalid()`` in a
+       subclass of ``ContactFormView``, be sure to read the
+       implementation and comments in the source code of
+       ``django-contact-form`` first. Note that Django 1.9.1, once
+       released, will not be affected by this bug.
