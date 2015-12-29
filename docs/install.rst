@@ -26,7 +26,7 @@ and 1.9, on any Python version supported by those versions of Django:
    supporting Python 2 and 3 in the same codebase much simpler).
 
    As a result, use of Python 3.2 is discouraged; Django 1.9 has
-   already dropped support for it, and the next release of
+   already dropped support for it, and the 1.3 release of
    ``django-registration`` will drop Python 3.2 support as well.
 
 
