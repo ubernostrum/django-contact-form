@@ -23,6 +23,19 @@ and 3.3, and the 1.3 release of ``django-contact-form`` will
 drop Python 3.2 support.
 
 
+What license is ``django-contact-form under``?
+----------------------------------------------
+
+``django-contact-form`` is offered under a three-clause BSD-style
+license; this is `an OSI-approved open-source license
+<http://www.opensource.org/licenses/bsd-license.php>`_, and allows you
+a large degree of freedom in modifiying and redistributing the
+code. For the full terms, see the file ``LICENSE`` which came with
+your copy of django-contact-form; if you did not receive a copy of
+this file, you can view it online at
+<https://github.com/ubernostrum/django-contact-form/blob/master/LICENSE>.
+
+
 Why aren't there any default templates I can use?
 -------------------------------------------------
 
@@ -72,3 +85,19 @@ is the exception Django raises when a newline is detected in a header.
 
 Note that this only applies to the headers of an email message; the
 message body can (and usually does) contain newlines.
+
+
+I found a bug or want to make an improvement!
+---------------------------------------------
+
+The canonical development repository for ``django-contact-form`` is
+online at <https://github.com/ubernostrum/django-contact-form>. Issues
+and pull requests can both be filed there.
+
+If you'd like to contribute to ``django-contact-form``, that's great!
+Just please remember that pull requests should include tests and
+documentation for any changes made, and that following `PEP 8
+<https://www.python.org/dev/peps/pep-0008/>`_ is mandatory. Pull
+requests without documentation won't be merged, and PEP 8 style
+violations or test coverage below 100% are both configured to break
+the build.
