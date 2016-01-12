@@ -24,6 +24,7 @@ Contents:
    :maxdepth: 1
 
    install
+   quickstart
    forms
    views
    faq
