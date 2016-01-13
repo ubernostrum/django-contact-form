@@ -21,10 +21,21 @@ documentation below.
 Contents:
 
 .. toctree::
+   :caption: Installation and configuration
    :maxdepth: 1
 
    install
    quickstart
+
+.. toctree::
+   :caption: For developers
+   :maxdepth: 1
+
    forms
    views
+
+.. toctree::
+   :caption: Other documentation
+   :maxdepth: 1
+
    faq
