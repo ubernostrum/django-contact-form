@@ -29,7 +29,10 @@ Built-in views
        form.
 
     Additionally, the following standard (from ``FormView``) methods
-    and attributes are commonly useful to override:
+    and attributes are commonly useful to override (all attributes
+    below can also be passed to ``as_view()`` in the URLconf,
+    permitting customization without the need to write a full custom
+    subclass of ``ContactFormView``):
 
     .. attribute:: form_class
 
