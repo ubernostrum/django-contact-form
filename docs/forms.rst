@@ -22,10 +22,10 @@ The ContactForm class
     of your own views, just do the following:
 
     1. When you instantiate the form, pass the current ``HttpRequest``
-       object to the constructor as the keyword argument ``request``;
-       this is used internally by the base implementation, and also
-       made available so that subclasses can add functionality which
-       relies on inspecting the request (such as spam filtering).
+       object to the as the keyword argument ``request``; this is used
+       internally by the base implementation, and also made available
+       so that subclasses can add functionality which relies on
+       inspecting the request (such as spam filtering).
 
     2. To send the message, call the form's ``save`` method, which
        accepts the keyword argument ``fail_silently`` and defaults it
