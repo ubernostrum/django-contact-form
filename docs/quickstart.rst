@@ -18,9 +18,9 @@ URL configuration
 =================
 
 The easiest way to set up the views in ``django-contact-form`` is to
-just use the provided URLconf. You can include it wherever you like in
-your site's URL configuration; for example, to have it live at the URL
-``/contact/``:
+just use the provided URLconf, found at ``contact_form.urls``. You can
+include it wherever you like in your site's URL configuration; for
+example, to have it live at the URL ``/contact/``:
 
 .. code-block:: python
 
@@ -83,7 +83,7 @@ for the subject line of the email to send, and
 extension for these is ``.txt``, not ``.html``!). Both of these will
 receive a ``RequestContext`` with a set of variables named for the
 fields of the form (by default: ``name``, ``email`` and ``body``), as
-well as one more variable: ``site``, represneting the current site
+well as one more variable: ``site``, representing the current site
 (either a ``Site`` or ``RequestSite`` instance, depending on whether
 Django's sites framework is installed).
 

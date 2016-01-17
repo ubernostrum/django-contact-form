@@ -83,5 +83,5 @@ Basic configuration and use
 ---------------------------
 
 Once you have Django and ``django-contact-form`` installed, check out
-:ref:`the quick start guide <quickstart>` for a guide to getting your
+:ref:`the quick start guide <quickstart>` to see how to get your
 contact form up and running.

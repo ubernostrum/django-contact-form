@@ -22,20 +22,20 @@ The ContactForm class
     of your own views, just do the following:
 
     1. When you instantiate the form, pass the current ``HttpRequest``
-       object to the as the keyword argument ``request``; this is used
+       object as the keyword argument ``request``; this is used
        internally by the base implementation, and also made available
        so that subclasses can add functionality which relies on
        inspecting the request (such as spam filtering).
 
     2. To send the message, call the form's ``save`` method, which
        accepts the keyword argument ``fail_silently`` and defaults it
-       to ``False``. This argument is passed directly to
-       ``send_mail``, and allows you to suppress or raise exceptions
-       as needed for debugging. The ``save`` method has no return
-       value.
+       to ``False``. This argument is passed directly to Django's
+       ``send_mail()`` function, and allows you to suppress or raise
+       exceptions as needed for debugging. The ``save`` method has no
+       return value.
 
     Other than that, treat it like any other form; validity checks and
-    validated data are handled normally, through the ``is_valid``
+    validated data are handled normally, through the ``is_valid()``
     method and the ``cleaned_data`` dictionary.
 
     Under the hood, this form uses a somewhat abstracted interface in
