@@ -6,7 +6,7 @@ customizable contact-form functionality for `Django
 <https://www.djangoproject.com/>`_-powered Web sites.
 
 Basic functionality (collecting a name, email address and message) can
-be achieved uot of the box by setting up a few templates and adding
+be achieved out of the box by setting up a few templates and adding
 one line to your site's root URLconf:
 
 .. code-block:: python
