@@ -17,10 +17,10 @@ As of ``django-contact-form`` |version|, Django 1.8 and 1.9 are supported.
 What versions of Python are supported?
 --------------------------------------
 
-As of |version|, ``django-contact-form`` supports Python 2.7, 3.2,
-3.3, 3.4, and 3.5. Note that Django 1.9 dropped support for Python 3.2
-and 3.3, and a future release of ``django-contact-form`` will drop
-Python 3.2 support.
+As of |version|, ``django-contact-form`` supports Python 2.7, 3.3,
+3.4, and 3.5. Although Django 1.8 supported Python 3.2 at initial
+release, Python 3.2 is now at its end-of-life and
+``django-contact-form`` no longer supports it.
 
 
 What license is ``django-contact-form under``?
