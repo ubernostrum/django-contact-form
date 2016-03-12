@@ -59,6 +59,14 @@ class. For example:
             name='contact_form_sent'),
     ]
 
+.. important:: **Where to put custom forms and views**
+
+   When writing a custom form class (or custom ``ContactFormView``
+   subclass), **don't** put your custom code inside
+   ``django-contact-form``. Instead, put your custom code in the
+   appropriate place (a ``forms.py`` or ``views.py`` file) in an
+   application you've written.
+
 
 Required templates
 ==================
