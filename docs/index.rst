@@ -1,9 +1,9 @@
 django-contact-form |version|
 =============================
 
-``django-contact-form`` is a simple application providing simple,
-customizable contact-form functionality for `Django
-<https://www.djangoproject.com/>`_-powered Web sites.
+``django-contact-form`` provides simple, customizable contact-form
+functionality for `Django <https://www.djangoproject.com/>`_-powered
+Web sites.
 
 Basic functionality (collecting a name, email address and message) can
 be achieved out of the box by setting up a few templates and adding
