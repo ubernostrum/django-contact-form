@@ -61,10 +61,10 @@ class ContactForm(forms.Form):
         Render the subject of the message to a string.
 
         """
-        template = self.subject_template_name() if \
-                   callable(self.subject_template_name) \
-                   else self.subject_template_name
-        subject = loader.render_to_string(subject_template_name,
+        template_name = self.subject_template_name() if \
+                        callable(self.subject_template_name) \
+                        else self.subject_template_name
+        subject = loader.render_to_string(template_name,
                                           self.get_context())
         return ''.join(subject.splitlines())
 
