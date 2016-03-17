@@ -41,23 +41,19 @@ The ContactForm class
     Under the hood, this form uses a somewhat abstracted interface in
     order to make it easier to subclass and add functionality.
 
-    These attributes play a role in determining behavior:
+    The following attributes play a role in determining behavior, and
+    any of them can be implemented as an attribute or as a method:
 
     .. attribute:: from_email
 
        The email address to use in the ``From:`` header of the
-       message. This can also be implemented as a method named
-       ``from_email()``, in which case it will be called when
-       constructing the message. By default, this is the value of the
-       setting ``DEFAULT_FROM_EMAIL``.
+       message. By default, this is the value of the setting
+       ``DEFAULT_FROM_EMAIL``.
 
     .. attribute:: recipient_list
 
-       The list of recipients for the message. This can also be
-       implemented as a method named ``recipient_list()``, in which
-       case it will be called when constructing the message. By
-       default, this is the email addresses specified in the setting
-       ``MANAGERS``.
+       The list of recipients for the message. By default, this is the
+       email addresses specified in the setting ``MANAGERS``.
 
     .. attribute:: subject_template_name
 
@@ -96,7 +92,9 @@ The ContactForm class
        corresponding to the arguments to Django's ``send_mail``
        function, then returns the dictionary. Overriding this allows
        essentially unlimited customization of how the message is
-       generated.
+       generated. Note that for compatibility, implementations which
+       override this should support callables for the values of
+       ``from_email`` and ``recipient_list``.
 
     .. method:: get_context()
 
