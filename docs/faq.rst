@@ -8,22 +8,19 @@ The following notes answer some common questions, and may be useful to
 you when installing, configuring or using ``django-contact-form``.
 
 
-What versions of Django are supported?
---------------------------------------
+What versions of Django and Python are supported?
+-------------------------------------------------
 
-As of ``django-contact-form`` |version|, Django 1.8 and 1.9 are supported.
+As of ``django-contact-form`` |version|, Django 1.8 and 1.9 are
+supported, on Python 2.7, 3.3, 3.4 or 3.5. Although Django 1.8
+supported Python 3.2 at initial release, Python 3.2 is now at its
+end-of-life and ``django-contact-form`` no longer supports it.
 
-
-What versions of Python are supported?
---------------------------------------
-
-As of |version|, ``django-contact-form`` supports Python 2.7, 3.3,
-3.4, and 3.5. Although Django 1.8 supported Python 3.2 at initial
-release, Python 3.2 is now at its end-of-life and
-``django-contact-form`` no longer supports it.
+It is expected that ``django-contact-form`` |version| will also work
+with Django 1.10 and Python 3.6 once they are released.
 
 
-What license is ``django-contact-form under``?
+What license is ``django-contact-form`` under?
 ----------------------------------------------
 
 ``django-contact-form`` is offered under a three-clause BSD-style
