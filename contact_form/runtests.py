@@ -37,12 +37,16 @@ SETTINGS_DICT = {
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
     ),
-    'TEMPLATE_DIRS': (
-        os.path.join(APP_DIR, 'tests/templates'),
-    ),
     'SITE_ID': 1,
     'DEFAULT_FROM_EMAIL': 'contact@example.com',
     'MANAGERS': [('Manager', 'noreply@example.com')],
+    'TEMPLATES': [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [os.path.join(APP_DIR, 'tests/templates'), ],
+            'APP_DIRS': True,
+        },
+    ]
 }
 
 
