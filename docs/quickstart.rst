@@ -3,21 +3,21 @@
 Quick start guide
 =================
 
-First you'll need to have Django and ``django-contact-form``
+First you'll need to have Django and django-contact-form
 installed; for details on that, see :ref:`the installation guide
 <install>`.
 
 Once that's done, you can start setting up
-``django-contact-form``. Since it doesn't provide any database models
+django-contact-form. Since it doesn't provide any database models
 or use any other application-config mechanisms, you do *not* need to
-add ``django-contact-form`` to your ``INSTALLED_APPS`` setting; you
+add django-contact-form to your ``INSTALLED_APPS`` setting; you
 can simply begin using it right away.
 
 
 URL configuration
 =================
 
-The easiest way to set up the views in ``django-contact-form`` is to
+The easiest way to set up the views in django-contact-form is to
 just use the provided URLconf, found at ``contact_form.urls``. You can
 include it wherever you like in your site's URL configuration; for
 example, to have it live at the URL ``/contact/``:
@@ -33,7 +33,7 @@ example, to have it live at the URL ``/contact/``:
     ]
 
 If you'll be using a custom form class, you'll need to manually set up
-your URLs so you can tell ``django-contact-form`` about your form
+your URLs so you can tell django-contact-form about your form
 class. For example:
 
 
@@ -63,7 +63,7 @@ class. For example:
 
    When writing a custom form class (or custom ``ContactFormView``
    subclass), **don't** put your custom code inside
-   ``django-contact-form``. Instead, put your custom code in the
+   django-contact-form. Instead, put your custom code in the
    appropriate place (a ``forms.py`` or ``views.py`` file) in an
    application you've written.
 
@@ -104,5 +104,5 @@ Django's sites framework is installed).
    subject. So it's a good idea to ensure your
    ``contact_form_subject.txt`` template only produces a single line
    of output when rendered; as a precaution, however,
-   ``django-contact-form`` will split the output of this template at
+   django-contact-form will split the output of this template at
    line breaks, then forcibly re-join it into a single line of text.

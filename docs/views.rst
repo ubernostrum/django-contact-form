@@ -51,7 +51,7 @@ Built-in views
 
        The URL to redirect to after successful form submission. By
        default, this is the named URL ``contact_form.sent``. In the
-       default URLconf provided with ``django-contact-form``, that URL
+       default URLconf provided with django-contact-form, that URL
        is mapped to ``TemplateView`` rendering the template
        ``contact_form/contact_form_sent.html``.
 
@@ -81,5 +81,5 @@ Built-in views
        method. If you choose to override ``form_invalid()`` in a
        subclass of ``ContactFormView``, be sure to read the
        implementation and comments in the source code of
-       ``django-contact-form`` first. Note that Django 1.9.1, once
+       django-contact-form first. Note that Django 1.9.1, once
        released, will not be affected by this bug.
