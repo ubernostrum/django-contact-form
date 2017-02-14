@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.requests import RequestSite
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
-from django.template import RequestContext, loader
+from django.template import loader
 
 
 class ContactForm(forms.Form):
@@ -54,7 +54,8 @@ class ContactForm(forms.Form):
         else:
             template_name = self.template_name
         return loader.render_to_string(template_name,
-                                       self.get_context())
+                                       context=self.get_context(),
+                                       request=self.request)
 
     def subject(self):
         """
@@ -65,7 +66,8 @@ class ContactForm(forms.Form):
             callable(self.subject_template_name) \
             else self.subject_template_name
         subject = loader.render_to_string(template_name,
-                                          self.get_context())
+                                          context=self.get_context(),
+                                          request=self.request)
         return ''.join(subject.splitlines())
 
     def get_context(self):
@@ -79,10 +81,6 @@ class ContactForm(forms.Form):
           same names as their fields.
 
         * The current ``Site`` object, as the variable ``site``.
-
-        * Any additional variables added by context processors (this
-          will be a ``RequestContext``).
-
         """
         if not self.is_valid():
             raise ValueError(
@@ -92,9 +90,7 @@ class ContactForm(forms.Form):
             site = Site.objects.get_current()
         else:
             site = RequestSite(self.request)
-        return RequestContext(self.request,
-                              dict(self.cleaned_data,
-                                   site=site))
+        return dict(self.cleaned_data, site=site)
 
     def get_message_dict(self):
         """
