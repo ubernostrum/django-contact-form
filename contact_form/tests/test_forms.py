@@ -139,3 +139,24 @@ class ContactFormTests(TestCase):
 
         self.assertEqual(overridden_data,
                          form.get_message_dict())
+
+    def test_template_request_context(self):
+        """
+        When a template_name() method is defined, it is used and
+        preferred over a 'template_name' attribute.
+
+        """
+        class TemplateRequestContext(ContactForm):
+            template_name = 'contact_form/test_template_request_context.html'
+
+        request = self.request()
+        request.foo = 'bar'
+        form = TemplateRequestContext(request=request,
+                                      data=self.valid_data)
+        self.assertTrue(form.is_valid())
+
+        form.save()
+        self.assertEqual(1, len(mail.outbox))
+
+        message = mail.outbox[0]
+        self.assertTrue(request.foo in message.body)
