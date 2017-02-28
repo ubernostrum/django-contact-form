@@ -13,7 +13,7 @@ env:
 install:
  - pip install coverage>=4.0
  - pip install flake8
- - pip install -q Django~=$DJANGO_VERSION
+ - pip install Django~=$DJANGO_VERSION
 matrix:
  exclude:
    - python: "3.3"
