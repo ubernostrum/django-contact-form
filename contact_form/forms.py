@@ -53,8 +53,9 @@ class ContactForm(forms.Form):
             template_name = self.template_name()
         else:
             template_name = self.template_name
-        return loader.render_to_string(template_name,
-                                       self.get_context())
+        return loader.render_to_string(
+            template_name, self.get_context(), request=self.request
+        )
 
     def subject(self):
         """
@@ -64,8 +65,9 @@ class ContactForm(forms.Form):
         template_name = self.subject_template_name() if \
             callable(self.subject_template_name) \
             else self.subject_template_name
-        subject = loader.render_to_string(template_name,
-                                          self.get_context())
+        subject = loader.render_to_string(
+            template_name, self.get_context(), request=self.request
+        )
         return ''.join(subject.splitlines())
 
     def get_context(self):
@@ -92,9 +94,7 @@ class ContactForm(forms.Form):
             site = Site.objects.get_current()
         else:
             site = RequestSite(self.request)
-        return RequestContext(self.request,
-                              dict(self.cleaned_data,
-                                   site=site))
+        return dict(self.cleaned_data, site=site)
 
     def get_message_dict(self):
         """

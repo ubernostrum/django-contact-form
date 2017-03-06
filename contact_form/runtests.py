@@ -26,7 +26,7 @@ SETTINGS_DICT = {
         'django.contrib.contenttypes',
         'django.contrib.sites',
     ),
-    'ROOT_URLCONF': 'contact_form.tests.urls',
+    'ROOT_URLCONF': 'contact_form.tests.test_urls',
     'DATABASES': {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

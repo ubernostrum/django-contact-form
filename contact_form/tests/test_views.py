@@ -1,10 +1,14 @@
 from django.conf import settings
 from django.core import mail
-from django.core.urlresolvers import reverse
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 
 from ..forms import ContactForm
+
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 
 @override_settings(ROOT_URLCONF='contact_form.tests.test_urls')
