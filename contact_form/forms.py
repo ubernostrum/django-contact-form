@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.requests import RequestSite
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
-from django.template import RequestContext, loader
+from django.template import loader
 
 
 class ContactForm(forms.Form):
