@@ -3,7 +3,10 @@ View which can render and send email from a contact form.
 
 """
 
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse  # Django < 1.10
 from django.views.generic.edit import FormView
 
 from .forms import ContactForm
