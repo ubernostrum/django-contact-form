@@ -11,7 +11,7 @@ download page <https://www.djangoproject.com/download/>`_, which
 offers convenient packaged downloads and installation instructions.
 
 The |version| release of django-contact-form supports Django 1.8,
-1.9, and 1.10, on the following Python versions:
+1.9, 1.10, and 1.11 on the following Python versions:
 
 * Django 1.8 suports Python 2.7, 3.3, 3.4 and 3.5.
 
@@ -19,8 +19,10 @@ The |version| release of django-contact-form supports Django 1.8,
 
 * Django 1.10 supports Python 2.7, 3.4 and 3.5.
 
+* Django 1.11 supports Python 2.7, 3.4, 3.5 and 3.6.
+
 It is expected that django-contact-form |version| will work
-without modification on Python 3.6 once it is released.
+without modification on Python 3.7 once it is released.
 
 .. important:: **Python 3.2**
 
