@@ -7,8 +7,8 @@ from ..forms import ContactForm
 
 try:
     from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
+except ImportError:  # pragma: no cover
+    from django.core.urlresolvers import reverse  # pragma: no cover
 
 
 @override_settings(ROOT_URLCONF='contact_form.tests.test_urls')
