@@ -11,7 +11,7 @@ Once that's done, you can start setting up
 django-contact-form. Since it doesn't provide any database models
 or use any other application-config mechanisms, you do *not* need to
 add django-contact-form to your ``INSTALLED_APPS`` setting; you
-can simply begin using it right away.
+can begin using it right away.
 
 
 URL configuration

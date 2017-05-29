@@ -68,7 +68,7 @@ Built-in views
        .. warning:: If you override ``get_form_kwargs()``, you
           **must** ensure that, at the very least, the keyword
           argument ``request`` is still provided, or ``ContactForm``
-          initialization will raise ``TypeError``. The simplest
+          initialization will raise ``TypeError``. The easiest
           approach is to use ``super()`` to call the base
           implementation in ``ContactFormView``, and modify the
           dictionary it returns.

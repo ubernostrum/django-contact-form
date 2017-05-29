@@ -19,9 +19,9 @@ The ContactForm class
     The base contact form class from which all contact form classes
     should inherit.
 
-    If you don't need any customization, you can simply use this form
-    to provide basic contact functionality; it will collect name,
-    email address and message.
+    If you don't need any customization, you can use this form to
+    provide basic contact functionality; it will collect name, email
+    address and message.
 
     The :class:`~contact_form.views.ContactFormView` included in this
     application knows how to work with this form and can handle many
@@ -176,7 +176,7 @@ The Akismet (spam-filtering) contact form class
    run ``pip install django-contact-form[akismet]``.
 
    Once you have an Akismet API key and URL configured, and the
-   ``akismet`` module installed, you can simply drop in
+   ``akismet`` module installed, you can drop in
    ``AkismetContactForm`` anywhere you would have used
    :class:`ContactForm`. For example, you could define a view
    (subclassing :class:`~contact_form.views.ContactFormView`) like so,

@@ -41,7 +41,7 @@ reused, are essentially impossible to produce; variations in site
 design, block structure, etc. cannot be reliably accounted for. As
 such, django-contact-form provides bare-bones (i.e., containing no
 HTML structure whatsoever) templates in its source distribution to
-enable running tests, and otherwise simply provides good documentation
+enable running tests, and otherwise just provides good documentation
 of all required templates and the context made available to them.
 
 
