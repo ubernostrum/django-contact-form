@@ -40,9 +40,17 @@ the standard Python package-installation tool. If you don't have
 Python 2.7.9 or later (for Python 2) or Python 3.4 or later (for
 Python 3), ``pip`` came bundled with your installation of Python.
 
-Once you have ``pip``, simply type::
+Once you have ``pip``, type::
 
     pip install django-contact-form
+
+If you plan to use the included spam-filtering contact form class,
+:class:`~contact_form.forms.AkismetContactForm`, you will also need
+the Python ``akismet`` module. You can manually install it via ``pip
+install akismet``, or tell ``django-contact-form`` to install it for
+you, by running::
+
+    pip install django-contact-form[akismet]
 
 
 Manual installation
@@ -60,7 +68,7 @@ Once you've installed django-contact-form, you can verify
 successful installation by opening a Python interpreter and typing
 ``import contact_form``.
 
-If the installation was successful, you'll simply get a fresh Python
+If the installation was successful, you'll get a fresh Python
 prompt. If you instead see an ``ImportError``, check the configuration
 of your install tools and your Python import path to ensure
 django-contact-form installed into a location Python can import

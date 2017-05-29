@@ -1,9 +1,18 @@
 .. _forms:
 .. module:: contact_form.forms
 
+Contact form classes
+====================
+
+There are two contact-form classes provided in django-contact-form;
+one provides all the basic infrastructure for a contact form, and will
+usually be the base class for subclasses which want to extend or
+modify functionality. The other is a subclass which adds spam
+filtering to the contact form.
+
 
 The ContactForm class
-=====================
+---------------------
 
 .. class:: ContactForm
 
@@ -135,3 +144,48 @@ The ContactForm class
     ``super``, in order to preserve behavior (each of those methods
     accepts at least one additional argument, and this application
     expects and requires them to do so).
+
+
+The Akismet (spam-filtering) contact form class
+-----------------------------------------------
+
+.. class:: AkismetContactForm
+
+   A subclass of :class:`ContactForm` which adds spam filtering, via
+   `the Wordpress Akismet spam-detection service
+   <https://akismet.com/>`_.
+
+   Use of this class requires you to provide configuration for the
+   Akismet web service; you'll need to obtain an Akismet API key, and
+   you'll need to associate it with the site you'll use the contact
+   form on. You can do this at <https://akismet.com/>. Once you have,
+   you can configure in either of two ways:
+
+   1. Put your Akismet API key in the Django setting
+      ``AKISMET_API_KEY``, and the URL it's associated with in the
+      setting ``AKISMET_BLOG_URL``, or
+
+   2. Put your Akismet API key in the environment variable
+      ``PYTHON_AKISMET_API_KEY``, and the URL it's associated with in
+      the environment variable ``PYTHON_AKISMET_BLOG_URL``.
+
+   You will also need `the Python Akismet module
+   <http://akismet.readthedocs.io/>`_ to communicate with the Akismet
+   web service. You can install it by running ``pip install akismet``,
+   or django-contact-form can install it automatically for you if you
+   run ``pip install django-contact-form[akismet]``.
+
+   Once you have an Akismet API key and URL configured, and the
+   ``akismet`` module installed, you can simply drop in
+   ``AkismetContactForm`` anywhere you would have used
+   :class:`ContactForm`. For example, you could define a view
+   (subclassing :class:`~contact_form.views.ContactFormView`) like so,
+   and then point a URL at it:
+
+   .. code-block:: python
+
+      from contact_form.forms import AkismetContactForm
+      from contact_form.views import ContactFormView
+
+      class AkismetContactFormView(ContactFormView):
+          form_class = AkismetContactForm
