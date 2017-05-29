@@ -4,7 +4,7 @@ from setuptools import setup
 
 
 setup(name='django-contact-form',
-      version='1.3',
+      version='1.4',
       zip_safe=False, # eggs are the devil.
       description='Generic contact-form application for Django',
       long_description=open(os.path.join(os.path.dirname(__file__),
@@ -30,5 +30,9 @@ setup(name='django-contact-form',
                    'Programming Language :: Python :: 3.3',
                    'Programming Language :: Python :: 3.4',
                    'Programming Language :: Python :: 3.5',
+                   'Programming Language :: Python :: 3.6',
                    'Topic :: Utilities'],
-      )
+      extras_require={
+          'akismet': ['akismet'],
+      },
+)

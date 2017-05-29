@@ -8,6 +8,8 @@ from django.views.generic import TemplateView
 
 from ..views import ContactFormView
 
+from .views import AkismetView
+
 
 urlpatterns = [
     url(r'^$',
@@ -22,4 +24,7 @@ urlpatterns = [
         ContactFormView.as_view(
             recipient_list=['recipient_list@example.com']),
         name='test_recipient_list'),
+    url(r'^test_akismet_form/$',
+        AkismetView.as_view(),
+        name='test_akismet_form'),
 ]
