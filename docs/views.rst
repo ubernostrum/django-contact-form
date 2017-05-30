@@ -15,7 +15,7 @@ Built-in views
     exactly this).
 
     This is a subclass of `Django's FormView
-    <https://docs.djangoproject.com/en/dev/ref/class-based-views/flattened-index/#formview>`_,
+    <https://docs.djangoproject.com/en/1.11/ref/class-based-views/flattened-index/#formview>`_,
     so refer to the Django documentation for a list of
     attributes/methods which can be overridden to customize behavior.
 

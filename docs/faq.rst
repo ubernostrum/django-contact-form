@@ -58,8 +58,9 @@ allow spammers and other malicious users to manipulate email and
 potentially cause automated systems to send mail to unintended
 recipients), `Django's email-sending framework does not permit
 newlines in message headers
-<https://docs.djangoproject.com/en/1.11/topics/email/#preventing-header-injection>`_. ``BadHeaderError``
-is the exception Django raises when a newline is detected in a header.
+<https://docs.djangoproject.com/en/1.11/topics/email/#preventing-header-injection>`_.
+``BadHeaderError`` is the exception Django raises when a newline is
+detected in a header.
 
 Note that this only applies to the headers of an email message; the
 message body can (and usually does) contain newlines.
