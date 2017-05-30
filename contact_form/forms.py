@@ -50,10 +50,9 @@ class ContactForm(forms.Form):
         Render the body of the message to a string.
 
         """
-        if callable(self.template_name):
-            template_name = self.template_name()
-        else:
-            template_name = self.template_name
+        template_name = self.template_name() if \
+            callable(self.template_name) \
+            else self.template_name
         return loader.render_to_string(
             template_name, self.get_context(), request=self.request
         )
