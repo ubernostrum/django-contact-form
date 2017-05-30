@@ -92,6 +92,12 @@ class ContactFormViewTests(TestCase):
         self.assertEqual(['recipient_list@example.com'],
                          message.recipients())
 
+
+class AkismetContactFormViewTests(TestCase):
+    """
+    Tests the views with the Akismet contact form.
+
+    """
     def test_akismet_view_spam(self):
         """
         The Akismet contact form errors on spam.
