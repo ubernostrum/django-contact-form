@@ -1,7 +1,7 @@
 django-contact-form |version|
 =============================
 
-``django-contact-form`` provides basic, customizable contact-form
+``django-contact-form`` provides customizable contact-form
 functionality for `Django <https://www.djangoproject.com/>`_-powered
 Web sites.
 

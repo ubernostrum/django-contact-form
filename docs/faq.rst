@@ -11,13 +11,11 @@ you when installing, configuring or using django-contact-form.
 What versions of Django and Python are supported?
 -------------------------------------------------
 
-As of django-contact-form |version|, Django 1.8, 1.9, and 1.10 are
-supported, on Python 2.7, 3.3, 3.4 or 3.5. Although Django 1.8
-supported Python 3.2 at initial release, Python 3.2 is now at its
-end-of-life and django-contact-form no longer supports it.
-
-It is expected that django-contact-form |version| will also work
-without modification on Python 3.6 once it is released.
+As of django-contact-form |version|, Django 1.8, 1.10, and 1.11 are
+supported, on Python 2.7, 3.3, (Django 1.8 only), 3.4, 3.5, or 3.6
+(Django 1.11 only). Although Django 1.8 supported Python 3.2 at
+initial release, Python 3.2 is now at its end-of-life and
+django-contact-form no longer supports it.
 
 
 What license is django-contact-form under?
@@ -45,23 +43,6 @@ enable running tests, and otherwise just provides good documentation
 of all required templates and the context made available to them.
 
 
-What happened to the spam-filtering form in previous versions?
---------------------------------------------------------------
-
-Older versions of django-contact-form shipped a subclass of
-:class:`~contact_form.forms.ContactForm` which used `the Akismet web
-service <http://akismet.com/>`_ to identify and reject spam
-submissions.
-
-Unfortunately, the Akismet Python library -- required in order to use
-such a class -- does not currently support all versions of Python on
-which django-contact-form is supported, meaning it cannot be
-included in django-contact-form by default. The author of
-django-contact-form is working on producing a version of the
-Akismet library compatible with Python 3, but it was not yet ready as
-of the release of django-contact-form |version|.
-
-
 Why am I getting a bunch of ``BadHeaderError`` exceptions?
 ----------------------------------------------------------
 
@@ -77,7 +58,7 @@ allow spammers and other malicious users to manipulate email and
 potentially cause automated systems to send mail to unintended
 recipients), `Django's email-sending framework does not permit
 newlines in message headers
-<https://docs.djangoproject.com/en/dev/topics/email/#preventing-header-injection>`_. ``BadHeaderError``
+<https://docs.djangoproject.com/en/1.11/topics/email/#preventing-header-injection>`_. ``BadHeaderError``
 is the exception Django raises when a newline is detected in a header.
 
 Note that this only applies to the headers of an email message; the

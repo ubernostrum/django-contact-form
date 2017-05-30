@@ -17,10 +17,10 @@ can begin using it right away.
 URL configuration
 =================
 
-The easiest way to set up the views in django-contact-form is to
-just use the provided URLconf, found at ``contact_form.urls``. You can
-include it wherever you like in your site's URL configuration; for
-example, to have it live at the URL ``/contact/``:
+The quicket way to set up the views in django-contact-form is to use
+the provided URLconf, found at ``contact_form.urls``. You can include
+it wherever you like in your site's URL configuration; for example, to
+have it live at the URL ``/contact/``:
 
 .. code-block:: python
 
@@ -51,11 +51,13 @@ class. For example:
         # ... other URL patterns for your site ...
         url(r'^contact/$',
             ContactFormView.as_view(
-                form_class=YourCustomFormClass),
+                form_class=YourCustomFormClass
+            ),
             name='contact_form'),
         url(r'^contact/sent/$',
             TemplateView.as_view(
-                template_name='contact_form/contact_form_sent.html'),
+                template_name='contact_form/contact_form_sent.html'
+            ),
             name='contact_form_sent'),
     ]
 
@@ -93,7 +95,9 @@ receive a ``RequestContext`` with a set of variables named for the
 fields of the form (by default: ``name``, ``email`` and ``body``), as
 well as one more variable: ``site``, representing the current site
 (either a ``Site`` or ``RequestSite`` instance, depending on whether
-Django's sites framework is installed).
+`Django's sites framework
+<https://docs.djangoproject.com/en/1.11/ref/contrib/sites/>`_ is
+installed).
 
 .. warning:: **Subject must be a single line**
 
