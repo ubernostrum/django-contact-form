@@ -80,3 +80,34 @@ documentation for any changes made, and that following `PEP 8
 requests without documentation won't be merged, and PEP 8 style
 violations or test coverage below 100% are both configured to break
 the build.
+
+
+I'm getting errors about "akismet" when trying to run tests?
+------------------------------------------------------------
+
+The full test suite of django-contact-form exercises all of its
+functionality, including the spam-filtering
+:class:`~contact_forms.forms.AkismetContactForm`. That class uses `the
+Wordpress Akismet spam-detection service <https://akismet.com/>`_ to
+perform spam filtering, and so requires the Python ``akismet`` module
+to communicate with the Akismet service, and some additional
+configuration (in the form of a valid Akismet API key and associated
+URL).
+
+By default, the tests for
+:class:`~contact_forms.forms.AkismetContactForm` will be skipped
+unless the required configuration (in the form of either a pair of
+Django settings, or a pair of environment variables) is
+detected. However, if you have supplied Akismet configuration but do
+*not* have the Python ``akismet`` module, you will see test errors
+from attempts to import ``akismet``. You can resolve this by running::
+
+    pip install akismet
+
+or (if you do not intend to use
+:class:`~contact_forms.forms.AkismetContactForm`) by no longer
+configuring the Django settings/environment variables used by Akismet.
+
+Additionally, if the :class:`~contact_forms.forms.AkismetContactForm`
+tests are skipped, the default code-coverage report will fail due to
+the relevant code not being exercised during the test run.

@@ -1,4 +1,5 @@
 import os
+import unittest
 
 from django.conf import settings
 from django.core import mail
@@ -148,6 +149,14 @@ class ContactFormTests(TestCase):
                          form.get_message_dict())
 
 
+@unittest.skipUnless(
+    getattr(
+        settings,
+        'AKISMET_API_KEY',
+        os.getenv('PYTHON_AKISMET_API_KEY')
+    ) is not None,
+    "AkismetContactForm requires Akismet configuration"
+)
 class AkismetContactFormTests(TestCase):
     """
     Tests the Akismet contact form.
