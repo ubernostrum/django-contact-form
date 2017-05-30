@@ -15,7 +15,7 @@ can begin using it right away.
 
 
 URL configuration
-=================
+-----------------
 
 The quicket way to set up the views in django-contact-form is to use
 the provided URLconf, found at ``contact_form.urls``. You can include
@@ -71,7 +71,7 @@ class. For example:
 
 
 Required templates
-==================
+------------------
 
 The two views above will need two templates to be created:
 
@@ -110,3 +110,41 @@ installed).
    of output when rendered; as a precaution, however,
    django-contact-form will split the output of this template at
    line breaks, then forcibly re-join it into a single line of text.
+
+
+Using a spam-filtering contact form
+-----------------------------------
+
+Spam filtering is a common desire for contact forms, due to the large
+amount of spam they can attract. There is a spam-filtering contact
+form class included in django-contact-form:
+:class:`~contact_forms.forms.AkismetContactForm`, which uses `the
+Wordpress Akismet spam-detection service <https://akismet.com/>`_.
+
+To use this form, you will need to do the following things:
+
+1. Install the Python ``akismet`` module to allow django-contact-form
+   to communicate with the Akismet service. You can do this via ``pip
+   install akismet``, or as you install django-contact-form via ``pip
+   install django-contact-form[akismet]``.
+
+2. Obtain an Akismet API key from <https://akismet.com/>, and
+   associate it with the URL of your site.
+
+3. Supply the API key and URL for django-contact-form to use. You can
+   either place them in the Django settings ``AKISMET_API_KEY`` and
+   ``AKISMET_BLOG_URL``, or in the environment variables
+   ``PYTHON_AKISMET_API_KEY`` and ``PYTHON_AKISMET_BLOG_URL``.
+
+Then you can replace the suggested URLconf above with the following:
+
+.. code-block:: python
+
+    from django.conf.urls import include, url
+
+
+    urlpatterns = [
+        # ... other URL patterns for your site ...
+        url(r'^contact/', include('contact_form.akismet_urls')),
+    ]
+
