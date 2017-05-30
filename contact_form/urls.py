@@ -1,9 +1,9 @@
 """
 Example URLConf for a contact form.
 
-If all you want is the basic ContactForm with default behavior, just
+If all you want is the basic ContactForm with default behavior,
 include this URLConf somewhere in your URL hierarchy (for example, at
-``/contact/``)>
+``/contact/``)
 
 """
 
