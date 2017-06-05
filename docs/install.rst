@@ -14,7 +14,7 @@ The |version| release of django-contact-form supports Django 1.8,
 1.10, and 1.11 on the following Python versions (matching the versions
 supported by Django itself):
 
-* Django 1.8 suports Python 2.7, 3.3, 3.4, and 3.5.
+* Django 1.8 supports Python 2.7, 3.3, 3.4, and 3.5.
 
 * Django 1.10 supports Python 2.7, 3.4, and 3.5.
 
