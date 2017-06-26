@@ -7,8 +7,7 @@ import os
 
 from django import forms
 from django.conf import settings
-from django.contrib.sites.models import Site
-from django.contrib.sites.requests import RequestSite
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
 from django.template import loader
@@ -90,11 +89,7 @@ class ContactForm(forms.Form):
             raise ValueError(
                 "Cannot generate Context from invalid contact form"
             )
-        if Site._meta.installed:
-            site = Site.objects.get_current()
-        else:
-            site = RequestSite(self.request)
-        return dict(self.cleaned_data, site=site)
+        return dict(self.cleaned_data, site=get_current_site(self.request))
 
     def get_message_dict(self):
         """
