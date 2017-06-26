@@ -1,4 +1,4 @@
-django-contact-form |version|
+django-contact-form |release|
 =============================
 
 django-contact-form provides customizable contact-form functionality
