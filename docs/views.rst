@@ -10,12 +10,12 @@ Built-in views
     The base view class from which most custom contact-form views
     should inherit. If you don't need any custom functionality, and
     are content with the default
-    :class:`~contact_form.forms.ContactForm` class, you can also just
-    use it as-is (and the provided URLConf, ``contact_form.urls``,
-    does exactly this).
+    :class:`~contact_form.forms.ContactForm` class, you can also use
+    it as-is (and the provided URLConf, ``contact_form.urls``, does
+    exactly this).
 
     This is a subclass of `Django's FormView
-    <https://docs.djangoproject.com/en/dev/ref/class-based-views/flattened-index/#formview>`_,
+    <https://docs.djangoproject.com/en/1.11/ref/class-based-views/flattened-index/#formview>`_,
     so refer to the Django documentation for a list of
     attributes/methods which can be overridden to customize behavior.
 
@@ -51,7 +51,7 @@ Built-in views
 
        The URL to redirect to after successful form submission. By
        default, this is the named URL ``contact_form.sent``. In the
-       default URLconf provided with ``django-contact-form``, that URL
+       default URLconf provided with django-contact-form, that URL
        is mapped to ``TemplateView`` rendering the template
        ``contact_form/contact_form_sent.html``.
 
@@ -68,18 +68,7 @@ Built-in views
        .. warning:: If you override ``get_form_kwargs()``, you
           **must** ensure that, at the very least, the keyword
           argument ``request`` is still provided, or ``ContactForm``
-          initialization will raise ``TypeError``. The simplest
+          initialization will raise ``TypeError``. The easiest
           approach is to use ``super()`` to call the base
           implementation in ``ContactFormView``, and modify the
           dictionary it returns.
-
-    .. warning:: Implementing ``form_invalid()``
-
-       To work around `a potential performance issue in Django 1.9
-       <https://code.djangoproject.com/ticket/25548>`_,
-       ``ContactFormView`` implements the ``form_invalid()``
-       method. If you choose to override ``form_invalid()`` in a
-       subclass of ``ContactFormView``, be sure to read the
-       implementation and comments in the source code of
-       ``django-contact-form`` first. Note that Django 1.9.1, once
-       released, will not be affected by this bug.

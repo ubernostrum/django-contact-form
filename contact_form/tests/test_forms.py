@@ -1,11 +1,19 @@
+import os
+import unittest
+
 from django.conf import settings
 from django.core import mail
 from django.test import RequestFactory, TestCase
+from django.utils.six import text_type
 
-from ..forms import ContactForm
+from ..forms import AkismetContactForm, ContactForm
 
 
 class ContactFormTests(TestCase):
+    """
+    Tests the base ContactForm.
+
+    """
     valid_data = {'name': 'Test',
                   'email': 'test@example.com',
                   'body': 'Test message'}
@@ -139,3 +147,68 @@ class ContactFormTests(TestCase):
 
         self.assertEqual(overridden_data,
                          form.get_message_dict())
+
+
+@unittest.skipUnless(
+    getattr(
+        settings,
+        'AKISMET_API_KEY',
+        os.getenv('PYTHON_AKISMET_API_KEY')
+    ) is not None,
+    "AkismetContactForm requires Akismet configuration"
+)
+class AkismetContactFormTests(TestCase):
+    """
+    Tests the Akismet contact form.
+
+    """
+    def request(self):
+        return RequestFactory().request()
+
+    def test_akismet_form_test_detection(self):
+        """
+        The Akismet contact form correctly detects a test environment.
+
+        """
+        form = AkismetContactForm(request=self.request())
+        self.assertTrue(form._is_unit_test())
+        try:
+            old_environ = os.getenv('CI')
+            os.environ['CI'] = ''
+            form = AkismetContactForm(request=self.request())
+            self.assertFalse(form._is_unit_test())
+        finally:
+            if old_environ is not None:
+                os.environ['CI'] = old_environ
+
+    def test_akismet_form_spam(self):
+        """
+        The Akismet contact form correctly rejects spam.
+
+        """
+        data = {'name': 'viagra-test-123',
+                'email': 'email@example.com',
+                'body': 'This is spam.'}
+        form = AkismetContactForm(
+            request=self.request(),
+            data=data
+        )
+        self.assertFalse(form.is_valid())
+        self.assertTrue(
+            text_type(form.SPAM_MESSAGE) in
+            form.errors['body']
+        )
+
+    def test_akismet_form_ham(self):
+        """
+        The Akismet contact form correctly accepts non-spam.
+
+        """
+        data = {'name': 'Test',
+                'email': 'email@example.com',
+                'body': 'Test message.'}
+        form = AkismetContactForm(
+            request=self.request(),
+            data=data
+        )
+        self.assertTrue(form.is_valid())

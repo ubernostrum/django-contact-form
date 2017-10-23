@@ -4,3 +4,6 @@ __pycache__
 docs/_build/
 dist/
 .coverage
+.python-version
+.tox/
+*.sh

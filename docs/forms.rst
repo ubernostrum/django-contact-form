@@ -1,17 +1,26 @@
 .. _forms:
 .. module:: contact_form.forms
 
+Contact form classes
+====================
+
+There are two contact-form classes included in django-contact-form;
+one provides all the infrastructure for a contact form, and will
+usually be the base class for subclasses which want to extend or
+modify functionality. The other is a subclass which adds spam
+filtering to the contact form.
+
 
 The ContactForm class
-=====================
+---------------------
 
 .. class:: ContactForm
 
     The base contact form class from which all contact form classes
     should inherit.
 
-    If you don't need any customization, you can simply use this form
-    to provide basic contact functionality; it will collect name,
+    If you don't need any customization, you can use this form to
+    provide basic contact-form functionality; it will collect name,
     email address and message.
 
     The :class:`~contact_form.views.ContactFormView` included in this
@@ -19,7 +28,7 @@ The ContactForm class
     types of subclasses as well (see below for a discussion of the
     important points), so in many cases it will be all that you
     need. If you'd like to use this form or a subclass of it from one
-    of your own views, just do the following:
+    of your own views, here's how:
 
     1. When you instantiate the form, pass the current ``HttpRequest``
        object as the keyword argument ``request``; this is used
@@ -42,7 +51,10 @@ The ContactForm class
     order to make it easier to subclass and add functionality.
 
     The following attributes play a role in determining behavior, and
-    any of them can be implemented as an attribute or as a method:
+    any of them can be implemented as an attribute or as a method (for
+    example, if you wish to have ``from_email`` be dynamic, you can
+    implement a method named ``from_email()`` instead of setting the
+    attribute ``from_email``):
 
     .. attribute:: from_email
 
@@ -66,8 +78,8 @@ The ContactForm class
        The name of the template to use when rendering the body of the
        message. By default, this is ``contact_form/contact_form.txt``.
 
-    And two methods are involved in actually producing the contents of
-    the message to send:
+    And two methods are involved in producing the contents of the
+    message to send:
 
     .. method:: message()
 
@@ -126,12 +138,75 @@ The ContactForm class
 
     .. method:: save
 
-       If the form has data and is valid, will actually send the
-       email, by calling :meth:`get_message_dict` and passing the
-       result to Django's ``send_mail`` function.
+       If the form has data and is valid, will send the email, by
+       calling :meth:`get_message_dict` and passing the result to
+       Django's ``send_mail`` function.
 
     Note that subclasses which override ``__init__`` or :meth:`save`
     need to accept ``*args`` and ``**kwargs``, and pass them via
     ``super``, in order to preserve behavior (each of those methods
     accepts at least one additional argument, and this application
     expects and requires them to do so).
+
+
+The Akismet (spam-filtering) contact form class
+-----------------------------------------------
+
+.. class:: AkismetContactForm
+
+   A subclass of :class:`ContactForm` which adds spam filtering, via
+   `the Wordpress Akismet spam-detection service
+   <https://akismet.com/>`_.
+
+   Use of this class requires you to provide configuration for the
+   Akismet web service; you'll need to obtain an Akismet API key, and
+   you'll need to associate it with the site you'll use the contact
+   form on. You can do this at <https://akismet.com/>. Once you have,
+   you can configure in either of two ways:
+
+   1. Put your Akismet API key in the Django setting
+      ``AKISMET_API_KEY``, and the URL it's associated with in the
+      setting ``AKISMET_BLOG_URL``, or
+
+   2. Put your Akismet API key in the environment variable
+      ``PYTHON_AKISMET_API_KEY``, and the URL it's associated with in
+      the environment variable ``PYTHON_AKISMET_BLOG_URL``.
+
+   You will also need `the Python Akismet module
+   <http://akismet.readthedocs.io/>`_ to communicate with the Akismet
+   web service. You can install it by running ``pip install akismet``,
+   or django-contact-form can install it automatically for you if you
+   run ``pip install django-contact-form[akismet]``.
+
+   Once you have an Akismet API key and URL configured, and the
+   ``akismet`` module installed, you can drop in
+   ``AkismetContactForm`` anywhere you would have used
+   :class:`ContactForm`. For example, you could define a view
+   (subclassing :class:`~contact_form.views.ContactFormView`) like so,
+   and then point a URL at it:
+
+   .. code-block:: python
+
+      from contact_form.forms import AkismetContactForm
+      from contact_form.views import ContactFormView
+
+      class AkismetContactFormView(ContactFormView):
+          form_class = AkismetContactForm
+
+   Or directly specify the form in your URLconf:
+
+   .. code-block:: python
+
+      from django.conf.urls import url
+
+      from contact_form.forms import AkismetContactForm
+      from contact_form.views import ContactFormView
+
+      urlpatterns = [
+          # other URL patterns...
+          url(r'^contact-form/$',
+              ContactForm.as_view(
+	          form_class=AkismetContactForm
+	      ),
+              name='contact_form'),
+      ]

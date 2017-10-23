@@ -3,14 +3,14 @@ A base contact form for allowing users to send email messages through
 a web interface.
 
 """
+import os
 
 from django import forms
 from django.conf import settings
-from django.contrib.sites.models import Site
-from django.contrib.sites.requests import RequestSite
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
-from django.template import RequestContext, loader
+from django.template import loader
 
 
 class ContactForm(forms.Form):
@@ -49,12 +49,12 @@ class ContactForm(forms.Form):
         Render the body of the message to a string.
 
         """
-        if callable(self.template_name):
-            template_name = self.template_name()
-        else:
-            template_name = self.template_name
-        return loader.render_to_string(template_name,
-                                       self.get_context())
+        template_name = self.template_name() if \
+            callable(self.template_name) \
+            else self.template_name
+        return loader.render_to_string(
+            template_name, self.get_context(), request=self.request
+        )
 
     def subject(self):
         """
@@ -64,8 +64,9 @@ class ContactForm(forms.Form):
         template_name = self.subject_template_name() if \
             callable(self.subject_template_name) \
             else self.subject_template_name
-        subject = loader.render_to_string(template_name,
-                                          self.get_context())
+        subject = loader.render_to_string(
+            template_name, self.get_context(), request=self.request
+        )
         return ''.join(subject.splitlines())
 
     def get_context(self):
@@ -88,13 +89,7 @@ class ContactForm(forms.Form):
             raise ValueError(
                 "Cannot generate Context from invalid contact form"
             )
-        if Site._meta.installed:
-            site = Site.objects.get_current()
-        else:
-            site = RequestSite(self.request)
-        return RequestContext(self.request,
-                              dict(self.cleaned_data,
-                                   site=site))
+        return dict(self.cleaned_data, site=get_current_site(self.request))
 
     def get_message_dict(self):
         """
@@ -130,3 +125,55 @@ class ContactForm(forms.Form):
 
         """
         send_mail(fail_silently=fail_silently, **self.get_message_dict())
+
+
+class AkismetContactForm(ContactForm):
+    """
+    Contact form which doesn't add any extra fields, but does add an
+    Akismet spam check to the validation routine.
+
+    Requires the Python Akismet library, and two configuration
+    parameters: an Akismet API key and the URL the key is associated
+    with. These can be supplied either as the settings AKISMET_API_KEY
+    and AKISMET_BLOG_URL, or the environment variables
+    PYTHON_AKISMET_API_KEY and PYTHON_AKISMET_BLOG_URL.
+
+    """
+    SPAM_MESSAGE = _(u"Your message was classified as spam.")
+
+    def _is_unit_test(self):
+        """
+        Determine if we're in a test run.
+
+        During test runs, Akismet should be passed the ``is_test``
+        argument to ensure no effect on training corpus.
+
+        django-contact-form's tox.ini will set the environment
+        variable ``CI`` to indicate this, as will most online
+        continuous-integration systems.
+
+        """
+        return os.getenv('CI') == 'true'
+
+    def clean_body(self):
+        if 'body' in self.cleaned_data:
+            from akismet import Akismet
+            akismet_api = Akismet(
+                key=getattr(settings, 'AKISMET_API_KEY', None),
+                blog_url=getattr(settings, 'AKISMET_BLOG_URL', None)
+            )
+            akismet_kwargs = {
+                'user_ip': self.request.META['REMOTE_ADDR'],
+                'user_agent': self.request.META.get('HTTP_USER_AGENT'),
+                'comment_author': self.cleaned_data.get('name'),
+                'comment_author_email': self.cleaned_data.get('email'),
+                'comment_content': self.cleaned_data['body'],
+                'comment_type': 'contact-form',
+            }
+            if self._is_unit_test():
+                akismet_kwargs['is_test'] = 1
+            if akismet_api.comment_check(**akismet_kwargs):
+                raise forms.ValidationError(
+                    self.SPAM_MESSAGE
+                )
+            return self.cleaned_data['body']

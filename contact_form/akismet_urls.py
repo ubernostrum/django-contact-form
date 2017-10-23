@@ -1,21 +1,23 @@
 """
-Example URLConf for a contact form.
+Example URLConf for a contact form with Akismet spam filtering.
 
-If all you want is the basic ContactForm with default behavior,
+If all you want is the basic contact-form plus spam filtering,
 include this URLConf somewhere in your URL hierarchy (for example, at
-``/contact/``)
+``/contact/``).
 
 """
 
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from contact_form.views import ContactFormView
+from .forms import AkismetContactForm
+from .views import ContactFormView
 
 
 urlpatterns = [
     url(r'^$',
-        ContactFormView.as_view(),
+        ContactFormView.as_view(
+            form_class=AkismetContactForm),
         name='contact_form'),
     url(r'^sent/$',
         TemplateView.as_view(
