@@ -1,6 +1,8 @@
 import os
 import unittest
 
+import mock
+
 from django.conf import settings
 from django.core import mail
 from django.test import RequestFactory, TestCase
@@ -165,22 +167,6 @@ class AkismetContactFormTests(TestCase):
     def request(self):
         return RequestFactory().request()
 
-    def test_akismet_form_test_detection(self):
-        """
-        The Akismet contact form correctly detects a test environment.
-
-        """
-        form = AkismetContactForm(request=self.request())
-        self.assertTrue(form._is_unit_test())
-        try:
-            old_environ = os.getenv('CI')
-            os.environ['CI'] = ''
-            form = AkismetContactForm(request=self.request())
-            self.assertFalse(form._is_unit_test())
-        finally:
-            if old_environ is not None:
-                os.environ['CI'] = old_environ
-
     def test_akismet_form_spam(self):
         """
         The Akismet contact form correctly rejects spam.
@@ -189,15 +175,19 @@ class AkismetContactFormTests(TestCase):
         data = {'name': 'viagra-test-123',
                 'email': 'email@example.com',
                 'body': 'This is spam.'}
-        form = AkismetContactForm(
-            request=self.request(),
-            data=data
-        )
-        self.assertFalse(form.is_valid())
-        self.assertTrue(
-            text_type(form.SPAM_MESSAGE) in
-            form.errors['body']
-        )
+        with mock.patch('akismet.Akismet', autospec=True) as akismet_mock:
+            instance = akismet_mock.return_value
+            instance.verify_key.return_value = True
+            instance.comment_check.return_value = True
+            form = AkismetContactForm(
+                request=self.request(),
+                data=data
+            )
+            self.assertFalse(form.is_valid())
+            self.assertTrue(
+                text_type(form.SPAM_MESSAGE) in
+                form.errors['body']
+            )
 
     def test_akismet_form_ham(self):
         """
@@ -207,8 +197,12 @@ class AkismetContactFormTests(TestCase):
         data = {'name': 'Test',
                 'email': 'email@example.com',
                 'body': 'Test message.'}
-        form = AkismetContactForm(
-            request=self.request(),
-            data=data
-        )
-        self.assertTrue(form.is_valid())
+        with mock.patch('akismet.Akismet', autospec=True) as akismet_mock:
+            instance = akismet_mock.return_value
+            instance.verify_key.return_value = True
+            instance.comment_check.return_value = False
+            form = AkismetContactForm(
+                request=self.request(),
+                data=data
+            )
+            self.assertTrue(form.is_valid())
