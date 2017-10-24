@@ -3,8 +3,6 @@ A base contact form for allowing users to send email messages through
 a web interface.
 
 """
-import os
-
 from django import forms
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -141,20 +139,6 @@ class AkismetContactForm(ContactForm):
     """
     SPAM_MESSAGE = _(u"Your message was classified as spam.")
 
-    def _is_unit_test(self):
-        """
-        Determine if we're in a test run.
-
-        During test runs, Akismet should be passed the ``is_test``
-        argument to ensure no effect on training corpus.
-
-        django-contact-form's tox.ini will set the environment
-        variable ``CI`` to indicate this, as will most online
-        continuous-integration systems.
-
-        """
-        return os.getenv('CI') == 'true'
-
     def clean_body(self):
         if 'body' in self.cleaned_data:
             from akismet import Akismet
@@ -170,8 +154,6 @@ class AkismetContactForm(ContactForm):
                 'comment_content': self.cleaned_data['body'],
                 'comment_type': 'contact-form',
             }
-            if self._is_unit_test():
-                akismet_kwargs['is_test'] = 1
             if akismet_api.comment_check(**akismet_kwargs):
                 raise forms.ValidationError(
                     self.SPAM_MESSAGE

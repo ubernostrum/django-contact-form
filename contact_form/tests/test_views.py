@@ -1,6 +1,8 @@
 import os
 import unittest
 
+import mock
+
 from django.conf import settings
 from django.core import mail
 from django.test import RequestFactory, TestCase
@@ -118,23 +120,31 @@ class AkismetContactFormViewTests(TestCase):
         data = {'name': 'viagra-test-123',
                 'email': 'email@example.com',
                 'body': 'This is spam.'}
-        response = self.client.post(contact_url,
-                                    data=data)
-        self.assertEqual(200, response.status_code)
-        self.assertFalse(response.context['form'].is_valid())
-        self.assertTrue(response.context['form'].has_error('body'))
+        with mock.patch('akismet.Akismet', autospec=True) as akismet_mock:
+            instance = akismet_mock.return_value
+            instance.verify_key.return_value = True
+            instance.comment_check.return_value = True
+            response = self.client.post(contact_url,
+                                        data=data)
+            self.assertEqual(200, response.status_code)
+            self.assertFalse(response.context['form'].is_valid())
+            self.assertTrue(response.context['form'].has_error('body'))
 
     def test_akismet_view_ham(self):
         contact_url = reverse('test_akismet_form')
         data = {'name': 'Test',
                 'email': 'email@example.com',
                 'body': 'Test message.'}
-        response = self.client.post(contact_url,
-                                    data=data)
-        self.assertRedirects(response,
-                             reverse('contact_form_sent'))
-        self.assertEqual(1, len(mail.outbox))
+        with mock.patch('akismet.Akismet', autospec=True) as akismet_mock:
+            instance = akismet_mock.return_value
+            instance.verify_key.return_value = True
+            instance.comment_check.return_value = False
+            response = self.client.post(contact_url,
+                                        data=data)
+            self.assertRedirects(response,
+                                 reverse('contact_form_sent'))
+            self.assertEqual(1, len(mail.outbox))
 
-        message = mail.outbox[0]
-        self.assertEqual(['noreply@example.com'],
-                         message.recipients())
+            message = mail.outbox[0]
+            self.assertEqual(['noreply@example.com'],
+                             message.recipients())
