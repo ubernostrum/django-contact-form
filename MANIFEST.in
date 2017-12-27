@@ -3,3 +3,4 @@ include MANIFEST.in
 include README.rst
 include Makefile
 recursive-include docs *
+recursive-include contact_form/locale *
