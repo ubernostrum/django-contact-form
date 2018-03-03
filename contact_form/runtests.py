@@ -67,8 +67,7 @@ def run_tests():
     # Then, call django.setup() to initialize the application cache
     # and other bits:
     import django
-    if hasattr(django, 'setup'):
-        django.setup()
+    django.setup()
 
     # Now we instantiate a test runner...
     from django.test.utils import get_runner
