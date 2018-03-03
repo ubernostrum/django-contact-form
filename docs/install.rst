@@ -4,28 +4,13 @@
 Installation guide
 ==================
 
-Before installing django-contact-form, you'll need to have a copy
-of `Django <https://www.djangoproject.com>`_ already installed. For
-information on obtaining and installing Django, consult the `Django
-download page <https://www.djangoproject.com/download/>`_, which
-offers convenient packaged downloads and installation instructions.
+The |release| release of django-contact-form supports Django 1.11 and
+2.0 on the following Python versions (matching the versions supported
+by Django itself):
 
-The |release| release of django-contact-form supports Django 1.8,
-1.10, and 1.11 on the following Python versions (matching the versions
-supported by Django itself):
+* Django 1.11 supports Python 2.7, 3.4, 3.5, and 3.6.
 
-* Django 1.8 supports Python 2.7, 3.3, 3.4, and 3.5.
-
-* Django 1.10 supports Python 2.7, 3.4, and 3.5.
-
-* Django 1.11 supports Python 2.7, 3.4, 3.5, and 3.6
-
-.. important:: **Python 3.2**
-
-   Although Django 1.8 supported Python 3.2 at the time of its
-   release, the Python 3.2 series has reached end-of-life, and as a
-   result support for Python 3.2 has been dropped from
-   django-contact-form.
+* Django 2.0 supports Python 3.4, 3.5, and 3.6.
 
 
 Normal installation
@@ -49,6 +34,10 @@ install akismet``, or tell ``django-contact-form`` to install it for
 you, by running::
 
     pip install django-contact-form[akismet]
+
+If you do not already have a supported version of Django installed,
+installing django-contact-form will automatically install the most
+recent supported version of Django.
 
 
 Installing from a source checkout

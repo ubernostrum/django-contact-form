@@ -32,6 +32,20 @@ have it live at the URL ``/contact/``:
         url(r'^contact/', include('contact_form.urls')),
     ]
 
+
+If you're using Django 2.0, and want to use the new-style URL
+configuration, instead you can do:
+
+.. code-block:: python
+
+from django.conf.urls import include, path
+
+
+    urlpatterns = [
+        # ... other URL patterns for your site ...
+        path('contact/', include('contact_form.urls')),
+    ]
+
 If you'll be using a custom form class, you'll need to manually set up
 your URLs so you can tell django-contact-form about your form
 class. For example:
