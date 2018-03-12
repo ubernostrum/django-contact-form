@@ -38,7 +38,7 @@ configuration, instead you can do:
 
 .. code-block:: python
 
-from django.conf.urls import include, path
+    from django.conf.urls import include, path
 
 
     urlpatterns = [
