@@ -6,6 +6,7 @@ from setuptools import setup
 setup(name='django-contact-form',
       version='1.5',
       zip_safe=False, # eggs are the devil.
+      include_package_data=True,
       description='A generic contact-form application for Django',
       long_description=open(os.path.join(os.path.dirname(__file__),
                                          'README.rst')).read(),
