@@ -6,7 +6,7 @@ include this URLConf somewhere in your URL hierarchy (for example, at
 ``/contact/``)
 
 """
-
+import sys
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
@@ -14,11 +14,15 @@ from contact_form.views import ContactFormView
 
 
 urlpatterns = [
-    url(r'^$',
-        ContactFormView.as_view(),
-        name='contact_form'),
-    url(r'^sent/$',
-        TemplateView.as_view(
-            template_name='contact_form/contact_form_sent.html'),
-        name='contact_form_sent'),
+    if sys.version_info.major >= (3):
+        path('',ContactFormView.as_view(),name='contact_form'),
+        path('sent/',TemplateView.as_view(template_name='contact_form/contact_form_sent.html'),name='contact_form_sent'),
+    else:
+        url(r'^$',
+            ContactFormView.as_view(),
+            name='contact_form'),
+        url(r'^sent/$',
+            TemplateView.as_view(
+                template_name='contact_form/contact_form_sent.html'),
+            name='contact_form_sent'),
 ]
