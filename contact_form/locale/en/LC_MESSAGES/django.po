@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 08:29+0200\n"
+"POT-Creation-Date: 2018-04-10 10:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:23
+#: forms.py:21
 msgid "Your name"
 msgstr ""
 
-#: forms.py:25
+#: forms.py:23
 msgid "Your email address"
 msgstr ""
 
-#: forms.py:27
+#: forms.py:25
 msgid "Your message"
+msgstr ""
+
+#: forms.py:140
+msgid "Your message was classified as spam."
 msgstr ""
