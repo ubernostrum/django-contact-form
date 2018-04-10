@@ -1,4 +1,5 @@
 akismet
+django-recaptcha
 coverage
 flake8
 mock

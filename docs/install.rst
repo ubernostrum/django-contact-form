@@ -27,13 +27,21 @@ Once you have ``pip``, type::
 
     pip install django-contact-form
 
-If you plan to use the included spam-filtering contact form class,
+If you plan to use the included spam-filtering contact form class
 :class:`~contact_form.forms.AkismetContactForm`, you will also need
 the Python ``akismet`` module. You can manually install it via ``pip
 install akismet``, or tell ``django-contact-form`` to install it for
 you, by running::
 
     pip install django-contact-form[akismet]
+
+If you plan to use the included spam-filtering contact form class
+:class:`~contact_form.forms.ReCaptchaContactForm`, you will also need
+the Python ``django-recaptcha`` module. You can manually install it via ``pip
+install django-recaptcha``, or tell ``django-contact-form`` to install it for
+you, by running::
+
+    pip install django-contact-form[captcha]
 
 If you do not already have a supported version of Django installed,
 installing django-contact-form will automatically install the most

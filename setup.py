@@ -36,5 +36,6 @@ setup(name='django-contact-form',
       ],
       extras_require={
           'akismet': ['akismet'],
+          'captcha': ['django-recaptcha'],
       },
 )

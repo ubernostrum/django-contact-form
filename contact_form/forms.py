@@ -159,3 +159,26 @@ class AkismetContactForm(ContactForm):
                     self.SPAM_MESSAGE
                 )
             return self.cleaned_data['body']
+
+
+class ReCaptchaContactForm(ContactForm):
+    """
+    Contact form which adds an extra field: captcha.
+
+    Requires the Python django-recaptcha library, and two configuration
+    parameters: a ReCaptcha public and private key. These can be
+    supplied either as the settings RECAPTCHA_PUBLIC_KEY
+    and RECAPTCHA_PRIVATE_KEY, or the environment variables
+    PYTHON_RECAPTCHA_PUBLIC_KEY and PYTHON_RECAPTCHA_PRIVATE_KEY.
+
+    Other options:
+    - settings.RECAPTCHA_LANG: language code, string.
+      See https://developers.google.com/recaptcha/docs/language
+    """
+    import os
+    from captcha.fields import ReCaptchaField
+    captcha = ReCaptchaField(
+      attrs={'lang': getattr(settings, 'RECAPTCHA_LANG', None),
+             'RECAPTCHA_PUBLIC_KEY': os.getenv('PYTHON_RECAPTCHA_PUBLIC_KEY'),
+             'RECAPTCHA_PRIVATE_KEY': os.getenv('PYTHON_RECAPTCHA_PRIVATE_KEY')
+             })

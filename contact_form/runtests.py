@@ -20,12 +20,12 @@ sys.path.insert(0, APP_DIR)
 # Minimum settings required for django-contact-form to work.
 SETTINGS_DICT = {
     'BASE_DIR': APP_DIR,
-    'INSTALLED_APPS': (
+    'INSTALLED_APPS': [
         'contact_form',
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sites',
-    ),
+    ],
     'ROOT_URLCONF': 'contact_form.tests.test_urls',
     'DATABASES': {
         'default': {
@@ -56,6 +56,25 @@ SETTINGS_DICT = {
         },
     }],
 }
+
+try:
+    from captcha.constants import TEST_PUBLIC_KEY, TEST_PRIVATE_KEY
+
+    SETTINGS_DICT['INSTALLED_APPS'].append('captcha')
+    SETTINGS_DICT.update({
+        'RECAPTCHA_PUBLIC_KEY':  os.getenv('PYTHON_RECAPTCHA_PUBLIC_KEY',
+                                           TEST_PUBLIC_KEY),
+        'RECAPTCHA_PRIVATE_KEY': os.getenv('PYTHON_RECAPTCHA_PRIVATE_KEY',
+                                           TEST_PRIVATE_KEY),
+        'NOCAPTCHA': False,
+        'RECAPTCHA_USE_SSL': True,
+        'RECAPTCHA_LANG': 'en',
+    })
+
+except ImportError:
+    captcha = None
+    print("Importing captcha failed. "
+          "Skipping all tests for ReCaptchaContactForm.")
 
 
 def run_tests():
