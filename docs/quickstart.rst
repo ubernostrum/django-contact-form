@@ -130,35 +130,65 @@ Using a spam-filtering contact form
 -----------------------------------
 
 Spam filtering is a common desire for contact forms, due to the large
-amount of spam they can attract. There is a spam-filtering contact
-form class included in django-contact-form:
-:class:`~contact_forms.forms.AkismetContactForm`, which uses `the
-Wordpress Akismet spam-detection service <https://akismet.com/>`_.
+amount of spam they can attract. There are two spam-filtering contact
+form classes included in django-contact-form:
 
-To use this form, you will need to do the following things:
+    * :class:`~contact_forms.forms.AkismetContactForm`, which uses `the
+      Wordpress Akismet spam-detection service <https://akismet.com/>`_.
 
-1. Install the Python ``akismet`` module to allow django-contact-form
-   to communicate with the Akismet service. You can do this via ``pip
-   install akismet``, or as you install django-contact-form via ``pip
-   install django-contact-form[akismet]``.
+      To use this form, you will need to do the following things:
 
-2. Obtain an Akismet API key from <https://akismet.com/>, and
-   associate it with the URL of your site.
+      1. Install the Python ``akismet`` module to allow django-contact-form
+         to communicate with the Akismet service. You can do this via ``pip
+         install akismet``, or as you install django-contact-form via ``pip
+         install django-contact-form[akismet]``.
 
-3. Supply the API key and URL for django-contact-form to use. You can
-   either place them in the Django settings ``AKISMET_API_KEY`` and
-   ``AKISMET_BLOG_URL``, or in the environment variables
-   ``PYTHON_AKISMET_API_KEY`` and ``PYTHON_AKISMET_BLOG_URL``.
+      2. Obtain an Akismet API key from <https://akismet.com/>, and
+         associate it with the URL of your site.
 
-Then you can replace the suggested URLconf above with the following:
+      3. Supply the API key and URL for django-contact-form to use. You can
+         either place them in the Django settings ``AKISMET_API_KEY`` and
+         ``AKISMET_BLOG_URL``, or in the environment variables
+         ``PYTHON_AKISMET_API_KEY`` and ``PYTHON_AKISMET_BLOG_URL``.
 
-.. code-block:: python
+      Then you can replace the suggested URLconf above with the following:
 
-    from django.conf.urls import include, url
+      .. code-block:: python
+
+          from django.conf.urls import include, url
 
 
-    urlpatterns = [
-        # ... other URL patterns for your site ...
-        url(r'^contact/', include('contact_form.akismet_urls')),
-    ]
+          urlpatterns = [
+              # ... other URL patterns for your site ...
+              url(r'^contact/', include('contact_form.akismet_urls')),
+          ]
 
+
+    * :class:`~contact_forms.forms.ReCaptchaContactForm`, which uses `the
+      Google reCAPTCHA spam-detection service <https://www.google.com/recaptcha>`_.
+
+      To use this form, you will need to do the following things:
+
+      1. Install the Python ``reCAPTCHA`` module to allow django-contact-form
+         to communicate with the reCAPTCHA service. You can do this via ``pip
+         install django-recaptcha``, or as you install django-contact-form via ``pip
+         install django-contact-form[captcha]``.
+
+      2. Obtain the reCAPTCHA API keys from <https://www.google.com/recaptcha>.
+
+      3. Supply the API keys for django-contact-form to use. You can
+         either place them in the Django settings ``RECAPTCHA_PUBLIC_KEY``
+         and ``RECAPTCHA_PRIVATE_KEY``, or in the environment variables
+         ``PYTHON_RECAPTCHA_PUBLIC_KEY`` and ``PYTHON_RECAPTCHA_PRIVATE_KEY``.
+
+      Then you can replace the suggested URLconf above with the following:
+
+      .. code-block:: python
+
+          from django.conf.urls import include, url
+
+
+          urlpatterns = [
+              # ... other URL patterns for your site ...
+              url(r'^contact/', include('contact_form.recaptcha_urls')),
+          ]
