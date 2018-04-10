@@ -148,3 +148,45 @@ class AkismetContactFormViewTests(TestCase):
             message = mail.outbox[0]
             self.assertEqual(['noreply@example.com'],
                              message.recipients())
+
+
+class ReCaptchaContactFormViewTests(TestCase):
+    """
+    Tests the views with the ReCaptcha contact form.
+
+    """
+    def setUp(self):
+        os.environ['RECAPTCHA_TESTING'] = 'True'
+
+    def test_captcha_send(self):
+        """
+        Valid data through the view results in a successful send.
+
+        """
+        contact_url = reverse('test_captcha_form')
+        data = {'name': 'Test',
+                'email': 'test@example.com',
+                'body': 'Test message'}
+        data.update({'g-recaptcha-response': 'PASSED'}
+                    if getattr(settings, 'NOCAPTCHA', True) else
+                    {'recaptcha_response_field': 'PASSED'})
+
+        response = self.client.post(contact_url,
+                                    data=data)
+
+        self.assertRedirects(response,
+                             reverse('contact_form_sent'))
+
+        self.assertEqual(1, len(mail.outbox))
+
+        message = mail.outbox[0]
+        self.assertTrue(data['body'] in message.body)
+        self.assertEqual(settings.DEFAULT_FROM_EMAIL,
+                         message.from_email)
+        form = ContactForm(request=RequestFactory().request)
+        self.assertEqual(form.recipient_list,
+                         message.recipients())
+
+    def tearDown(self):
+        del os.environ['RECAPTCHA_TESTING']
+        pass

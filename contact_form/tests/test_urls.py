@@ -6,7 +6,7 @@ URLConf for testing django-contact-form.
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from ..forms import AkismetContactForm
+from ..forms import AkismetContactForm, ReCaptchaContactForm
 from ..views import ContactFormView
 
 
@@ -28,4 +28,9 @@ urlpatterns = [
             form_class=AkismetContactForm
         ),
         name='test_akismet_form'),
+    url(r'^test_captcha_form/$',
+        ContactFormView.as_view(
+            form_class=ReCaptchaContactForm
+        ),
+        name='test_captcha_form'),
 ]
