@@ -31,6 +31,7 @@ setup(name='django-contact-form',
                    'Programming Language :: Python :: 3.4',
                    'Programming Language :: Python :: 3.5',
                    'Programming Language :: Python :: 3.6',
+                   'Programming Language :: Python :: 3.7',
                    'Topic :: Utilities'],
       install_requires=[
           'Django>=1.11',
