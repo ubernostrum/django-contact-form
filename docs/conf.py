@@ -3,7 +3,7 @@ import sys
 
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
-extensions = []
+extensions = ['sphinx.ext.intersphinx']
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'

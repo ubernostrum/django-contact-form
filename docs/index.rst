@@ -1,3 +1,5 @@
+.. _index:
+
 django-contact-form |release|
 =============================
 
@@ -16,8 +18,6 @@ For notes on getting started quickly, and on how to customize
 django-contact-form's behavior, read through the full documentation
 below.
 
-
-Contents:
 
 .. toctree::
    :caption: Installation and configuration

@@ -4,40 +4,48 @@
 Installation guide
 ==================
 
-The |release| release of django-contact-form supports Django 1.11 and
-2.0 on the following Python versions (matching the versions supported
-by Django itself):
+The |release| release of django-contact-form supports Django 1.11, 2.0
+and 2.1 on the following Python versions:
 
-* Django 1.11 supports Python 2.7, 3.4, 3.5, and 3.6.
+* Django 1.11 supports Python 2.7, 3.4, 3.5 and 3.6.
 
-* Django 2.0 supports Python 3.4, 3.5, and 3.6.
+* Django 2.0 supports Python 3.4, 3.5, 3.6 and 3.7.
+
+* Django 2.1 supports Python 3.5, 3.6 and 3.7.
 
 
 Normal installation
 -------------------
 
-The preferred method of installing django-contact-form is via ``pip``,
+The preferred method of installing django-contact-form is via `pip`,
 the standard Python package-installation tool. If you don't have
-``pip``, instructions are available for `how to obtain and install it
-<https://pip.pypa.io/en/latest/installing.html>`_. If you're using
-Python 2.7.9 or later (for Python 2) or Python 3.4 or later (for
-Python 3), ``pip`` came bundled with your installation of Python.
+`pip`, instructions are available for `how to obtain and install it
+<https://pip.pypa.io/en/latest/installing.html>`_. If you're using a
+supported version of Python, `pip` should have come bundled with your
+installation of Python.
 
-Once you have ``pip``, type::
+Once you have `pip`, type::
 
     pip install django-contact-form
 
 If you plan to use the included spam-filtering contact form class,
 :class:`~contact_form.forms.AkismetContactForm`, you will also need
-the Python ``akismet`` module. You can manually install it via ``pip
-install akismet``, or tell ``django-contact-form`` to install it for
-you, by running::
+`the Python akismet module <https://pypi.org/project/akismet/>`_. You
+can manually install it via `pip install akismet`, or tell
+django-contact-form to install it for you, by running::
 
     pip install django-contact-form[akismet]
 
-If you do not already have a supported version of Django installed,
-installing django-contact-form will automatically install the most
-recent supported version of Django.
+If you don't have a copy of a compatible version of Django, installing
+django-contact-form will also automatically install one for you.
+
+.. warning:: **Python 2**
+
+   If you are using Python 2, you should install the latest Django
+   1.11 release *before* installing django-contact-form. Later
+   versions of Django no longer support Python 2, and installation
+   will fail. To install a compatible version of Django for Python 2,
+   run `pip install "Django>=1.11,<2.0"`.
 
 
 Installing from a source checkout
@@ -53,16 +61,16 @@ repository by typing::
 
     git clone https://github.com/ubernostrum/django-contact-form.git
 
-From there, you can use normal git commands to check out the specific
-revision you want, and install it using ``pip install -e .`` (the
-``-e`` flag specifies an "editable" install, allowing you to change
-code as you work on django-contact-form, and have your changes picked
-up automatically).
+From there, you can use git commands to check out the specific
+revision you want, and perform an "editable" install (allowing you to
+change code as you work on it) by typing::
+
+    pip install -e .
 
 
-Configuration and use
----------------------
+Next steps
+----------
 
-Once you have Django and django-contact-form installed, check out
-:ref:`the quick start guide <quickstart>` to see how to get your
-contact form up and running.
+To get up and running quickly, check out :ref:`the quick start guide
+<quickstart>`. For full documentation, see :ref:`the documentation
+index <index>`.

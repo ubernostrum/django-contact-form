@@ -30,98 +30,120 @@ The ContactForm class
     need. If you'd like to use this form or a subclass of it from one
     of your own views, here's how:
 
-    1. When you instantiate the form, pass the current ``HttpRequest``
-       object as the keyword argument ``request``; this is used
-       internally by the base implementation, and also made available
-       so that subclasses can add functionality which relies on
-       inspecting the request (such as spam filtering).
+    1. When you instantiate the form, pass the current
+       :class:`~django.http.HttpRequest` object as the keyword
+       argument `request`; this is used internally by the base
+       implementation, and also made available so that subclasses can
+       add functionality which relies on inspecting the request (such
+       as spam filtering).
 
-    2. To send the message, call the form's ``save`` method, which
-       accepts the keyword argument ``fail_silently`` and defaults it
-       to ``False``. This argument is passed directly to Django's
-       ``send_mail()`` function, and allows you to suppress or raise
-       exceptions as needed for debugging. The ``save`` method has no
-       return value.
+    2. To send the message, call the form's :meth:`save` method, which
+       accepts the keyword argument `fail_silently` and defaults it to
+       `False`. This argument is passed directly to Django's
+       :func:`~django.core.mail.send_mail` function, and allows you to
+       suppress or raise exceptions as needed for debugging. The
+       :meth:`save` method has no return value.
 
     Other than that, treat it like any other form; validity checks and
-    validated data are handled normally, through the ``is_valid()``
-    method and the ``cleaned_data`` dictionary.
+    validated data are handled normally, through the
+    :meth:`~django.forms.Form.is_valid` method and the
+    :attr:`~django.forms.Form.cleaned_data` dictionary.
 
     Under the hood, this form uses a somewhat abstracted interface in
     order to make it easier to subclass and add functionality.
 
     The following attributes play a role in determining behavior, and
     any of them can be implemented as an attribute or as a method (for
-    example, if you wish to have ``from_email`` be dynamic, you can
-    implement a method named ``from_email()`` instead of setting the
-    attribute ``from_email``):
+    example, if you wish to have :attr:`from_email` be dynamic, you
+    can implement a method named :meth:`from_email` instead of setting
+    the attribute :attr:`from_email`).
 
     .. attribute:: from_email
 
-       The email address to use in the ``From:`` header of the
-       message. By default, this is the value of the setting
-       ``DEFAULT_FROM_EMAIL``.
+       The email address (:class:`str`) to use in the `From:` header
+       of the message. By default, this is the value of the setting
+       :data:`~django.conf.settings.DEFAULT_FROM_EMAIL`.
 
     .. attribute:: recipient_list
 
-       The list of recipients for the message. By default, this is the
-       email addresses specified in the setting ``MANAGERS``.
+       A :class:`list` of recipients for the message. By default, this
+       is the email addresses specified in the setting
+       :data:`~django.conf.settings.MANAGERS`.
 
     .. attribute:: subject_template_name
 
-       The name of the template to use when rendering the subject line
-       of the message. By default, this is
-       ``contact_form/contact_form_subject.txt``.
+       A :class:`str`, the name of the template to use when rendering
+       the subject line of the message. By default, this is
+       `contact_form/contact_form_subject.txt`.
 
     .. attribute:: template_name
 
-       The name of the template to use when rendering the body of the
-       message. By default, this is ``contact_form/contact_form.txt``.
+       A :class:`str`, the name of the template to use when rendering
+       the body of the message. By default, this is
+       `contact_form/contact_form.txt`.
 
     And two methods are involved in producing the contents of the
     message to send:
 
-    .. method:: message()
+    .. method:: message
 
        Returns the body of the message to send. By default, this is
        accomplished by rendering the template name specified in
        :attr:`template_name`.
 
-    .. method:: subject()
+       :rtype: str
+
+    .. method:: subject
 
        Returns the subject line of the message to send. By default,
        this is accomplished by rendering the template name specified
        in :attr:`subject_template_name`.
 
+       :rtype: str
+
+    .. warning:: **Subject must be a single line**
+
+       The subject of an email is sent in a header (named
+       `Subject:`). Because email uses newlines as a separator between
+       headers, newlines in the subject can cause it to be interpreted
+       as multiple headers; this is the `header injection attack
+       <https://en.wikipedia.org/wiki/Email_injection>`_. To prevent
+       this, :meth:`subject` will always force the subject to a single
+       line of text, stripping all newline characters. If you override
+       :meth:`subject`, be sure to either do this manually, or use
+       :func:`super` to call the parent implementation.
+
     Finally, the message itself is generated by the following two
     methods:
 
-    .. method:: get_message_dict()
+    .. method:: get_message_dict
 
        This method loops through :attr:`from_email`,
        :attr:`recipient_list`, :meth:`message` and :meth:`subject`,
        collecting those parts into a dictionary with keys
-       corresponding to the arguments to Django's ``send_mail``
+       corresponding to the arguments to Django's `send_mail`
        function, then returns the dictionary. Overriding this allows
        essentially unlimited customization of how the message is
        generated. Note that for compatibility, implementations which
        override this should support callables for the values of
-       ``from_email`` and ``recipient_list``.
+       :attr:`from_email` and :attr:`recipient_list`.
 
-    .. method:: get_context()
+    .. method:: get_context
 
        For methods which render portions of the message using
        templates (by default, :meth:`message` and :meth:`subject`),
        generates the context used by those templates. The default
-       context will be a ``RequestContext`` (using the current HTTP
-       request, so user information is available), plus the contents
-       of the form's ``cleaned_data`` dictionary, and one additional
-       variable:
+       context will be a :class:`~django.template.RequestContext`
+       (using the current HTTP request, so user information is
+       available), plus the contents of the form's
+       :class:`~django.forms.Form.cleaned_data` dictionary, and one
+       additional variable:
 
-       ``site``
-         If ``django.contrib.sites`` is installed, the
-         currently-active ``Site`` object. Otherwise, a
-         ``RequestSite`` object generated from the request.
+       `site`
+         If `django.contrib.sites` is installed, the currently-active
+         :class:`~django.contrib.sites.models.Site` object. Otherwise,
+         a :class:`~django.contrib.sites.requests.RequestSite` object
+         generated from the request.
 
     Meanwhile, the following attributes/methods generally should not
     be overridden; doing so may interfere with functionality, may not
@@ -131,22 +153,23 @@ The ContactForm class
 
     .. attribute:: request
 
-       The ``HttpRequest`` object representing the current
-       request. This is set automatically in ``__init__()``, and is
-       used both to generate a ``RequestContext`` for the templates
-       and to allow subclasses to engage in request-specific behavior.
+       The :class:`~django.http.HttpRequest` object representing the
+       current request. This is set automatically in `__init__()`, and
+       is used both to generate a
+       :class:`~django.template.RequestContext` for the templates and
+       to allow subclasses to engage in request-specific behavior.
 
     .. method:: save
 
        If the form has data and is valid, will send the email, by
        calling :meth:`get_message_dict` and passing the result to
-       Django's ``send_mail`` function.
+       Django's :func:`~django.core.mail.send_mail` function.
 
-    Note that subclasses which override ``__init__`` or :meth:`save`
-    need to accept ``*args`` and ``**kwargs``, and pass them via
-    ``super``, in order to preserve behavior (each of those methods
-    accepts at least one additional argument, and this application
-    expects and requires them to do so).
+    Note that subclasses which override `__init__` or :meth:`save`
+    need to accept `*args` and `**kwargs`, and pass them via
+    :func:`super`, in order to preserve behavior (each of those
+    methods accepts at least one additional argument, and this
+    application expects and requires them to do so).
 
 
 The Akismet (spam-filtering) contact form class
@@ -165,48 +188,23 @@ The Akismet (spam-filtering) contact form class
    you can configure in either of two ways:
 
    1. Put your Akismet API key in the Django setting
-      ``AKISMET_API_KEY``, and the URL it's associated with in the
-      setting ``AKISMET_BLOG_URL``, or
+      :data:`~django.conf.settings.AKISMET_API_KEY`, and the URL it's
+      associated with in the setting
+      :class:`~django.conf.settings.AKISMET_BLOG_URL`, or
 
    2. Put your Akismet API key in the environment variable
-      ``PYTHON_AKISMET_API_KEY``, and the URL it's associated with in
-      the environment variable ``PYTHON_AKISMET_BLOG_URL``.
+      `PYTHON_AKISMET_API_KEY`, and the URL it's associated with in
+      the environment variable `PYTHON_AKISMET_BLOG_URL`.
 
    You will also need `the Python Akismet module
    <http://akismet.readthedocs.io/>`_ to communicate with the Akismet
-   web service. You can install it by running ``pip install akismet``,
+   web service. You can install it by running `pip install akismet`,
    or django-contact-form can install it automatically for you if you
-   run ``pip install django-contact-form[akismet]``.
+   run `pip install django-contact-form[akismet]`.
 
    Once you have an Akismet API key and URL configured, and the
-   ``akismet`` module installed, you can drop in
-   ``AkismetContactForm`` anywhere you would have used
-   :class:`ContactForm`. For example, you could define a view
-   (subclassing :class:`~contact_form.views.ContactFormView`) like so,
-   and then point a URL at it:
-
-   .. code-block:: python
-
-      from contact_form.forms import AkismetContactForm
-      from contact_form.views import ContactFormView
-
-      class AkismetContactFormView(ContactFormView):
-          form_class = AkismetContactForm
-
-   Or directly specify the form in your URLconf:
-
-   .. code-block:: python
-
-      from django.conf.urls import url
-
-      from contact_form.forms import AkismetContactForm
-      from contact_form.views import ContactFormView
-
-      urlpatterns = [
-          # other URL patterns...
-          url(r'^contact-form/$',
-              ContactForm.as_view(
-	          form_class=AkismetContactForm
-	      ),
-              name='contact_form'),
-      ]
+   `akismet` module installed, you can drop in
+   :class:`AkismetContactForm` anywhere you would have used
+   :class:`ContactForm`. A URLconf is provided in django-contact-form,
+   at `contact_form.akismet_urls`, which will correctly configure
+   :class:`AkismetContactForm` for you.
