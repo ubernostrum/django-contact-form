@@ -1,14 +1,14 @@
 import os
 import unittest
 
-import mock
-
 from django.conf import settings
 from django.core import mail
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 
-from ..forms import ContactForm
+import mock
+from contact_form.forms import ContactForm
+
 
 try:
     from django.urls import reverse
@@ -16,7 +16,7 @@ except ImportError:  # pragma: no cover
     from django.core.urlresolvers import reverse  # pragma: no cover
 
 
-@override_settings(ROOT_URLCONF='contact_form.tests.test_urls')
+@override_settings(ROOT_URLCONF='tests.test_urls')
 class ContactFormViewTests(TestCase):
 
     def test_get(self):
@@ -106,6 +106,7 @@ class ContactFormViewTests(TestCase):
     ) is not None,
     "AkismetContactForm requires Akismet configuration"
 )
+@override_settings(ROOT_URLCONF='contact_form.akismet_urls')
 class AkismetContactFormViewTests(TestCase):
     """
     Tests the views with the Akismet contact form.
@@ -116,7 +117,7 @@ class AkismetContactFormViewTests(TestCase):
         The Akismet contact form errors on spam.
 
         """
-        contact_url = reverse('test_akismet_form')
+        contact_url = reverse('contact_form')
         data = {'name': 'viagra-test-123',
                 'email': 'email@example.com',
                 'body': 'This is spam.'}
@@ -131,7 +132,7 @@ class AkismetContactFormViewTests(TestCase):
             self.assertTrue(response.context['form'].has_error('body'))
 
     def test_akismet_view_ham(self):
-        contact_url = reverse('test_akismet_form')
+        contact_url = reverse('contact_form')
         data = {'name': 'Test',
                 'email': 'email@example.com',
                 'body': 'Test message.'}

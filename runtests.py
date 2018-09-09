@@ -1,10 +1,9 @@
 """
 A standalone test runner script, configuring the minimum settings
-required for django-contact-form' tests to execute.
+required for tests to execute.
 
 Re-use at your own risk: many Django applications will require full
-settings and/or templates in order to execute their tests, while
-django-contact-form does not.
+settings and/or templates in order to execute their tests.
 
 """
 
@@ -26,14 +25,14 @@ SETTINGS_DICT = {
         'django.contrib.contenttypes',
         'django.contrib.sites',
     ),
-    'ROOT_URLCONF': 'contact_form.tests.test_urls',
+    'ROOT_URLCONF': 'contact_form.urls',
     'DATABASES': {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(APP_DIR, 'db.sqlite3'),
         },
     },
-    'MIDDLEWARE_CLASSES': (
+    'MIDDLEWARE': (
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
     ),
@@ -75,7 +74,7 @@ def run_tests():
 
     # And then we run tests and return the results.
     test_runner = TestRunner(verbosity=2, interactive=True)
-    failures = test_runner.run_tests(['contact_form.tests'])
+    failures = test_runner.run_tests(['tests'])
     sys.exit(bool(failures))
 
 

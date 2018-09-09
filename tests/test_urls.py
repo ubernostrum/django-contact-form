@@ -6,8 +6,8 @@ URLConf for testing django-contact-form.
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from ..forms import AkismetContactForm
-from ..views import ContactFormView
+from contact_form.forms import AkismetContactForm
+from contact_form.views import ContactFormView
 
 
 urlpatterns = [

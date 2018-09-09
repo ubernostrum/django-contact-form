@@ -1,14 +1,13 @@
 import os
 import unittest
 
-import mock
-
 from django.conf import settings
 from django.core import mail
 from django.test import RequestFactory, TestCase
 from django.utils.six import text_type
 
-from ..forms import AkismetContactForm, ContactForm
+import mock
+from contact_form.forms import AkismetContactForm, ContactForm
 
 
 class ContactFormTests(TestCase):

@@ -6,9 +6,9 @@ a web interface.
 from django import forms
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
 from django.template import loader
+from django.utils.translation import ugettext_lazy as _
 
 
 class ContactForm(forms.Form):

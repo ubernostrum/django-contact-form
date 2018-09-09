@@ -7,6 +7,7 @@ from django.views.generic.edit import FormView
 
 from .forms import ContactForm
 
+
 try:
     from django.urls import reverse
 except ImportError:  # pragma: no cover

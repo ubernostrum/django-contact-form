@@ -17,7 +17,7 @@ can begin using it right away.
 URL configuration
 -----------------
 
-The quicket way to set up the views in django-contact-form is to use
+The quickest way to set up the views in django-contact-form is to use
 the provided URLconf, found at ``contact_form.urls``. You can include
 it wherever you like in your site's URL configuration; for example, to
 have it live at the URL ``/contact/``:
