@@ -3,20 +3,16 @@ View which can render and send email from a contact form.
 
 """
 
+from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 
 from .forms import ContactForm
 
 
-try:
-    from django.urls import reverse
-except ImportError:  # pragma: no cover
-    from django.core.urlresolvers import reverse  # pragma: no cover
-
-
 class ContactFormView(FormView):
     form_class = ContactForm
     recipient_list = None
+    success_url = reverse_lazy('contact_form_sent')
     template_name = 'contact_form/contact_form.html'
 
     def form_valid(self, form):
@@ -34,12 +30,3 @@ class ContactFormView(FormView):
         if self.recipient_list is not None:
             kwargs.update({'recipient_list': self.recipient_list})
         return kwargs
-
-    def get_success_url(self):
-        # This is in a method instead of the success_url attribute
-        # because doing it as an attribute would involve a
-        # module-level call to reverse(), creating a circular
-        # dependency between the URLConf (which imports this module)
-        # and this module (which would need to access the URLConf to
-        # make the reverse() call).
-        return reverse('contact_form_sent')
