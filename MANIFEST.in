@@ -1,6 +1,8 @@
 include LICENSE
 include MANIFEST.in
-include README.rst
-include Makefile
+include AUTHORS
 recursive-include docs *
-recursive-include contact_form/locale *
+include tox.ini
+include runtests.py
+graft src
+graft tests
