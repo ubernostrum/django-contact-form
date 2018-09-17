@@ -148,9 +148,9 @@ variables:
    will reject any attempt to send an email with a multi-line
    subject. So it's a good idea to ensure your
    `contact_form_subject.txt` template only produces a single line of
-   output when rendered; as a precaution, however, by default
-   django-contact-form will force the subject to a single line,
-   stripping newline characters.
+   output when rendered; as a precaution, however, django-contact-form
+   will, by default, condense the output of this template to a single
+   line.
 
 
 Using a spam-filtering contact form
@@ -159,7 +159,7 @@ Using a spam-filtering contact form
 Spam filtering is a common desire for contact forms, due to the large
 amount of spam they can attract. There is a spam-filtering contact
 form class included in django-contact-form:
-:class:`~contact_forms.forms.AkismetContactForm`, which uses `the
+:class:`~contact_form.forms.AkismetContactForm`, which uses `the
 Wordpress Akismet spam-detection service <https://akismet.com/>`_.
 
 To use this form, you will need to do the following things:

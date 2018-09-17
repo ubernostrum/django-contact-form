@@ -61,8 +61,8 @@ The ContactForm class
     .. attribute:: from_email
 
        The email address (:class:`str`) to use in the `From:` header
-       of the message. By default, this is the value of the setting
-       :data:`~django.conf.settings.DEFAULT_FROM_EMAIL`.
+       of the message. By default, this is the value of the Django
+       setting :data:`~django.conf.settings.DEFAULT_FROM_EMAIL`.
 
     .. attribute:: recipient_list
 
@@ -128,6 +128,8 @@ The ContactForm class
        override this should support callables for the values of
        :attr:`from_email` and :attr:`recipient_list`.
 
+       :rtype: dict
+
     .. method:: get_context
 
        For methods which render portions of the message using
@@ -136,7 +138,7 @@ The ContactForm class
        context will be a :class:`~django.template.RequestContext`
        (using the current HTTP request, so user information is
        available), plus the contents of the form's
-       :class:`~django.forms.Form.cleaned_data` dictionary, and one
+       :attr:`~django.forms.Form.cleaned_data` dictionary, and one
        additional variable:
 
        `site`
@@ -144,6 +146,8 @@ The ContactForm class
          :class:`~django.contrib.sites.models.Site` object. Otherwise,
          a :class:`~django.contrib.sites.requests.RequestSite` object
          generated from the request.
+
+       :rtype: dict
 
     Meanwhile, the following attributes/methods generally should not
     be overridden; doing so may interfere with functionality, may not

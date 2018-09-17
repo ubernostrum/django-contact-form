@@ -52,12 +52,16 @@ Built-in views
 
     .. method:: get_success_url
 
-       The URL to redirect to after successful form submission. By
-       default, this is the named URL `contact_form.sent`. In the
-       default URLconf provided with django-contact-form, that URL is
-       mapped to :class:`~django.views.generic.base.TemplateView`
-       rendering the template `contact_form/contact_form_sent.html`.
+       The URL to redirect to after successful form submission. Can be
+       a hard-coded string, the string resulting from calling Django's
+       :func:`~django.urls.reverse` helper, or the lazy object
+       produced by Django's :func:`~django.urls.reverse_lazy`
+       helper. Default value is the result of calling
+       :func:`~django.urls.reverse_lazy` with the URL name
+       `'contact_form_sent'`.
 
+       :rtype: str
+       
     .. method:: get_form_kwargs
 
        Returns additional keyword arguments (as a dictionary) to pass
@@ -76,3 +80,5 @@ Built-in views
           :func:`super` to call the base implementation in
           :class:`ContactFormView`, and modify the dictionary it
           returns.
+
+       :rtype: dict
