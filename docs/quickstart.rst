@@ -9,7 +9,23 @@ installed; for details on that, see :ref:`the installation guide
 
 Once that's done, you can start setting up django-contact-form. First,
 add it to your :data:`~django.conf.settings.INSTALLED_APPS`
-setting. Then, you can begin configuring.
+setting:
+
+.. code-block:: python
+
+    INSTALLED_APPS = [
+        .
+        .
+        .
+        'django.contrib.sites',
+        'contact_form'
+        .
+        .
+        .
+
+    ]
+
+Then, you can begin configuring.
 
 
 URL configuration
