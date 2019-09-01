@@ -24,7 +24,7 @@ msgstr "Dein Name"
 
 #: forms.py:23
 msgid "Your email address"
-msgstr "deine Emailadresse"
+msgstr "Deine E-Mail-Adresse"
 
 #: forms.py:25
 msgid "Your message"
@@ -32,4 +32,4 @@ msgstr "Deine Nachricht"
 
 #: forms.py:140
 msgid "Your message was classified as spam."
-msgstr ""
+msgstr "Deine Nachricht wurde als Spam klassifiziert."
