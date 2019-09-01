@@ -32,4 +32,4 @@ msgstr "Votre message"
 
 #: forms.py:140
 msgid "Your message was classified as spam."
-msgstr ""
+msgstr "Votre message a été classé comme spam."
