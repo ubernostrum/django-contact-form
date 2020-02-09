@@ -14,6 +14,19 @@ from django.template import loader
 from django.utils.translation import ugettext_lazy as _
 
 
+# Parameters to a form being handled from a live request will actually
+# be instances of django.utils.datastructures.MultiValueDict, but this
+# is declared as a typing.Dict for a few reasons:
+#
+# * MultiValueDict is a subclass of dict, so instances of
+#   MultiValueDict will pass type checks.
+#
+# * Testing of forms more typically passes in plain dict for the form
+#   arguments, so supporting it is useful.
+#
+# * PEP 560, which allows dropping the typing module's aliases and
+#   subscripting the actual types, was adopted for Python 3.7, but
+#   currently we support back to Python 3.5.
 StringKeyedDict = Dict[str, Any]
 
 
