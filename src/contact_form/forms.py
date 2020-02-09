@@ -37,9 +37,9 @@ class ContactForm(forms.Form):
 
     """
 
-    name = forms.CharField(max_length=100, label=_(u"Your name"))
-    email = forms.EmailField(max_length=200, label=_(u"Your email address"))
-    body = forms.CharField(widget=forms.Textarea, label=_(u"Your message"))
+    name = forms.CharField(max_length=100, label=_("Your name"))
+    email = forms.EmailField(max_length=200, label=_("Your email address"))
+    body = forms.CharField(widget=forms.Textarea, label=_("Your message"))
 
     from_email = settings.DEFAULT_FROM_EMAIL
 
@@ -158,7 +158,7 @@ class AkismetContactForm(ContactForm):
 
     """
 
-    SPAM_MESSAGE = _(u"Your message was classified as spam.")
+    SPAM_MESSAGE = _("Your message was classified as spam.")
 
     def clean_body(self) -> str:
         from akismet import Akismet

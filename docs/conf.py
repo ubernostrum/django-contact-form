@@ -7,8 +7,8 @@ extensions = ["sphinx.ext.intersphinx"]
 templates_path = ["_templates"]
 source_suffix = ".rst"
 master_doc = "index"
-project = u"django-contact-form"
-copyright = u"2007-2020, James Bennett"
+project = "django-contact-form"
+copyright = "2007-2020, James Bennett"
 version = "1.8"
 release = "1.8a1"
 exclude_trees = ["_build"]
@@ -19,8 +19,8 @@ latex_documents = [
     (
         "index",
         "django-contact-form.tex",
-        u"django-contact-form Documentation",
-        u"James Bennett",
+        "django-contact-form Documentation",
+        "James Bennett",
         "manual",
     ),
 ]
