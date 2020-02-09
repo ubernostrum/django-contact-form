@@ -37,14 +37,6 @@ django-contact-form to install it for you, by running::
 If you don't have a copy of a compatible version of Django, installing
 django-contact-form will also automatically install one for you.
 
-.. warning:: **Python 2**
-
-   If you are using Python 2, you should install the latest Django
-   1.11 release *before* installing django-contact-form. Later
-   versions of Django no longer support Python 2, and installation
-   will fail. To install a compatible version of Django for Python 2,
-   run `pip install "Django>=1.11,<2.0"`.
-
 
 Installing from a source checkout
 ---------------------------------

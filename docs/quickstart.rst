@@ -22,12 +22,12 @@ have it live at the URL `/contact/`:
 
 .. code-block:: python
 
-    from django.conf.urls import include, url
+    from django.urls import include, path
 
 
     urlpatterns = [
         # ... other URL patterns for your site ...
-        url(r'^contact/', include('contact_form.urls')),
+        path('contact/', include('contact_form.urls')),
     ]
 
 If you'll be using a custom form class, you'll need to manually set up
@@ -37,7 +37,7 @@ class. For example:
 
 .. code-block:: python
 
-    from django.conf.urls import include, url
+    from django.urls import include, path
     from django.views.generic import TemplateView
 
     from contact_form.views import ContactFormView
@@ -47,12 +47,12 @@ class. For example:
 
     urlpatterns = [
         # ... other URL patterns for your site ...
-        url(r'^contact/$',
+        path('contact/',
             ContactFormView.as_view(
                 form_class=YourCustomFormClass
             ),
             name='contact_form'),
-        url(r'^contact/sent/$',
+        path('contact/sent/',
             TemplateView.as_view(
                 template_name='contact_form/contact_form_sent.html'
             ),
@@ -183,11 +183,11 @@ Then you can replace the suggested URLconf above with the following:
 
 .. code-block:: python
 
-    from django.conf.urls import include, url
+    from django.urls import include, path
 
 
     urlpatterns = [
         # ... other URL patterns for your site ...
-        url(r'^contact/', include('contact_form.akismet_urls')),
+        path('contact/', include('contact_form.akismet_urls')),
     ]
 
