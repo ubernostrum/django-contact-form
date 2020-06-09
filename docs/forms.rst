@@ -4,11 +4,11 @@
 Contact form classes
 ====================
 
-There are two contact-form classes included in django-contact-form;
+There are three contact-form classes included in django-contact-form;
 one provides all the infrastructure for a contact form, and will
 usually be the base class for subclasses which want to extend or
-modify functionality. The other is a subclass which adds spam
-filtering to the contact form.
+modify functionality. The others are subclasses which adds spam
+filtering or a recaptcha checkbox to the contact form.
 
 
 The ContactForm class
@@ -212,3 +212,36 @@ The Akismet (spam-filtering) contact form class
    :class:`ContactForm`. A URLconf is provided in django-contact-form,
    at `contact_form.akismet_urls`, which will correctly configure
    :class:`AkismetContactForm` for you.
+
+
+The ReCaptcha (spam-filtering) contact form class
+-------------------------------------------------
+
+.. class:: ReCaptchaContactForm
+
+   A subclass of :class:`ContactForm` which protects against bots with a
+   checkbox on the form, via `Google ReCaptcha bot-detection service
+   <https://www.google.com/recaptcha/intro/v3.html>`_.
+
+   Use of this class requires you to provide configuration for the
+   ReCaptcha web service; you'll need to obtain an ReCaptcha API key, and
+   you'll need to associate it with the site you'll use the contact
+   form on. You can do this at <https://www.google.com/recaptcha/intro/v3.html/>. Once you have,
+   you can configure by adding the following settings to your settings.py:
+
+   Put your ReCaptcha API key in the Django settings
+   :data:`~django.conf.settings.RECAPTCHA_PUBLIC_KEY`, and the key with
+   setting :data:`~django.conf.settings.RECAPTCHA_PRIVATE_KEY`.
+
+   You will also need `to install the django-recaptcha module
+   <https://pypi.org/project/django-recaptcha/>`_ to communicate with the ReCaptcha
+   web service. You can install it by running `pip install django-recaptcha`,
+   or django-contact-form can install it automatically for you if you
+   run `pip install django-contact-form[recaptcha]`. You also have to add 'captcha' to your :data:`~django.conf.settings.INSTALLED_APPS` list.
+
+   Once you have an ReCaptcha API key and SECRET configured, and the
+   `django-recaptcha` module installed, you can drop in
+   :class:`ReCaptchaContactForm` anywhere you would have used
+   :class:`ContactForm`. A URLconf is provided in django-contact-form,
+   at `contact_form.recaptcha_urls`, which will correctly configure
+   :class:`ReCaptchaContactForm` for you.

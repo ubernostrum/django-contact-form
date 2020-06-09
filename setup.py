@@ -35,5 +35,8 @@ setup(
     keywords=["django", "email", "contact-form"],
     python_requires=">=3.5",
     install_requires=["Django>=2.2,<3.1"],
-    extras_require={"akismet": ["akismet"]},
+    extras_require={
+        "akismet": ["akismet"],
+        "recaptcha": ["django-recaptcha"]
+        },
 )

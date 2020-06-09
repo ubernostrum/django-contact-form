@@ -12,7 +12,12 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template import loader
 from django.utils.translation import gettext_lazy as _
-
+RECAPTCHA_ENABLED = False
+try:
+    from captcha.fields import ReCaptchaField
+    RECAPTCHA_ENABLED = True
+except:
+    pass
 
 # Parameters to a form being handled from a live request will actually
 # be instances of django.utils.datastructures.MultiValueDict, but this
@@ -178,3 +183,17 @@ class AkismetContactForm(ContactForm):
         if akismet_api.comment_check(**akismet_kwargs):
             raise forms.ValidationError(self.SPAM_MESSAGE)
         return self.cleaned_data["body"]
+
+class ReCaptchaContactForm(ContactForm):
+    """
+    Contact form which doesn't add any extra fields, but does add an
+    ReCaptcha spam check to the validation routine.
+
+    Requires the django-recaptcha package, and two configuration
+    parameters: an ReCaptcha API key and the ReCaptcha SECRET Key.
+    These can be supplied either as the settings RECAPTCHA_PUBLIC_KEY
+    and RECAPTCHA_PRIVATE_KEY.
+
+    """
+    if RECAPTCHA_ENABLED:
+        captcha = ReCaptchaField()
