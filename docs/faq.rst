@@ -11,7 +11,7 @@ you when installing, configuring or using django-contact-form.
 What versions of Django and Python are supported?
 -------------------------------------------------
 
-As of django-contact-form |release|, Django 2.2 and 3.0 are supported,
+As of django-contact-form |release|, Django 2.2, 3.0 and 3.1 are supported,
 on Python 3.5 (Django 2.2 only) 3.6, 3.7, and 3.8.
 
 

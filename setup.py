@@ -21,6 +21,7 @@ setup(
         "Framework :: Django",
         "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.0",
+        "Framework :: Django :: 3.1",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
@@ -34,6 +35,6 @@ setup(
     ],
     keywords=["django", "email", "contact-form"],
     python_requires=">=3.5",
-    install_requires=["Django>=2.2,<3.1"],
+    install_requires=["Django>=2.2,<3.2"],
     extras_require={"akismet": ["akismet"]},
 )
