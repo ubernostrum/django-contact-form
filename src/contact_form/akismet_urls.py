@@ -16,7 +16,9 @@ from .views import ContactFormView
 
 urlpatterns = [
     path(
-        "", ContactFormView.as_view(form_class=AkismetContactForm), name="contact_form",
+        "",
+        ContactFormView.as_view(form_class=AkismetContactForm),
+        name="contact_form",
     ),
     path(
         "sent/",
