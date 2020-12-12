@@ -12,7 +12,6 @@ from django.views.generic import TemplateView
 
 from contact_form.views import ContactFormView
 
-
 urlpatterns = [
     path("", ContactFormView.as_view(), name="contact_form"),
     path(

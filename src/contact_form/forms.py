@@ -13,7 +13,6 @@ from django.core.mail import send_mail
 from django.template import loader
 from django.utils.translation import gettext_lazy as _
 
-
 # Parameters to a form being handled from a live request will actually
 # be instances of django.utils.datastructures.MultiValueDict, but this
 # is declared as a typing.Dict for a few reasons:

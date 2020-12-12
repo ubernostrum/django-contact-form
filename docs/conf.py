@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 
 extensions = ["sphinx.ext.intersphinx"]
@@ -13,7 +14,6 @@ version = "1.8"
 release = "1.8.2"
 exclude_trees = ["_build"]
 pygments_style = "sphinx"
-html_static_path = ["_static"]
 htmlhelp_basename = "django-contact-formdoc"
 latex_documents = [
     (

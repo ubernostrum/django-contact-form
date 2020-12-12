@@ -13,7 +13,6 @@ from django.views.generic import TemplateView
 from .forms import AkismetContactForm
 from .views import ContactFormView
 
-
 urlpatterns = [
     path(
         "",
