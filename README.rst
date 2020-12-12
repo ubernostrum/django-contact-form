@@ -1,7 +1,7 @@
 .. -*-restructuredtext-*-
 
-.. image:: https://travis-ci.org/ubernostrum/django-contact-form.svg?branch=master
-    :target: https://travis-ci.org/ubernostrum/django-contact-form
+.. image:: https://github.com/ubernostrum/django-contact-form/workflows/CI/badge.svg
+   :alt: CI status image
 
 This application provides extensible contact-form functionality for
 `Django <https://www.djangoproject.com/>`_ sites.
