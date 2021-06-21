@@ -10,6 +10,8 @@ settings and/or templates in order to execute their tests.
 import os
 import sys
 
+from django.utils.crypto import get_random_string
+
 
 APP_DIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -37,6 +39,7 @@ SETTINGS_DICT = {
     "SITE_ID": 1,
     "DEFAULT_FROM_EMAIL": "contact@example.com",
     "MANAGERS": [("Manager", "noreply@example.com")],
+    "SECRET_KEY": get_random_string(12),
     "TEMPLATES": [
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
