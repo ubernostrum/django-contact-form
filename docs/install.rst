@@ -5,7 +5,7 @@ Installation guide
 ==================
 
 The |release| release of django-contact-form supports Django 2.2, 3.1,
-and 3.2 on Python 3.6, 3.7, 3.8, and 3.9.
+3.2, and 4.0 on Python 3.6, 3.7, 3.8, and 3.9.
 
 
 Normal installation

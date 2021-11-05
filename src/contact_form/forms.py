@@ -73,7 +73,7 @@ class ContactForm(forms.Form):
             self.template_name() if callable(self.template_name) else self.template_name
         )
         return loader.render_to_string(
-            template_name, self.get_context(), request=self.request
+            template_name, self.get_message_context(), request=self.request
         )
 
     def subject(self) -> str:
@@ -87,11 +87,11 @@ class ContactForm(forms.Form):
             else self.subject_template_name
         )
         subject = loader.render_to_string(
-            template_name, self.get_context(), request=self.request
+            template_name, self.get_message_context(), request=self.request
         )
         return "".join(subject.splitlines())
 
-    def get_context(self) -> StringKeyedDict:
+    def get_message_context(self) -> StringKeyedDict:
         """
         Return the context used to render the templates for the email
         subject and body.

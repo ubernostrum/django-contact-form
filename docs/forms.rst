@@ -130,7 +130,7 @@ The ContactForm class
 
        :rtype: dict
 
-    .. method:: get_context
+    .. method:: get_message_context
 
        For methods which render portions of the message using
        templates (by default, :meth:`message` and :meth:`subject`),
