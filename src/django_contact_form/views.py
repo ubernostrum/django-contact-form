@@ -3,24 +3,23 @@ View which can render and send email from a contact form.
 
 """
 
-from django import http
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 
-from .forms import ContactForm, StringKeyedDict
+from .forms import ContactForm
 
 
 class ContactFormView(FormView):
     form_class = ContactForm
     recipient_list = None
-    success_url = reverse_lazy("contact_form_sent")
-    template_name = "contact_form/contact_form.html"
+    success_url = reverse_lazy("django_contact_form_sent")
+    template_name = "django_contact_form/contact_form.html"
 
-    def form_valid(self, form) -> http.HttpResponse:
+    def form_valid(self, form):
         form.save()
         return super().form_valid(form)
 
-    def get_form_kwargs(self) -> StringKeyedDict:
+    def get_form_kwargs(self):
         # ContactForm instances require instantiation with an
         # HttpRequest.
         kwargs = super().get_form_kwargs()

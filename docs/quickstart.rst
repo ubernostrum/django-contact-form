@@ -8,17 +8,18 @@ installed; for details on that, see :ref:`the installation guide
 <install>`.
 
 Once that's done, you can start setting up django-contact-form. First,
-add `'contact_form'` to your :data:`~django.conf.settings.INSTALLED_APPS`
-setting. Then, you can begin configuring.
+add `'django_contact_form'` to your
+:data:`~django.conf.settings.INSTALLED_APPS` setting. Then, you can
+begin configuring.
 
 
 URL configuration
 -----------------
 
 The quickest way to set up the views in django-contact-form is to use
-the provided URLconf, found at `contact_form.urls`. You can include
-it wherever you like in your site's URL configuration; for example, to
-have it live at the URL `/contact/`:
+the provided URLconf, found at `django_contact_form.urls`. You can
+include it wherever you like in your site's URL configuration; for
+example, to have it live at the URL `/contact/`:
 
 .. code-block:: python
 
@@ -27,7 +28,7 @@ have it live at the URL `/contact/`:
 
     urlpatterns = [
         # ... other URL patterns for your site ...
-        path('contact/', include('contact_form.urls')),
+        path('contact/', include('django_contact_form.urls')),
     ]
 
 If you'll be using a custom form class, you'll need to manually set up
@@ -40,7 +41,7 @@ class. For example:
     from django.urls import include, path
     from django.views.generic import TemplateView
 
-    from contact_form.views import ContactFormView
+    from django_contact_form.views import ContactFormView
 
     from yourapp.forms import YourCustomFormClass
 
@@ -51,18 +52,18 @@ class. For example:
             ContactFormView.as_view(
                 form_class=YourCustomFormClass
             ),
-            name='contact_form'),
+            name='django_contact_form'),
         path('contact/sent/',
             TemplateView.as_view(
-                template_name='contact_form/contact_form_sent.html'
+                template_name='django_contact_form/contact_form_sent.html'
             ),
-            name='contact_form_sent'),
+            name='django_contact_form_sent'),
     ]
 
 .. important:: **Where to put custom forms and views**
 
    When writing a custom form class (or custom
-   :class:`~contact_form.views.ContactFormView` subclass), **don't**
+   :class:`~django_contact_form.views.ContactFormView` subclass), **don't**
    put your custom code inside django-contact-form. Instead, put your
    custom code in the appropriate place (a `forms.py` or `views.py`
    file) in an application you've written.
@@ -74,16 +75,16 @@ Required templates
 The two views above will need several templates to be created.
 
 
-`contact_form/contact_form.html`
-````````````````````````````````
+`django_contact_form/contact_form.html`
+```````````````````````````````````````
 
  This is used to display the contact form. It has a
  :class:`~django.template.RequestContext` (so any context processors
  will be applied), and also provides the form instance as the context
  variable `form`.
 
-`contact_form/contact_form_sent.html`
-`````````````````````````````````````
+`django_contact_form/contact_form_sent.html`
+````````````````````````````````````````````
 
 This is used after a successful form submission, to let the user know
 their message has been sent. It has a
@@ -91,8 +92,8 @@ their message has been sent. It has a
 context variables of its own.
 
 
-`contact_form/contact_form.txt`
-```````````````````````````````
+`django_contact_form/contact_form.txt`
+``````````````````````````````````````
 
 Used to render the subject of the email. Will receive a
 :class:`~django.template.RequestContext` with the following additional
@@ -116,8 +117,8 @@ variables:
     installed).
 
 
-`contact_form/contact_form_subject.txt`
-```````````````````````````````````````
+`django_contact_form/contact_form_subject.txt`
+``````````````````````````````````````````````
 
 Used to render the subject of the email. Will receive a
 :class:`~django.template.RequestContext` with the following additional
@@ -159,8 +160,9 @@ Using a spam-filtering contact form
 Spam filtering is a common desire for contact forms, due to the large
 amount of spam they can attract. There is a spam-filtering contact
 form class included in django-contact-form:
-:class:`~contact_form.forms.AkismetContactForm`, which uses `the
-Wordpress Akismet spam-detection service <https://akismet.com/>`_.
+:class:`~django_contact_form.forms.AkismetContactForm`, which uses
+`the Wordpress Akismet spam-detection service
+<https://akismet.com/>`_.
 
 To use this form, you will need to do the following things:
 
@@ -188,6 +190,6 @@ Then you can replace the suggested URLconf above with the following:
 
     urlpatterns = [
         # ... other URL patterns for your site ...
-        path('contact/', include('contact_form.akismet_urls')),
+        path('contact/', include('django_contact_form.akismet_urls')),
     ]
 

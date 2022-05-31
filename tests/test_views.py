@@ -8,7 +8,7 @@ from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
 
-from contact_form.forms import ContactForm
+from django_contact_form.forms import ContactForm
 
 
 @override_settings(ROOT_URLCONF="tests.test_urls")
@@ -18,23 +18,23 @@ class ContactFormViewTests(TestCase):
         HTTP GET on the form view just shows the form.
 
         """
-        contact_url = reverse("contact_form")
+        contact_url = reverse("django_contact_form")
 
         response = self.client.get(contact_url)
         self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, "contact_form/contact_form.html")
+        self.assertTemplateUsed(response, "django_contact_form/contact_form.html")
 
     def test_send(self):
         """
         Valid data through the view results in a successful send.
 
         """
-        contact_url = reverse("contact_form")
+        contact_url = reverse("django_contact_form")
         data = {"name": "Test", "email": "test@example.com", "body": "Test message"}
 
         response = self.client.post(contact_url, data=data)
 
-        self.assertRedirects(response, reverse("contact_form_sent"))
+        self.assertRedirects(response, reverse("django_contact_form_sent"))
 
         self.assertEqual(1, len(mail.outbox))
 
@@ -49,7 +49,7 @@ class ContactFormViewTests(TestCase):
         Invalid data doesn't work.
 
         """
-        contact_url = reverse("contact_form")
+        contact_url = reverse("django_contact_form")
         data = {"name": "Test", "body": "Test message"}
 
         response = self.client.post(contact_url, data=data)
@@ -68,7 +68,7 @@ class ContactFormViewTests(TestCase):
         data = {"name": "Test", "email": "test@example.com", "body": "Test message"}
 
         response = self.client.post(contact_url, data=data)
-        self.assertRedirects(response, reverse("contact_form_sent"))
+        self.assertRedirects(response, reverse("django_contact_form_sent"))
         self.assertEqual(1, len(mail.outbox))
 
         message = mail.outbox[0]
@@ -80,7 +80,7 @@ class ContactFormViewTests(TestCase):
     is not None,
     "AkismetContactForm requires Akismet configuration",
 )
-@override_settings(ROOT_URLCONF="contact_form.akismet_urls")
+@override_settings(ROOT_URLCONF="django_contact_form.akismet_urls")
 class AkismetContactFormViewTests(TestCase):
     """
     Tests the views with the Akismet contact form.
@@ -92,7 +92,7 @@ class AkismetContactFormViewTests(TestCase):
         The Akismet contact form errors on spam.
 
         """
-        contact_url = reverse("contact_form")
+        contact_url = reverse("django_contact_form")
         data = {
             "name": "viagra-test-123",
             "email": "email@example.com",
@@ -108,14 +108,14 @@ class AkismetContactFormViewTests(TestCase):
             self.assertTrue(response.context["form"].has_error("body"))
 
     def test_akismet_view_ham(self):
-        contact_url = reverse("contact_form")
+        contact_url = reverse("django_contact_form")
         data = {"name": "Test", "email": "email@example.com", "body": "Test message."}
         with mock.patch("akismet.Akismet", autospec=True) as akismet_mock:
             instance = akismet_mock.return_value
             instance.verify_key.return_value = True
             instance.comment_check.return_value = False
             response = self.client.post(contact_url, data=data)
-            self.assertRedirects(response, reverse("contact_form_sent"))
+            self.assertRedirects(response, reverse("django_contact_form_sent"))
             self.assertEqual(1, len(mail.outbox))
 
             message = mail.outbox[0]

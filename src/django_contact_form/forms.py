@@ -4,29 +4,12 @@ a web interface.
 
 """
 
-from typing import Any, Dict, List, Optional
-
-from django import forms, http
+from django import forms
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template import loader
 from django.utils.translation import gettext_lazy as _
-
-# Parameters to a form being handled from a live request will actually
-# be instances of django.utils.datastructures.MultiValueDict, but this
-# is declared as a typing.Dict for a few reasons:
-#
-# * MultiValueDict is a subclass of dict, so instances of
-#   MultiValueDict will pass type checks.
-#
-# * Testing of forms more typically passes in plain dict for the form
-#   arguments, so supporting it is useful.
-#
-# * PEP 560, which allows dropping the typing module's aliases and
-#   subscripting the actual types, was adopted for Python 3.7, but
-#   currently we support back to Python 3.5.
-StringKeyedDict = Dict[str, Any]
 
 
 class ContactForm(forms.Form):
@@ -44,18 +27,12 @@ class ContactForm(forms.Form):
 
     recipient_list = [mail_tuple[1] for mail_tuple in settings.MANAGERS]
 
-    subject_template_name = "contact_form/contact_form_subject.txt"
+    subject_template_name = "django_contact_form/contact_form_subject.txt"
 
-    template_name = "contact_form/contact_form.txt"
+    template_name = "django_contact_form/contact_form.txt"
 
     def __init__(
-        self,
-        data: Optional[StringKeyedDict] = None,
-        files: Optional[StringKeyedDict] = None,
-        request: Optional[http.HttpRequest] = None,
-        recipient_list: Optional[List[str]] = None,
-        *args,
-        **kwargs
+        self, data=None, files=None, request=None, recipient_list=None, *args, **kwargs
     ):
         if request is None:
             raise TypeError("Keyword argument 'request' must be supplied")
@@ -64,7 +41,7 @@ class ContactForm(forms.Form):
             self.recipient_list = recipient_list
         super().__init__(data=data, files=files, *args, **kwargs)
 
-    def message(self) -> str:
+    def message(self):
         """
         Render the body of the message to a string.
 
@@ -73,10 +50,10 @@ class ContactForm(forms.Form):
             self.template_name() if callable(self.template_name) else self.template_name
         )
         return loader.render_to_string(
-            template_name, self.get_context(), request=self.request
+            template_name, self.get_message_context(), request=self.request
         )
 
-    def subject(self) -> str:
+    def subject(self):
         """
         Render the subject of the message to a string.
 
@@ -87,11 +64,11 @@ class ContactForm(forms.Form):
             else self.subject_template_name
         )
         subject = loader.render_to_string(
-            template_name, self.get_context(), request=self.request
+            template_name, self.get_message_context(), request=self.request
         )
         return "".join(subject.splitlines())
 
-    def get_context(self) -> StringKeyedDict:
+    def get_message_context(self):
         """
         Return the context used to render the templates for the email
         subject and body.
@@ -111,7 +88,7 @@ class ContactForm(forms.Form):
             raise ValueError("Cannot generate Context from invalid contact form")
         return dict(self.cleaned_data, site=get_current_site(self.request))
 
-    def get_message_dict(self) -> StringKeyedDict:
+    def get_message_dict(self):
         """
         Generate the various parts of the message and return them in a
         dictionary, suitable for passing directly as keyword arguments
@@ -136,7 +113,7 @@ class ContactForm(forms.Form):
             message_dict[message_part] = attr() if callable(attr) else attr
         return message_dict
 
-    def save(self, fail_silently: bool = False) -> None:
+    def save(self, fail_silently=False):
         """
         Build and send the email message.
 
@@ -159,7 +136,7 @@ class AkismetContactForm(ContactForm):
 
     SPAM_MESSAGE = _("Your message was classified as spam.")
 
-    def clean_body(self) -> str:
+    def clean_body(self):
         from akismet import Akismet
 
         akismet_api = Akismet(

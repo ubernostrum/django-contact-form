@@ -1,5 +1,5 @@
 .. _forms:
-.. module:: contact_form.forms
+.. module:: django_contact_form.forms
 
 Contact form classes
 ====================
@@ -23,12 +23,12 @@ The ContactForm class
     provide basic contact-form functionality; it will collect name,
     email address and message.
 
-    The :class:`~contact_form.views.ContactFormView` included in this
-    application knows how to work with this form and can handle many
-    types of subclasses as well (see below for a discussion of the
-    important points), so in many cases it will be all that you
-    need. If you'd like to use this form or a subclass of it from one
-    of your own views, here's how:
+    The :class:`~django_contact_form.views.ContactFormView` included
+    in this application knows how to work with this form and can
+    handle many types of subclasses as well (see below for a
+    discussion of the important points), so in many cases it will be
+    all that you need. If you'd like to use this form or a subclass of
+    it from one of your own views, here's how:
 
     1. When you instantiate the form, pass the current
        :class:`~django.http.HttpRequest` object as the keyword
@@ -74,13 +74,13 @@ The ContactForm class
 
        A :class:`str`, the name of the template to use when rendering
        the subject line of the message. By default, this is
-       `contact_form/contact_form_subject.txt`.
+       `django_contact_form/contact_form_subject.txt`.
 
     .. attribute:: template_name
 
        A :class:`str`, the name of the template to use when rendering
        the body of the message. By default, this is
-       `contact_form/contact_form.txt`.
+       `django_contact_form/contact_form.txt`.
 
     And two methods are involved in producing the contents of the
     message to send:
@@ -130,7 +130,14 @@ The ContactForm class
 
        :rtype: dict
 
-    .. method:: get_context
+    .. method:: get_message_context
+
+       .. warning:: **Renamed method**
+
+          Prior to django-contact-form 2.x, this method was named
+          `get_context()`. It was renamed to `get_message_context()`
+          in django-contact-form 2.0. See :ref:`the upgrade guide
+          <renamed-get-context>` for details.
 
        For methods which render portions of the message using
        templates (by default, :meth:`message` and :meth:`subject`),
@@ -210,5 +217,5 @@ The Akismet (spam-filtering) contact form class
    `akismet` module installed, you can drop in
    :class:`AkismetContactForm` anywhere you would have used
    :class:`ContactForm`. A URLconf is provided in django-contact-form,
-   at `contact_form.akismet_urls`, which will correctly configure
-   :class:`AkismetContactForm` for you.
+   at `django_contact_form.akismet_urls`, which will correctly
+   configure :class:`AkismetContactForm` for you.

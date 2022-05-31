@@ -1,7 +1,6 @@
 import os
 import sys
 
-
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 
 extensions = ["sphinx.ext.intersphinx"]
@@ -9,9 +8,9 @@ templates_path = ["_templates"]
 source_suffix = ".rst"
 master_doc = "index"
 project = "django-contact-form"
-copyright = "2007-2021, James Bennett"
-version = "1.9"
-release = "1.9"
+copyright = "2007-2022, James Bennett"
+version = "2.0a1"
+release = "2.0a1"
 exclude_trees = ["_build"]
 pygments_style = "sphinx"
 htmlhelp_basename = "django-contact-formdoc"

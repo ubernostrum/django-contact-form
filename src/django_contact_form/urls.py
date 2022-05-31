@@ -10,13 +10,15 @@ include this URLConf somewhere in your URL hierarchy (for example, at
 from django.urls import path
 from django.views.generic import TemplateView
 
-from contact_form.views import ContactFormView
+from django_contact_form.views import ContactFormView
 
 urlpatterns = [
-    path("", ContactFormView.as_view(), name="contact_form"),
+    path("", ContactFormView.as_view(), name="django_contact_form"),
     path(
         "sent/",
-        TemplateView.as_view(template_name="contact_form/contact_form_sent.html"),
-        name="contact_form_sent",
+        TemplateView.as_view(
+            template_name="django_contact_form/contact_form_sent.html"
+        ),
+        name="django_contact_form_sent",
     ),
 ]

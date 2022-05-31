@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core import mail
 from django.test import RequestFactory, TestCase
 
-from contact_form.forms import AkismetContactForm, ContactForm
+from django_contact_form.forms import AkismetContactForm, ContactForm
 
 
 class ContactFormTests(TestCase):
@@ -35,7 +35,7 @@ class ContactFormTests(TestCase):
         data = {"name": "Test", "body": "Test message"}
         form = ContactForm(request=self.request(), data=data)
         self.assertRaises(ValueError, form.get_message_dict)
-        self.assertRaises(ValueError, form.get_context)
+        self.assertRaises(ValueError, form.get_message_context)
 
     def test_send(self):
         """
@@ -93,7 +93,7 @@ class ContactFormTests(TestCase):
 
         class CallableTemplateName(ContactForm):
             def template_name(self):
-                return "contact_form/test_callable_template_name.html"
+                return "django_contact_form/test_callable_template_name.html"
 
         form = CallableTemplateName(request=self.request(), data=self.valid_data)
         self.assertTrue(form.is_valid())

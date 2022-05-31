@@ -11,8 +11,11 @@ you when installing, configuring or using django-contact-form.
 What versions of Django and Python are supported?
 -------------------------------------------------
 
-As of django-contact-form |release|, Django 2.2, 3.1, and 3.2 are
-supported, on Python 3.6, 3.7, 3.8, and 3.9.
+As of django-contact-form |release|, Django 3.2 and 4.0 are
+supported, on Python 3.7 (Django 3.2 only), 3.8, 3.9, and 3.10. Note
+that Django 3.2's support for Python 3.10 was added in Django 3.2.9,
+so you may experience issues with Python 3.10 and earlier Django 3.2
+versions.
 
 
 What license is django-contact-form under?
@@ -44,11 +47,12 @@ Why am I getting a bunch of `BadHeaderError` exceptions?
 ----------------------------------------------------------
 
 Most likely, you have an error in your
-:class:`~contact_form.forms.ContactForm` subclass. Specifically, one
-or more of :attr:`~contact_form.forms.ContactForm.from_email`,
-:attr:`~contact_form.forms.ContactForm.recipient_list` or
-:meth:`~contact_form.forms.ContactForm.subject` are returning values
-which contain newlines.
+:class:`~django_contact_form.forms.ContactForm`
+subclass. Specifically, one or more of
+:attr:`~django_contact_form.forms.ContactForm.from_email`,
+:attr:`~django_contact_form.forms.ContactForm.recipient_list` or
+:meth:`~django_contact_form.forms.ContactForm.subject` are returning
+values which contain newlines.
 
 As a security precaution against `email header injection attacks
 <https://en.wikipedia.org/wiki/Email_injection>`_ (which allow
@@ -56,11 +60,11 @@ spammers and other malicious users to manipulate email and potentially
 cause automated systems to send mail to unintended recipients),
 `Django's email-sending framework does not permit newlines in message
 headers
-<https://docs.djangoproject.com/en/1.11/topics/email/#preventing-header-injection>`_.
+<https://docs.djangoproject.com/en/stable/topics/email/#preventing-header-injection>`_.
 :exc:`~django.core.mail.BadHeaderError` is the exception Django raises
 when a newline is detected in a header. By default,
-:meth:`contact_form.forms.ContactForm.subject` will forcibly condense
-the subject to a single line.
+:meth:`~django_contact_form.forms.ContactForm.subject` will forcibly
+condense the subject to a single line.
 
 Note that this only applies to the headers of an email message; the
 message body can (and usually does) contain newlines.
@@ -87,17 +91,17 @@ I'm getting errors about "akismet" when trying to run tests?
 
 The full test suite of django-contact-form exercises all of its
 functionality, including the spam-filtering
-:class:`~contact_forms.forms.AkismetContactForm`. That class uses `the
-Wordpress Akismet spam-detection service <https://akismet.com/>`_ to
-perform spam filtering, and so requires the Python `akismet` module to
-communicate with the Akismet service, and some additional
-configuration (in the form of a valid Akismet API key and associated
-URL).
+:class:`~django_contact_forms.forms.AkismetContactForm`. That class
+uses `the Wordpress Akismet spam-detection service
+<https://akismet.com/>`_ to perform spam filtering, and so requires
+the Python `akismet` module to communicate with the Akismet service,
+and some additional configuration (in the form of a valid Akismet API
+key and associated URL).
 
 By default, the tests for
-:class:`~contact_forms.forms.AkismetContactForm` will be skipped
-unless the required configuration (in the form of either a pair of
-Django settings, or a pair of environment variables) is
+:class:`~django_contact_forms.forms.AkismetContactForm` will be
+skipped unless the required configuration (in the form of either a
+pair of Django settings, or a pair of environment variables) is
 detected. However, if you have supplied Akismet configuration but do
 *not* have the Python `akismet` module, you will see test errors from
 attempts to import `akismet`. You can resolve this by running::
@@ -105,9 +109,10 @@ attempts to import `akismet`. You can resolve this by running::
     pip install akismet
 
 or (if you do not intend to use
-:class:`~contact_forms.forms.AkismetContactForm`) by no longer
+:class:`~django_contact_forms.forms.AkismetContactForm`) by no longer
 configuring the Django settings/environment variables used by Akismet.
 
-Additionally, if the :class:`~contact_forms.forms.AkismetContactForm`
-tests are skipped, the default code-coverage report will fail due to
-the relevant code not being exercised during the test run.
+Additionally, if the
+:class:`~django_contact_forms.forms.AkismetContactForm` tests are
+skipped, the default code-coverage report will fail due to the
+relevant code not being exercised during the test run.

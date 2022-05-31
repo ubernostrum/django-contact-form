@@ -1,5 +1,5 @@
 .. _views:
-.. module:: contact_form.views
+.. module:: django_contact_form.views
 
 
 Built-in views
@@ -10,9 +10,9 @@ Built-in views
     The base view class from which most custom contact-form views
     should inherit. If you don't need any custom functionality, and
     are content with the default
-    :class:`~contact_form.forms.ContactForm` class, you can also use
-    it as-is (and the provided URLConf, `contact_form.urls`, does
-    exactly this).
+    :class:`~django_contact_form.forms.ContactForm` class, you can
+    also use it as-is (and the provided URLConf,
+    `django_contact_form.urls`, does exactly this).
 
     This is a subclass of Django's
     :class:`~django.views.generic.edit.FormView`, so refer to the
@@ -25,7 +25,7 @@ Built-in views
 
        The list of email addresses to send mail to. If not specified,
        defaults to the
-       :attr:`~contact_form.forms.ContactForm.recipient_list` of the
+       :attr:`~django_contact_form.forms.ContactForm.recipient_list` of the
        form.
 
     Additionally, the following standard (from
@@ -39,8 +39,8 @@ Built-in views
     .. attribute:: form_class
 
        The form class to use. By default, will be
-       :class:`~contact_form.forms.ContactForm`. This can also be
-       overridden as a method named
+       :class:`~django_contact_form.forms.ContactForm`. This can also
+       be overridden as a method named
        :meth:`~django.views.generic.edit.FormMixin.form_class`; this
        permits, for example, per-request customization (by inspecting
        attributes of `self.request`).
@@ -48,7 +48,7 @@ Built-in views
     .. attribute:: template_name
 
        A :class:`str`, the template to use when rendering the form. By
-       default, will be `contact_form/contact_form.html`.
+       default, will be `django_contact_form/contact_form.html`.
 
     .. method:: get_success_url
 
@@ -58,7 +58,7 @@ Built-in views
        produced by Django's :func:`~django.urls.reverse_lazy`
        helper. Default value is the result of calling
        :func:`~django.urls.reverse_lazy` with the URL name
-       `'contact_form_sent'`.
+       `'django_contact_form_sent'`.
 
        :rtype: str
        
@@ -73,12 +73,11 @@ Built-in views
        defined, its value (as the key `recipient_list`).
 
        .. warning:: If you override :meth:`get_form_kwargs`, you
-          **must** ensure that, at the very least, the keyword
-          argument `request` is still provided, or
-          :class:`~contact_form.forms.ContactForm` initialization will
-          raise :exc:`TypeError`. The easiest approach is to use
-          :func:`super` to call the base implementation in
-          :class:`ContactFormView`, and modify the dictionary it
-          returns.
+         **must** ensure that, at the very least, the keyword argument
+         `request` is still provided, or
+         :class:`~django_contact_form.forms.ContactForm` initialization
+         will raise :exc:`TypeError`. The easiest approach is to use
+         :func:`super` to call the base implementation in
+         :class:`ContactFormView`, and modify the dictionary it returns.
 
        :rtype: dict

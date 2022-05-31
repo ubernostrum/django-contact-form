@@ -12,7 +12,6 @@ import sys
 
 from django.utils.crypto import get_random_string
 
-
 APP_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -20,12 +19,12 @@ APP_DIR = os.path.abspath(os.path.dirname(__file__))
 SETTINGS_DICT = {
     "BASE_DIR": APP_DIR,
     "INSTALLED_APPS": (
-        "contact_form",
+        "django_contact_form",
         "django.contrib.auth",
         "django.contrib.contenttypes",
         "django.contrib.sites",
     ),
-    "ROOT_URLCONF": "contact_form.urls",
+    "ROOT_URLCONF": "django_contact_form.urls",
     "DATABASES": {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
