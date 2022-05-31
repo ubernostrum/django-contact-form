@@ -19,10 +19,10 @@ Prior to 2.x, django-contact-form installed a Python module named
 `contact_form`. To avoid silent incompatibilities, and to conform to
 more recent best practices, django-contact-form 2.x now installs a
 module named `django_contact_form`. Attempts to import from the
-`registration` module will immediately fail with :exc:`ImportError`.
+`contact_form` module will immediately fail with :exc:`ImportError`.
 
 Many installations will be able to adapt by replacing references to
-`registration` with references to `django_contact_form`.
+`contact_form` with references to `django_contact_form`.
 
 
 Template directory renamed

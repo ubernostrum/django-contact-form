@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="django-contact-form",
-    version="2.0",
+    version="2.0.1",
     zip_safe=False,  # eggs are the devil.
     description="A generic contact-form application for Django",
     long_description=open(os.path.join(os.path.dirname(__file__), "README.rst")).read(),
