@@ -3,8 +3,8 @@ name: CI
 on: [push]
 
 env:
-  TEST_AKISMET_API_KEY: ${{ secrets.TEST_AKISMET_API_KEY }}
-  TEST_AKISMET_BLOG_URL: ${{ secrets.TEST_AKISMET_BLOG_URL }}
+  PYTHON_AKISMET_API_KEY: ${{ secrets.PYTHON_AKISMET_API_KEY }}
+  PYTHON_AKISMET_BLOG_URL: ${{ secrets.PYTHON_AKISMET_BLOG_URL }}
 
 jobs:
   tests:
