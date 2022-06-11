@@ -1,7 +1,7 @@
 import os
 
 from setuptools import find_packages, setup
-
+#this are the cool stuffs behin the scene
 setup(
     name="django-contact-form",
     version="2.0.1",
