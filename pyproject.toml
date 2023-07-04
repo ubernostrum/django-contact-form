@@ -62,7 +62,7 @@ tests = [
 skips = ["B101"]
 
 [tool.black]
-target-version = ["py37"]
+target-version = ["py38"]
 
 [tool.check-manifest]
 ignore-bad-ideas = ["*.mo"]
