@@ -32,7 +32,7 @@ class ContactForm(forms.Form):
     template_name = "django_contact_form/contact_form.txt"
 
     def __init__(
-        self, data=None, files=None, request=None, recipient_list=None, *args, **kwargs
+        self, *args, data=None, files=None, request=None, recipient_list=None, **kwargs
     ):
         if request is None:
             raise TypeError("Keyword argument 'request' must be supplied")
@@ -47,7 +47,9 @@ class ContactForm(forms.Form):
 
         """
         template_name = (
-            self.template_name() if callable(self.template_name) else self.template_name
+            self.template_name()  # pylint: disable=not-callable
+            if callable(self.template_name)
+            else self.template_name
         )
         return loader.render_to_string(
             template_name, self.get_message_context(), request=self.request
@@ -59,7 +61,7 @@ class ContactForm(forms.Form):
 
         """
         template_name = (
-            self.subject_template_name()
+            self.subject_template_name()  # pylint: disable=not-callable
             if callable(self.subject_template_name)
             else self.subject_template_name
         )
@@ -137,7 +139,11 @@ class AkismetContactForm(ContactForm):
     SPAM_MESSAGE = _("Your message was classified as spam.")
 
     def clean_body(self):
-        from akismet import Akismet
+        """
+        Apply Akismet spam filtering to the submission.
+
+        """
+        from akismet import Akismet  # pylint: disable=import-outside-toplevel
 
         akismet_api = Akismet(
             key=getattr(settings, "AKISMET_API_KEY", None),

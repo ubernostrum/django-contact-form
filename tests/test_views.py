@@ -1,3 +1,8 @@
+"""
+Tests for the built-in views.
+
+"""
+
 import os
 import unittest
 from unittest import mock
@@ -13,6 +18,11 @@ from django_contact_form.forms import ContactForm
 
 @override_settings(ROOT_URLCONF="tests.test_urls")
 class ContactFormViewTests(TestCase):
+    """
+    Tests for the built-in ContactFormView.
+
+    """
+
     def test_get(self):
         """
         HTTP GET on the form view just shows the form.
@@ -108,6 +118,10 @@ class AkismetContactFormViewTests(TestCase):
             self.assertTrue(response.context["form"].has_error("body"))
 
     def test_akismet_view_ham(self):
+        """
+        The Akismet contact form does not error on non-spam.
+
+        """
         contact_url = reverse("django_contact_form")
         data = {"name": "Test", "email": "email@example.com", "body": "Test message."}
         with mock.patch("akismet.Akismet", autospec=True) as akismet_mock:

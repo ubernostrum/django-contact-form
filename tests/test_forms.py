@@ -1,3 +1,8 @@
+"""
+Tests for the built-in form classes.
+
+"""
+
 import os
 import unittest
 from unittest import mock
@@ -18,6 +23,10 @@ class ContactFormTests(TestCase):
     valid_data = {"name": "Test", "email": "test@example.com", "body": "Test message"}
 
     def request(self):
+        """
+        Construct and return an HttpRequest object for test use.
+
+        """
         return RequestFactory().request()
 
     def test_request_required(self):
@@ -92,7 +101,17 @@ class ContactFormTests(TestCase):
         """
 
         class CallableTemplateName(ContactForm):
+            """
+            Form with a template_name() method instead of a template_name attribute.
+
+            """
+
+            # pylint: disable=invalid-overridden-method
             def template_name(self):
+                """
+                Return the template name as a method rather than an attribute.
+
+                """
                 return "django_contact_form/test_callable_template_name.html"
 
         form = CallableTemplateName(request=self.request(), data=self.valid_data)
@@ -118,16 +137,37 @@ class ContactFormTests(TestCase):
         }
 
         class CallableMessageParts(ContactForm):
+            """
+            Form with the message parts as methods rather than attributes.
+
+            """
+
             def from_email(self):
+                """
+                Method returning the from_email.
+
+                """
                 return overridden_data["from_email"]
 
             def message(self):
+                """
+                Method returning the message.
+
+                """
                 return overridden_data["message"]
 
-            def recipient_list(self):
+            def recipient_list(self):  # pylint: disable=method-hidden
+                """
+                Method returning the recipient_list.
+
+                """
                 return overridden_data["recipient_list"]
 
             def subject(self):
+                """
+                Method returning the subject.
+
+                """
                 return overridden_data["subject"]
 
         form = CallableMessageParts(request=self.request(), data=self.valid_data)
@@ -148,6 +188,10 @@ class AkismetContactFormTests(TestCase):
     """
 
     def request(self):
+        """
+        Construct and return an HttpRequest object for test use.
+
+        """
         return RequestFactory().request()
 
     def test_akismet_form_spam(self):
