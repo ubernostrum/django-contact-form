@@ -79,10 +79,6 @@ exclude_lines = [
 fail_under = 100
 
 [tool.interrogate]
-exclude = [
-  "src/django_registration/migrations",
-  "tests/migrations",
-]
 fail-under = 100
 ignore-init-method = true
 ignore-init-module = true
