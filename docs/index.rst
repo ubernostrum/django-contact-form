@@ -12,7 +12,7 @@ one line to your site's root URLconf:
 
 .. code-block:: python
 
-    path('contact/', include('django_contact_form.urls')),
+    path("contact/", include("django_contact_form.urls")),
 
 For notes on getting started quickly, and on how to customize
 django-contact-form's behavior, read through the full documentation
