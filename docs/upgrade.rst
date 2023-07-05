@@ -10,7 +10,6 @@ not backwards-compatible with the django-contact-form 1.x release series.
 Changes between django-contact-form 1.x and 2.x
 -----------------------------------------------
 
-
 Module renaming
 ~~~~~~~~~~~~~~~
 
@@ -30,7 +29,6 @@ Template directory renamed
 Similar to the module renaming above, the name of the default directory in
 which django-contact-form looks for templates has changed from
 ``contact_form/`` to ``django_contact_form/``.
-
 
 .. _renamed-get-context:
 
