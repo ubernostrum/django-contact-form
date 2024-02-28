@@ -7,8 +7,7 @@ https://www.sphinx-doc.org/
 
 import os
 import sys
-
-import django_contact_form
+from importlib.metadata import version as get_version
 
 extensions = [
     "notfound.extension",
@@ -25,8 +24,8 @@ source_suffix = ".rst"
 master_doc = "index"
 project = "django-contact-form"
 copyright = "2007, James Bennett"
-version = django_contact_form.__version__
-release = django_contact_form.__version__
+version = get_version("django-contact-form")
+release = version
 exclude_trees = ["_build"]
 pygments_style = "sphinx"
 htmlhelp_basename = "django-contact-formdoc"
