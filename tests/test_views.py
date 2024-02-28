@@ -7,6 +7,7 @@ import os
 import unittest
 from unittest import mock
 
+import django
 from django.conf import settings
 from django.core import mail
 from django.test import RequestFactory, TestCase
@@ -65,7 +66,16 @@ class ContactFormViewTests(TestCase):
         response = self.client.post(contact_url, data=data)
 
         self.assertEqual(200, response.status_code)
-        self.assertFormError(response, "form", "email", "This field is required.")
+        # The argument signature of assertFormError() changed beginning in Django 4.1 --
+        # prior to that the first argument was a response object, and after the
+        # deprecation cycle completed in 5.0 the first argument is now the form
+        # instance.
+        if django.get_version() < "4.2":
+            self.assertFormError(response, "form", "email", "This field is required.")
+        else:
+            self.assertFormError(
+                response.context["form"], "email", "This field is required."
+            )
         self.assertEqual(0, len(mail.outbox))
 
     def test_recipient_list(self):

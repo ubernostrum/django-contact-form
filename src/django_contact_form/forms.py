@@ -130,7 +130,7 @@ class ContactForm(forms.Form):
         self.request = request
         if recipient_list is not None:
             self.recipient_list = recipient_list
-        super().__init__(data=data, files=files, *args, **kwargs)
+        super().__init__(data=data, files=files, *args, **kwargs)  # noqa: B026
 
     def message(self):
         """
