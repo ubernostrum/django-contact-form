@@ -275,18 +275,26 @@ class AkismetContactForm(ContactForm):
 
     SPAM_MESSAGE = _("Your message was classified as spam.")
 
-    def clean_body(self):
+    def get_akismet_client(self):
         """
-        Apply Akismet spam filtering to the submission.
+        Obtain and return an Akismet API client.
 
         """
-        from akismet import Akismet  # pylint: disable=import-outside-toplevel
-
-        akismet_api = Akismet(
-            key=getattr(settings, "AKISMET_API_KEY", None),
-            blog_url=getattr(settings, "AKISMET_BLOG_URL", None),
+        from ._akismet import (  # pylint: disable=import-outside-toplevel
+            _try_get_akismet_client,
         )
-        akismet_kwargs = {
+
+        return _try_get_akismet_client()
+
+    def get_akismet_check_arguments(self):
+        """
+        Return the arguments which will be passed to the Akismet spam check.
+
+        If your form contains additional fields which need to have their contents passed
+        to Akismet, override this to ensure those arguments are correctly set.
+
+        """
+        return {
             "user_ip": self.request.META["REMOTE_ADDR"],
             "user_agent": self.request.META.get("HTTP_USER_AGENT"),
             "comment_author": self.cleaned_data.get("name"),
@@ -294,6 +302,14 @@ class AkismetContactForm(ContactForm):
             "comment_content": self.cleaned_data["body"],
             "comment_type": "contact-form",
         }
-        if akismet_api.comment_check(**akismet_kwargs):
+
+    def clean_body(self):
+        """
+        Apply Akismet spam filtering to the submission.
+
+        """
+        akismet_client = self.get_akismet_client()
+
+        if akismet_client.comment_check(**self.get_akismet_check_arguments()):
             raise forms.ValidationError(self.SPAM_MESSAGE)
         return self.cleaned_data["body"]

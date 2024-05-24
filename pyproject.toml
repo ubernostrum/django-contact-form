@@ -26,9 +26,9 @@ classifiers = [
   "Topic :: Utilities",
 ]
 name = "django-contact-form"
-description = "A generic contact-form application for Django"
+description = "A generic contact-form application for Django."
 dependencies = [
-  "Django>=3.2,!=4.0.*,!=4.1.*",
+  "Django>=4.2",
 ]
 dynamic = ["version"]
 keywords = ["django", "email", "contact-form"]
@@ -42,7 +42,7 @@ homepage = "https://github.com/ubernostrum/django-contact-form"
 
 [project.optional-dependencies]
 akismet = [
-  "akismet",
+  "akismet>=24.5.0",
 ]
 docs = [
   "furo",
@@ -54,7 +54,7 @@ docs = [
   "sphinxext-opengraph",
 ]
 tests = [
-  "akismet",
+  "akismet>=24.5.0",
   "coverage",
   "tomli; python_full_version < '3.11.0a7'",
 ]
