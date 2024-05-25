@@ -41,6 +41,7 @@ latex_documents = [
 ]
 
 intersphinx_mapping = {
+    "akismet": ("https://akismet.readthedocs.io/en/latest", None),
     "django": (
         "https://docs.djangoproject.com/en/stable/",
         "https://docs.djangoproject.com/en/stable/_objects/",

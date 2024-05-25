@@ -68,7 +68,7 @@ def tests_with_coverage(session: nox.Session, django: str) -> None:
     Run the package's unit tests, with coverage report.
 
     """
-    session.install(f"Django~={django}.0", ".[tests]")
+    session.install(f"Django~={django}.0", ".[akismet,tests]")
     python_version = session.run(
         f"{session.bin}/python{session.python}", "--version", silent=True
     ).strip()
@@ -283,7 +283,7 @@ def lint_pylint(session: nox.Session) -> None:
     """
     # Pylint requires that all dependencies be importable during the run, so unlike
     # other lint tasks we just install the package.
-    session.install(".", "akismet")
+    session.install(".[akismet]")
     session.install("pylint", "pylint-django")
     session.run(f"python{session.python}", "-Im", "pylint", "--version")
     session.run(f"python{session.python}", "-Im", "pylint", "src/", "tests/")

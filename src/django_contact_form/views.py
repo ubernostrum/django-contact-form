@@ -54,28 +54,10 @@ class ContactFormView(FormView):
        helper. Default value is the result of calling :func:`~django.urls.reverse_lazy`
        with the URL name ``django_contact_form_sent``.
 
-       :rtype: str
+    You can also override the following method for full customization of the form
+    instance construction:
 
-    .. method:: get_form_kwargs
-
-       Return additional keyword arguments (as a dictionary) to pass to the form class
-       on initialization.
-
-       By default, this will return a dictionary containing the current
-       :class:`~django.http.HttpRequest` (as the key `request`) and, if
-       :attr:`~ContactFormView.recipient_list` was defined, its value (as the key
-       ``recipient_list``).
-
-       .. warning:: **Request is a required argument**
-
-          If you override :meth:`get_form_kwargs`, you **must** ensure that, at the very
-          least, the keyword argument ``request`` is still provided, or
-          :class:`~django_contact_form.forms.ContactForm` initialization will raise
-          :exc:`TypeError`. The easiest approach is to use :class:`super` to call the
-          base implementation in :class:`ContactFormView`, and modify the dictionary it
-          returns.
-
-       :rtype: dict
+    .. automethod:: get_form_kwargs
 
     """
 
@@ -92,10 +74,24 @@ class ContactFormView(FormView):
         form.save()
         return super().form_valid(form)
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> dict:
         """
-        Override of base method in order to pass the HTTP request as a form keyword
-        argument, and also the optional recipient_list (if set).
+        Return additional keyword arguments (as a dictionary) to pass to the form class
+        on initialization.
+
+        By default, this will return a dictionary containing the current
+        :class:`~django.http.HttpRequest` (as the key `request`) and, if
+        :attr:`~ContactFormView.recipient_list` was defined, its value (as the key
+        ``recipient_list``).
+
+        .. warning:: **Request is a required argument**
+
+           If you override :meth:`get_form_kwargs`, you **must** ensure that, at the very
+           least, the keyword argument ``request`` is still provided, or
+           :class:`~django_contact_form.forms.ContactForm` initialization will raise
+           :exc:`TypeError`. The easiest approach is to use :class:`super` to call the
+           base implementation in :class:`ContactFormView`, and modify the dictionary it
+           returns.
 
         """
         # ContactForm instances require instantiation with an

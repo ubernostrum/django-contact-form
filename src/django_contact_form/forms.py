@@ -1,6 +1,6 @@
 """
-A base contact form for allowing users to send email messages through
-a web interface.
+A base contact form for allowing users to send email messages through a web
+interface.
 
 """
 
@@ -132,12 +132,10 @@ class ContactForm(forms.Form):
             self.recipient_list = recipient_list
         super().__init__(data=data, files=files, *args, **kwargs)  # noqa: B026
 
-    def message(self):
+    def message(self) -> str:
         """
         Return the body of the message to send. By default, this is accomplished by
         rendering the template name specified in :attr:`template_name`.
-
-        :rtype: str
 
         """
         template_name = (
@@ -149,7 +147,7 @@ class ContactForm(forms.Form):
             template_name, self.get_message_context(), request=self.request
         )
 
-    def subject(self):
+    def subject(self) -> str:
         """
         Return the subject line of the message to send. By default, this is
         accomplished by rendering the template name specified in
@@ -166,8 +164,6 @@ class ContactForm(forms.Form):
            be sure to either do this manually, or use :class:`super` to call the parent
            implementation.
 
-        :rtype: str
-
         """
         template_name = (
             self.subject_template_name()  # pylint: disable=not-callable
@@ -179,16 +175,10 @@ class ContactForm(forms.Form):
         )
         return "".join(subject.splitlines())
 
-    def get_message_context(self):
+    def get_message_context(self) -> dict:
         """
         Return the context used to render the templates for the email
         subject and body.
-
-        .. warning:: **Renamed method**
-
-           Prior to django-contact-form 2.x, this method was named ``get_context()``. It
-           was renamed to ``get_message_context()`` in django-contact-form 2.0. See
-           :ref:`the upgrade guide <renamed-get-context>` for details.
 
         The default context will be a :class:`~django.template.RequestContext` (using
         the current HTTP request, so user information is available), plus the contents
@@ -196,31 +186,27 @@ class ContactForm(forms.Form):
         additional variable:
 
         ``site``
-          If `django.contrib.sites` is installed, the currently-active
+          If ``django.contrib.sites`` is installed, the currently-active
           :class:`~django.contrib.sites.models.Site` object. Otherwise, a
           :class:`~django.contrib.sites.requests.RequestSite` object generated from the
           request.
-
-        :rtype: dict
 
         """
         if not self.is_valid():
             raise ValueError("Cannot generate Context from invalid contact form")
         return dict(self.cleaned_data, site=get_current_site(self.request))
 
-    def get_message_dict(self):
+    def get_message_dict(self) -> dict:
         """
         Generate the parts of the message and return them in a dictionary suitable
         for passing as keyword arguments to Django's
         :func:`~django.core.mail.send_mail`.
 
-        By default, method will collect and return :attr:`from_email`,
+        By default, this method will collect and return :attr:`from_email`,
         :attr:`recipient_list`, :meth:`message` and :meth:`subject`. Overriding this
         allows essentially unlimited customization of how the message is generated. Note
         that for compatibility, implementations which override this should support
         callables for the values of :attr:`from_email` and :attr:`recipient_list`.
-
-        :rtype: dict
 
         """
         if not self.is_valid():
@@ -245,48 +231,38 @@ class ContactForm(forms.Form):
 
 class AkismetContactForm(ContactForm):
     """
-    A subclass of :class:`ContactForm` which adds spam filtering, via `the Wordpress
-    Akismet spam-detection service <https://akismet.com/>`_.
+    A subclass of :class:`ContactForm` which adds spam filtering, via `the Akismet
+    spam-detection service <https://akismet.com/>`_.
 
-    Use of this class requires you to provide configuration for the Akismet web service;
-    you'll need to obtain an Akismet API key, and you'll need to associate it with the
+    Use of this class requires you to provide configuration for the Akismet web service.
+    You'll need to obtain an Akismet API key, and you'll need to associate it with the
     site you'll use the contact form on. You can do this at <https://akismet.com/>. Once
-    you have, you can configure in either of two ways:
-
-    1. Put your Akismet API key in the Django setting :setting:`AKISMET_API_KEY`, and
-       the URL it's associated with in the setting :setting:`AKISMET_BLOG_URL`, or
-
-    2. Put your Akismet API key in the environment variable ``PYTHON_AKISMET_API_KEY``,
-       and the URL it's associated with in the environment variable
-       ``PYTHON_AKISMET_BLOG_URL``.
+    you have, put your Akismet API key in the environment variable
+    ``PYTHON_AKISMET_API_KEY``, and the URL it's associated with in the environment
+    variable ``PYTHON_AKISMET_BLOG_URL``.
 
     You will also need `the Python Akismet module <http://akismet.readthedocs.io/>`_ to
     communicate with the Akismet web service. You can install it by running ``pip
     install akismet``, or django-contact-form can install it automatically for you if
-    you run ``pip install django-contact-form[akismet]``.
+    you run ``pip install "django-contact-form[akismet]"``.
 
     Once you have an Akismet API key and URL configured, and the ``akismet`` module
     installed, you can drop in :class:`AkismetContactForm` anywhere you would have used
-    :class:`ContactForm`. A URLconf is provided in django-contact-form, at
+    :class:`ContactForm`. A URLconf is also provided in django-contact-form, at
     ``django_contact_form.akismet_urls``, which will correctly configure
     :class:`AkismetContactForm` for you.
+
+    If you want to customize the spam-filtering behavior, there are two methods you can
+    override:
+
+    .. automethod:: get_akismet_check_arguments
+    .. automethod:: get_akismet_client
 
     """
 
     SPAM_MESSAGE = _("Your message was classified as spam.")
 
-    def get_akismet_client(self):
-        """
-        Obtain and return an Akismet API client.
-
-        """
-        from ._akismet import (  # pylint: disable=import-outside-toplevel
-            _try_get_akismet_client,
-        )
-
-        return _try_get_akismet_client()
-
-    def get_akismet_check_arguments(self):
+    def get_akismet_check_arguments(self) -> dict:
         """
         Return the arguments which will be passed to the Akismet spam check.
 
@@ -302,6 +278,26 @@ class AkismetContactForm(ContactForm):
             "comment_content": self.cleaned_data["body"],
             "comment_type": "contact-form",
         }
+
+    def get_akismet_client(self) -> "akismet.SyncClient":  # noqa: F821
+        """
+        Obtain and return an Akismet API client.
+
+        By default, this will create a single API client instance and keep it resident
+        in memory for the life of the Python process
+
+        If you need to customize the Akismet client creation (for example, to pass
+        custom arguments to the Akismet API client), override this method.
+
+        *Note:* Only synchronous Akismet clients (:class:`akismet.SyncClient`) are
+        supported here; async clients (:class:`akismet.AsyncClient`) are not.
+
+        """
+        from ._akismet import (  # pylint: disable=import-outside-toplevel
+            _try_get_akismet_client,
+        )
+
+        return _try_get_akismet_client()
 
     def clean_body(self):
         """

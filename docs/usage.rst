@@ -1,9 +1,9 @@
-.. _quickstart:
+.. _usage:
 
-Quick start guide
-=================
+Usage guide
+===========
 
-First you'll need to have Django and django-contact-form installed; for details
+First you'll need to have Django and ``django-contact-form`` installed. For details
 on that, see :ref:`the installation guide <install>`.
 
 Once that's done, you can start setting up django-contact-form. Add
@@ -14,9 +14,9 @@ can begin configuring.
 URL configuration
 -----------------
 
-The quickest way to set up the views in django-contact-form is to use the
+The quickest way to set up the views in ``django-contact-form`` is to use the
 provided URLconf, found at ``django_contact_form.urls``. You can include it
-wherever you like in your site's URL configuration; for example, to have it
+wherever you like in your site's URL configuration. For example, to have it
 live at the URL ``/contact/``:
 
 .. code-block:: python
@@ -30,7 +30,7 @@ live at the URL ``/contact/``:
     ]
 
 If you'll be using a custom form class, you'll need to manually set up your
-URLs so you can tell django-contact-form about your form class. For example:
+URLs so you can tell ``django-contact-form`` about your form class. For example:
 
 
 .. code-block:: python
@@ -61,15 +61,18 @@ URLs so you can tell django-contact-form about your form class. For example:
 
    When writing a custom form class (or custom
    :class:`~django_contact_form.views.ContactFormView` subclass), **don't** put
-   your custom code inside django-contact-form. Instead, put your custom code
-   in the appropriate place (a ``forms.py`` or ``views.py`` file) in an
-   application you've written.
+   your custom code inside ``django-contact-form``. Instead, put your custom
+   code in the appropriate place (a ``forms.py`` or ``views.py`` file) in a
+   Django application you've written.
 
+
+.. _default-templates:
 
 Required templates
 ------------------
 
-The two views above will need several templates to be created.
+In the default configuration, ``django-contact-form`` requires the following
+templates to exist:
 
 
 ``django_contact_form/contact_form.html``
@@ -142,7 +145,7 @@ variables:
       attempt to send an email with a multi-line subject. So it's a good idea
       to ensure your ``contact_form_subject.txt`` template only produces a
       single line of output when rendered; as a precaution, however,
-      django-contact-form will, by default, condense the output of this
+      ``django-contact-form`` will, by default, condense the output of this
       template to a single line.
 
 
@@ -151,24 +154,24 @@ Using a spam-filtering contact form
 
 Spam filtering is a common desire for contact forms, due to the large amount of
 spam they can attract. There is a spam-filtering contact form class included in
-django-contact-form: :class:`~django_contact_form.forms.AkismetContactForm`,
-which uses `the Wordpress Akismet spam-detection service
-<https://akismet.com/>`_.
+``django-contact-form``:
+:class:`~django_contact_form.forms.AkismetContactForm`, which uses `the Akismet
+spam-detection service <https://akismet.com/>`_.
 
 To use this form, you will need to do the following things:
 
-1. Install the Python ``akismet`` module to allow django-contact-form to
-   communicate with the Akismet service. You can do this via ``pip install
-   akismet``, or as you install django-contact-form via ``pip install
-   django-contact-form[akismet]``.
+1. Install `the Python akismet client <https://akismet.readthedocs.io/>`_ to
+   allow ``django-contact-form`` to communicate with the Akismet service. You
+   can do this manually (in which case you must install at least version 24.5.0
+   of ``akismet``) or as you install ``django-contact-form`` by telling ``pip``
+   to install ``"django-contact-form[akismet]"``.
 
 2. Obtain an Akismet API key from <https://akismet.com/>, and associate it with
    the URL of your site.
 
-3. Supply the API key and URL for django-contact-form to use. You can either
-   place them in the Django settings :setting:`AKISMET_API_KEY` and
-   :setting:`AKISMET_BLOG_URL`, or in the environment variables
-   ``PYTHON_AKISMET_API_KEY`` and ``PYTHON_AKISMET_BLOG_URL``.
+3. Supply the API key and URL for ``django-contact-form`` to use. You can
+   either place them in the environment variables ``PYTHON_AKISMET_API_KEY``
+   and ``PYTHON_AKISMET_BLOG_URL``.
 
 Then you can replace the suggested URLconf above with the following:
 

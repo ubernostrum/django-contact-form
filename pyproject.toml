@@ -54,7 +54,6 @@ docs = [
   "sphinxext-opengraph",
 ]
 tests = [
-  "akismet>=24.5.0",
   "coverage",
   "tomli; python_full_version < '3.11.0a7'",
 ]
