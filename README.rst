@@ -10,7 +10,7 @@
 This application includes:
 
 * An extensible base contact-form class which is also usable as-is for basic
-  functionality (collecting a name, email address and message)
+  functionality (collecting a name, email address, and message)
 
 * A subclass of the base form which uses the Akismet spam-filtering service to
   detect and reject spam submissions

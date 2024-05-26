@@ -17,7 +17,7 @@ The base contact form class
 .. autoclass:: ContactForm
 
 
-The spam filtering contact form class
+The spam-filtering contact form class
 -------------------------------------
 
 .. autoclass:: AkismetContactForm

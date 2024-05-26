@@ -169,9 +169,9 @@ To use this form, you will need to do the following things:
 2. Obtain an Akismet API key from <https://akismet.com/>, and associate it with
    the URL of your site.
 
-3. Supply the API key and URL for ``django-contact-form`` to use. You can
-   either place them in the environment variables ``PYTHON_AKISMET_API_KEY``
-   and ``PYTHON_AKISMET_BLOG_URL``.
+3. Supply the API key and URL for ``django-contact-form`` to use, by placing
+   them in the environment variables ``PYTHON_AKISMET_API_KEY`` and
+   ``PYTHON_AKISMET_BLOG_URL``.
 
 Then you can replace the suggested URLconf above with the following:
 

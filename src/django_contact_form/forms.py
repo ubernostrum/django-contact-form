@@ -97,9 +97,9 @@ class ContactForm(forms.Form):
     .. attribute:: request
 
        The :class:`~django.http.HttpRequest` object representing the current
-       request. This is set automatically in `__init__()`, and is used both to generate
-       a :class:`~django.template.RequestContext` for the templates and to allow
-       subclasses to engage in request-specific behavior.
+       request. This is set automatically in ``__init__()``, and is used both to
+       generate a :class:`~django.template.RequestContext` for the templates and to
+       allow subclasses to engage in request-specific behavior.
 
     .. automethod:: save
 
@@ -242,15 +242,16 @@ class AkismetContactForm(ContactForm):
     variable ``PYTHON_AKISMET_BLOG_URL``.
 
     You will also need `the Python Akismet module <http://akismet.readthedocs.io/>`_ to
-    communicate with the Akismet web service. You can install it by running ``pip
-    install akismet``, or django-contact-form can install it automatically for you if
-    you run ``pip install "django-contact-form[akismet]"``.
+    communicate with the Akismet web service. You can install it manually (if you do,
+    install at least version 24.5.0), or ``django-contact-form`` can install it
+    automatically for you if you tell ``pip`` to install
+    ``"django-contact-form[akismet]"``.
 
     Once you have an Akismet API key and URL configured, and the ``akismet`` module
     installed, you can drop in :class:`AkismetContactForm` anywhere you would have used
     :class:`ContactForm`. A URLconf is also provided in django-contact-form, at
-    ``django_contact_form.akismet_urls``, which will correctly configure
-    :class:`AkismetContactForm` for you.
+    ``django_contact_form.akismet_urls``, which will set up :class:`AkismetContactForm`
+    for you in place of the base contact form class.
 
     If you want to customize the spam-filtering behavior, there are two methods you can
     override:
@@ -284,7 +285,7 @@ class AkismetContactForm(ContactForm):
         Obtain and return an Akismet API client.
 
         By default, this will create a single API client instance and keep it resident
-        in memory for the life of the Python process
+        in memory for the life of the Python process.
 
         If you need to customize the Akismet client creation (for example, to pass
         custom arguments to the Akismet API client), override this method.

@@ -14,7 +14,7 @@ class ContactFormView(FormView):
     The base view class from which most custom contact-form views should inherit. If
     you don't need any custom functionality, and are content with the default
     :class:`~django_contact_form.forms.ContactForm` class, you can also use it as-is
-    (and the provided URLConf, `django_contact_form.urls`, does exactly this).
+    (and the provided URLConf, ``django_contact_form.urls``, does exactly this).
 
     This is a subclass of Django's :class:`~django.views.generic.edit.FormView`, so
     refer to the Django documentation for a list of attributes/methods which can be
@@ -44,7 +44,7 @@ class ContactFormView(FormView):
     .. attribute:: template_name
 
        A :class:`str`, the template to use when rendering the form. By default, will be
-       `django_contact_form/contact_form.html`.
+       ``django_contact_form/contact_form.html``.
 
     .. attribute:: success_url
 
@@ -52,7 +52,7 @@ class ContactFormView(FormView):
        string, the string resulting from calling Django's :func:`~django.urls.reverse`
        helper, or the lazy object produced by Django's :func:`~django.urls.reverse_lazy`
        helper. Default value is the result of calling :func:`~django.urls.reverse_lazy`
-       with the URL name ``django_contact_form_sent``.
+       with the URL name ``"django_contact_form_sent"``.
 
     You can also override the following method for full customization of the form
     instance construction:
@@ -80,7 +80,7 @@ class ContactFormView(FormView):
         on initialization.
 
         By default, this will return a dictionary containing the current
-        :class:`~django.http.HttpRequest` (as the key `request`) and, if
+        :class:`~django.http.HttpRequest` (as the key ``request``) and, if
         :attr:`~ContactFormView.recipient_list` was defined, its value (as the key
         ``recipient_list``).
 
