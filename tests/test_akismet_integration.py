@@ -3,6 +3,8 @@ Tests for the Akismet spam-filtering integration.
 
 """
 
+# SPDX-License-Identifier: BSD-3-Clause
+
 import os
 from http import HTTPStatus
 from unittest import mock

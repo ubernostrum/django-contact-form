@@ -3,6 +3,8 @@ Tests for the built-in form classes.
 
 """
 
+# SPDX-License-Identifier: BSD-3-Clause
+
 from django.conf import settings
 from django.core import mail
 from django.test import RequestFactory, TestCase

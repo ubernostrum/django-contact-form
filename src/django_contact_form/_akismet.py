@@ -3,6 +3,8 @@ Helper code for obtaining an Akismet API client.
 
 """
 
+# SPDX-License-Identifier: BSD-3-Clause
+
 import textwrap
 import warnings
 

@@ -3,6 +3,8 @@ View which can render and send email from a contact form.
 
 """
 
+# SPDX-License-Identifier: BSD-3-Clause
+
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 

@@ -4,7 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 authors = [
-  {name = "James Bennett", email = "james@b-list.org"}
+  {name = "James Bennett"}
+]
+maintainers = [
+  {name = "James Bennett"}
 ]
 classifiers = [
   "Development Status :: 5 - Production/Stable",

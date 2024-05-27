@@ -7,6 +7,8 @@ include this URLConf somewhere in your URL hierarchy (for example, at
 
 """
 
+# SPDX-License-Identifier: BSD-3-Clause
+
 from django.urls import path
 from django.views.generic import TemplateView
 

@@ -3,6 +3,8 @@ Minimal Django settings file for test runs.
 
 """
 
+# SPDX-License-Identifier: BSD-3-Clause
+
 import pathlib
 
 from django.utils.crypto import get_random_string

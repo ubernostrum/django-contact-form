@@ -3,6 +3,8 @@ Tests for the built-in views.
 
 """
 
+# SPDX-License-Identifier: BSD-3-Clause
+
 from http import HTTPStatus
 
 import django
