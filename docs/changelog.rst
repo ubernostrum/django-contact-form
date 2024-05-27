@@ -67,7 +67,7 @@ Releases under DjangoVer
 Version 5.0.0
 ~~~~~~~~~~~~~
 
-*Not yet released*
+Released May 2024
 
 * Adopted "DjangoVer" versioning.
 
