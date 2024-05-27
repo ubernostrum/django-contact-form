@@ -39,8 +39,8 @@ readme = "README.rst"
 requires-python = ">=3.8"
 
 [project.urls]
-documentation = "https://django-contact-form.readthedocs.io/"
-homepage = "https://github.com/ubernostrum/django-contact-form"
+"Documentation" = "https://django-contact-form.readthedocs.io/"
+"Source Code" = "https://github.com/ubernostrum/django-contact-form"
 
 [project.optional-dependencies]
 akismet = [
