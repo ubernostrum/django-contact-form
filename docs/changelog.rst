@@ -64,6 +64,17 @@ The API stability/deprecation policy for ``django-contact-form`` is as follows:
 Releases under DjangoVer
 ------------------------
 
+Version 5.0.1
+~~~~~~~~~~~~~
+
+Released May 2024
+
+* Correct an issue in the changelog for 5.0.0
+
+* Correct an issue with the display of the package's documentation/source URLs
+  on the Python Package Index.
+
+
 Version 5.0.0
 ~~~~~~~~~~~~~
 
