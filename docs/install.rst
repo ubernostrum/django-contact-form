@@ -4,13 +4,11 @@
 Installation guide
 ==================
 
-``django-contact-form`` |release| supports Django 4.2 and 5.0 on Python 3.8
-(Django 4.2 only), 3.9 (Django 4.2 only), 3.10, 3.11, and 3.12.
-
-Django 4.2 only added Python 3.12 support in the 4.2.8 release, so for use with
-Python 3.12 it is suggested that you use at least Django 4.2.8 (and always
-recommended to use the latest bugfix release of whichever Django version you
-choose to use).
+``django-contact-form`` |release| supports Django 4.2, 5.0, and 5.1, and Python
+3.8 through 3.12. See `Django's Python support matrix
+<https://docs.djangoproject.com/en/dev/faq/install/#what-python-version-can-i-use-with-django>`_
+for details of which Python versions are compatible with each version of
+Django.
 
 
 Installing ``django-contact-form``
