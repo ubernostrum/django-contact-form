@@ -27,7 +27,7 @@ is `an OSI-approved open-source license
 degree of freedom in modifying and redistributing the code. For the full terms,
 see the file `LICENSE` which came with your copy of ``django-contact-form``; if
 you did not receive a copy of this file, you can view it online at
-<https://github.com/ubernostrum/django-contact-form/blob/master/LICENSE>.
+<https://github.com/ubernostrum/django-contact-form/blob/trunk/LICENSE>.
 
 
 Why aren't there any default templates?
