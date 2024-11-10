@@ -64,7 +64,7 @@ The API stability/deprecation policy for ``django-contact-form`` is as follows:
 Releases under DjangoVer
 ------------------------
 
-Verison 5.1.1
+Version 5.1.1
 ~~~~~~~~~~~~~
 
 *Under development*
