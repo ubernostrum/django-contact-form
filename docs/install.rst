@@ -5,7 +5,7 @@ Installation guide
 ==================
 
 ``django-contact-form`` |release| supports Django 4.2, 5.0, and 5.1, and Python
-3.8 through 3.12. See `Django's Python support matrix
+3.9 through 3.13. See `Django's Python support matrix
 <https://docs.djangoproject.com/en/dev/faq/install/#what-python-version-can-i-use-with-django>`_
 for details of which Python versions are compatible with each version of
 Django.
@@ -72,35 +72,22 @@ If you don't already have a supported version of Django installed, using
 ``pip`` to install ``django-contact-form`` will also install the latest
 supported version of Django.
 
-Installing from a source checkout
----------------------------------
+Installing for local development
+--------------------------------
 
-If you want to work on ``django-contact-form``, you can obtain a source
+If you want to work on ``django-registration``, you can obtain a source
 checkout.
 
-The development repository for django-contact-form is at
-<https://github.com/ubernostrum/django-contact-form>. If you have git
-installed, you can obtain a copy of the repository by typing:
+The development repository for ``django-registration`` is at
+<https://github.com/ubernostrum/django-registration>. If you have `git
+<http://git-scm.com/>`_ installed, you can obtain a copy of the repository by
+typing::
 
-.. code-block:: shell
+    git clone https://github.com/ubernostrum/django-registration.git
 
-   git clone https://github.com/ubernostrum/django-contact-form.git
+Then follow the instructions in the file ``CONTRIBUTING.rst`` in the root
+directory of the source checkout.
 
-From there, you can use git commands to check out the specific revision you
-want, and perform an "editable" install (allowing you to change code as you
-work on it) by typing:
-
-.. tab:: macOS/Linux/other Unix
-
-   .. code-block:: shell
-
-      python -m pip install -e .
-
-.. tab:: Windows
-
-   .. code-block:: shell
-
-      py -m pip install -e .
 
 Next steps
 ----------

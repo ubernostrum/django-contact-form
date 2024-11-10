@@ -57,12 +57,12 @@ class ContactForm(forms.Form):
 
        The email address (:class:`str`) to use in the ``From:`` header of the
        message. By default, this is the value of the Django setting
-       :setting:`DEFAULT_FROM_EMAIL`.
+       ```DEFAULT_FROM_EMAIL``.
 
     .. attribute:: recipient_list
 
        A :class:`list` of recipients for the message. By default, this is the email
-       addresses specified in the setting :setting:`MANAGERS`.
+       addresses specified in the Django setting ``MANAGERS``.
 
     .. attribute:: subject_template_name
 

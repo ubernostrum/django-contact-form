@@ -7,7 +7,7 @@ First you'll need to have Django and ``django-contact-form`` installed. For deta
 on that, see :ref:`the installation guide <install>`.
 
 Once that's done, you can start setting up django-contact-form. Add
-``"django_contact_form"`` to your :setting:`INSTALLED_APPS` setting. Then, you
+``"django_contact_form"`` to your ``INSTALLED_APPS`` setting. Then, you
 can begin configuring.
 
 

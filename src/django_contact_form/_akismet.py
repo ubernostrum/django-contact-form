@@ -76,8 +76,8 @@ def _try_get_akismet_client(  # pylint: disable=inconsistent-return-statements
     """
     global _akismet_client  # pylint: disable=global-statement
 
-    if _akismet_client is None:
-        for attempt in [
+    if _akismet_client is None:  # pragma: no branch
+        for attempt in [  # pragma: no branch
             _client_from_settings,
             _client_from_environment,
         ]:

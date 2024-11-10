@@ -18,7 +18,7 @@ This application includes:
   contact form classes, or your own customized form
 
 For the default contact-form functionality, add ``"django_contact_form"`` to
-your Django site's :setting:`INSTALLED_APPS` setting, add the following line to
+your Django site's ``INSTALLED_APPS`` setting, add the following line to
 your site's root URLConf, and create the templates specified in :ref:`the usage
 guide <default-templates>`:
 

@@ -5,25 +5,38 @@ https://www.sphinx-doc.org/
 
 """
 
+# SPDX-License-Identifier: BSD-3-Clause
+
 import os
 import sys
 from importlib.metadata import version as get_version
+
+import django
+from django.conf import settings
+
+settings.configure(
+    INSTALLED_APPS=[
+        "django_contact_form",
+    ],
+    DEBUG=True,
+)
+
+django.setup()
 
 extensions = [
     "notfound.extension",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
-    "sphinxcontrib_django",
     "sphinxext.opengraph",
     "sphinx_copybutton",
     "sphinx_inline_tabs",
 ]
 templates_path = ["_templates"]
-source_suffix = ".rst"
+source_suffix = {".rst": "restructuredtext"}
 master_doc = "index"
 project = "django-contact-form"
-copyright = "2007, James Bennett"
+copyright = "James Bennett and contributors"
 version = get_version("django-contact-form")
 release = version
 exclude_trees = ["_build"]
@@ -41,7 +54,6 @@ latex_documents = [
 ]
 
 intersphinx_mapping = {
-    "akismet": ("https://akismet.readthedocs.io/en/latest", None),
     "django": (
         "https://docs.djangoproject.com/en/stable/",
         "https://docs.djangoproject.com/en/stable/_objects/",
@@ -59,6 +71,10 @@ spelling_lang = "en_US"
 
 # Location of word list.
 spelling_word_list_filename = "spelling_wordlist.txt"
+
+# The documentation does not include contributor names, so we skip this because it's
+# flaky about needing to scan commit history.
+spelling_ignore_contributor_names = False
 
 # OGP metadata configuration.
 ogp_enable_meta_description = True

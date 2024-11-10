@@ -89,9 +89,12 @@ class AkismetContactFormTests(TestCase):
         The Akismet contact form correctly rejects spam.
 
         """
-        with AlwaysSpamClient(config=self.akismet_config) as akismet_client, mock.patch(
-            "django_contact_form._akismet._try_get_akismet_client",
-            new=mock.Mock(return_value=akismet_client),
+        with (
+            AlwaysSpamClient(config=self.akismet_config) as akismet_client,
+            mock.patch(
+                "django_contact_form._akismet._try_get_akismet_client",
+                new=mock.Mock(return_value=akismet_client),
+            ),
         ):
             form = AkismetContactForm(request=self.request(), data=self.payload)
             assert not form.is_valid()
@@ -102,9 +105,12 @@ class AkismetContactFormTests(TestCase):
         The Akismet contact form correctly accepts non-spam.
 
         """
-        with NeverSpamClient(config=self.akismet_config) as akismet_client, mock.patch(
-            "django_contact_form._akismet._try_get_akismet_client",
-            new=mock.Mock(return_value=akismet_client),
+        with (
+            NeverSpamClient(config=self.akismet_config) as akismet_client,
+            mock.patch(
+                "django_contact_form._akismet._try_get_akismet_client",
+                new=mock.Mock(return_value=akismet_client),
+            ),
         ):
             form = AkismetContactForm(request=self.request(), data=self.payload)
             assert form.is_valid()
@@ -117,9 +123,12 @@ class AkismetContactFormTests(TestCase):
         """
         data = {"name": "Test", "email": "email@example.com"}
 
-        with NeverSpamClient(config=self.akismet_config) as akismet_client, mock.patch(
-            "django_contact_form._akismet._try_get_akismet_client",
-            new=mock.Mock(return_value=akismet_client),
+        with (
+            NeverSpamClient(config=self.akismet_config) as akismet_client,
+            mock.patch(
+                "django_contact_form._akismet._try_get_akismet_client",
+                new=mock.Mock(return_value=akismet_client),
+            ),
         ):
             form = AkismetContactForm(request=self.request(), data=data)
             assert not form.is_valid()
@@ -142,10 +151,13 @@ class AkismetContactFormTests(TestCase):
         raised.
 
         """
-        with self.settings(
-            AKISMET_API_KEY=self.akismet_config.key,
-            AKISMET_BLOG_URL=self.akismet_config.url,
-        ), self.assertRaises(ImproperlyConfigured):
+        with (
+            self.settings(
+                AKISMET_API_KEY=self.akismet_config.key,
+                AKISMET_BLOG_URL=self.akismet_config.url,
+            ),
+            self.assertRaises(ImproperlyConfigured),
+        ):
             _try_get_akismet_client(InvalidConfigClient)
 
     def test_akismet_env_valid(self):

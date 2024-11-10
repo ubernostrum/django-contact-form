@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
 [project]
 authors = [
-  {name = "James Bennett"}
+    {name = "James Bennett"},
 ]
 maintainers = [
   {name = "James Bennett"}
@@ -21,23 +21,23 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.8",
   "Topic :: Utilities",
 ]
 name = "django-contact-form"
 description = "A generic contact-form application for Django."
 dependencies = [
-  "Django>=4.2",
+    "Django>=4.2",
 ]
-dynamic = ["version"]
 keywords = ["django", "email", "contact-form"]
 license = {text = "BSD-3-Clause"}
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
+version = "5.1.1a1"
 
 [project.urls]
 "Documentation" = "https://django-contact-form.readthedocs.io/"
@@ -45,33 +45,25 @@ requires-python = ">=3.8"
 
 [project.optional-dependencies]
 akismet = [
-  "akismet>=24.5.0",
+    "akismet>=24.5.0",
 ]
-docs = [
-  "furo",
-  "sphinx",
-  "sphinx-copybutton",
-  "sphinx-inline-tabs",
-  "sphinx-notfound-page",
-  "sphinxcontrib-django",
-  "sphinxext-opengraph",
-]
-tests = [
-  "coverage",
-  "tomli; python_full_version < '3.11.0a7'",
-]
+[dependency-groups]
+tests = ["nox"]
 
 [tool.bandit]
 skips = ["B101"]
 
 [tool.black]
-target-version = ["py38", "py39", "py310", "py311", "py312"]
+target-version = ["py39", "py310", "py311", "py312", "py313"]
 
 [tool.check-manifest]
 ignore-bad-ideas = ["*.mo"]
 
-#[tool.check-wheel-contents]
-#ignore = ["W004"]
+[tool.check-wheel-contents]
+ignore = ["W004"]
+
+[tool.coverage.paths]
+source = ["src", ".nox/tests_with_coverage*/**/site-packages"]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -80,6 +72,11 @@ exclude_lines = [
   "raise NotImplementedError",
 ]
 fail_under = 100
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["django-contact-form"]
 
 [tool.interrogate]
 fail-under = 100
@@ -90,8 +87,23 @@ ignore-magic = true
 [tool.isort]
 profile = "black"
 
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+source-includes = [
+    ".editorconfig",
+    ".flake8",
+    ".pre-commit-config.yaml",
+    ".readthedocs.yaml",
+    "AUTHORS",
+    "CONTRIBUTING.rst",
+    "docs/",
+    "noxfile.py",
+    "pdm.lock",
+    "runtests.py",
+    "tests/",
+]
+
 [tool.pylint]
 disable = ["duplicate-code"]
-
-[tool.setuptools.dynamic]
-version = {attr = "django_contact_form.__version__"}
