@@ -64,6 +64,16 @@ The API stability/deprecation policy for ``django-contact-form`` is as follows:
 Releases under DjangoVer
 ------------------------
 
+Version 5.1.2
+~~~~~~~~~~~~~
+
+Released March 2025
+
+* Fixed a bug with the Akismet integration where the first call to create an
+  Akismet client would succeed in creating and returning it, but subsequent
+  calls would not return the cached client instance. Now subsequent calls do
+  correctly return the cached instance.
+
 Version 5.1.1
 ~~~~~~~~~~~~~
 

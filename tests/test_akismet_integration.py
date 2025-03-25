@@ -133,18 +133,6 @@ class AkismetContactFormTests(TestCase):
             form = AkismetContactForm(request=self.request(), data=data)
             assert not form.is_valid()
 
-    def test_akismet_django_settings_valid(self):
-        """
-        When the Django settings are present and valid, an Akismet client is
-        returned using them.
-
-        """
-        with self.settings(
-            AKISMET_API_KEY=self.akismet_config.key,
-            AKISMET_BLOG_URL=self.akismet_config.url,
-        ):
-            _try_get_akismet_client(ValidConfigClient)
-
     def test_akismet_django_settings_invalid(self):
         """
         When the Django settings are present and invalid, ImproperlyConfigured is
@@ -159,20 +147,6 @@ class AkismetContactFormTests(TestCase):
             self.assertRaises(ImproperlyConfigured),
         ):
             _try_get_akismet_client(InvalidConfigClient)
-
-    def test_akismet_env_valid(self):
-        """
-        When the environment variables are present and valid, an Akismet client is
-        returned using them.
-
-        """
-        try:
-            os.environ["PYTHON_AKISMET_API_KEY"] = self.akismet_config.key
-            os.environ["PYTHON_AKISMET_BLOG_URL"] = self.akismet_config.url
-            _try_get_akismet_client(ValidConfigClient)
-        finally:
-            del os.environ["PYTHON_AKISMET_API_KEY"]
-            del os.environ["PYTHON_AKISMET_BLOG_URL"]
 
     def test_akismet_env_invalid(self):
         """
@@ -199,6 +173,66 @@ class AkismetContactFormTests(TestCase):
                 del os.environ[key]
         with self.assertRaises(ImproperlyConfigured):
             _try_get_akismet_client(InvalidConfigClient)
+
+    def test_akismet_django_settings_valid(self):
+        """
+        When the Django settings are present and valid, an Akismet client is
+        returned using them.
+
+        """
+        with self.settings(
+            AKISMET_API_KEY=self.akismet_config.key,
+            AKISMET_BLOG_URL=self.akismet_config.url,
+        ):
+            client = _try_get_akismet_client(ValidConfigClient)
+            assert client is not None
+            assert isinstance(client, ValidConfigClient)
+
+    def test_akismet_env_valid(self):
+        """
+        When the environment variables are present and valid, an Akismet client is
+        returned using them.
+
+        """
+        try:
+            os.environ["PYTHON_AKISMET_API_KEY"] = self.akismet_config.key
+            os.environ["PYTHON_AKISMET_BLOG_URL"] = self.akismet_config.url
+            client = _try_get_akismet_client(ValidConfigClient)
+            assert client is not None
+            assert isinstance(client, ValidConfigClient)
+        finally:
+            del os.environ["PYTHON_AKISMET_API_KEY"]
+            del os.environ["PYTHON_AKISMET_BLOG_URL"]
+
+    def test_akismet_django_settings_persist(self):
+        """
+        A client created from Django settings is correctly persistsed and returned on
+        later calls.
+
+        """
+        with self.settings(
+            AKISMET_API_KEY=self.akismet_config.key,
+            AKISMET_BLOG_URL=self.akismet_config.url,
+        ):
+            first = _try_get_akismet_client(ValidConfigClient)
+            second = _try_get_akismet_client(ValidConfigClient)
+            assert first is second
+
+    def test_akismet_env_persist(self):
+        """
+        A client cretaed from environment variables is correctly persisted and returned
+        on later calls.
+
+        """
+        try:
+            os.environ["PYTHON_AKISMET_API_KEY"] = self.akismet_config.key
+            os.environ["PYTHON_AKISMET_BLOG_URL"] = self.akismet_config.url
+            first = _try_get_akismet_client(ValidConfigClient)
+            second = _try_get_akismet_client(ValidConfigClient)
+            assert first is second
+        finally:
+            del os.environ["PYTHON_AKISMET_API_KEY"]
+            del os.environ["PYTHON_AKISMET_BLOG_URL"]
 
     @override_settings(ROOT_URLCONF="django_contact_form.akismet_urls")
     def test_akismet_view(self):

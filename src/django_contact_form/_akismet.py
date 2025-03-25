@@ -12,7 +12,7 @@ import akismet
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-_akismet_client = None  # pylint: disable=invalid-name
+_AKISMET_CLIENT = None
 
 
 def _client_from_settings(client_class):
@@ -74,16 +74,17 @@ def _try_get_akismet_client(  # pylint: disable=inconsistent-return-statements
        configuration is missing or invalid.
 
     """
-    global _akismet_client  # pylint: disable=global-statement
+    global _AKISMET_CLIENT  # pylint: disable=global-statement
 
-    if _akismet_client is None:  # pragma: no branch
+    if _AKISMET_CLIENT is None:  # pragma: no branch
         for attempt in [  # pragma: no branch
             _client_from_settings,
             _client_from_environment,
         ]:
-            _akismet_client = attempt(client_class)
-            if _akismet_client is not None:
-                return _akismet_client
+            _AKISMET_CLIENT = attempt(client_class)
+            if _AKISMET_CLIENT is not None:
+                return _AKISMET_CLIENT
+    return _AKISMET_CLIENT
 
 
 def _clear_cached_instance():
@@ -92,5 +93,5 @@ def _clear_cached_instance():
     next time it is requested.
 
     """
-    global _akismet_client  # pylint: disable=global-statement
-    _akismet_client = None
+    global _AKISMET_CLIENT  # pylint: disable=global-statement
+    _AKISMET_CLIENT = None
